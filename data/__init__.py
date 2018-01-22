@@ -37,7 +37,7 @@ def unregister():
     bpy.utils.unregister_class(ItemCollectionPropertyGroup)
     bpy.utils.unregister_class(ObjPolycountPropertyGroup)
     bpy.utils.unregister_class(EditModePropertyGroup)
-    bpy.utils.register_class(ModifiersPropertyGroup)
+    bpy.utils.unregister_class(ModifiersPropertyGroup)
     bpy.utils.unregister_class(ObjectModePropertyGroup)
     bpy.utils.unregister_class(ObjListPropertyGroup)
     bpy.utils.unregister_class(ScnTempPropertyGroup)
