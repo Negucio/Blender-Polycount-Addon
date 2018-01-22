@@ -67,11 +67,87 @@ class DATA_OT_polycount_obj_list_remove(bpy.types.Operator):
 
     def execute(self, context):
         # Index of the selected item in the list
-        idx = context.scene.Polycount.MainUI.lists_List_Index
-        item = context.scene.Polycount.MainUI.lists_List[idx].obj_list_Index
+        list_idx = context.scene.Polycount.MainUI.lists_List_Index
+        obj_idx = context.scene.Polycount.MainUI.lists_List[list_idx].obj_list_Index
         # The selected item is removed from the list
-        bpy.context.scene.Polycount.MainUI.lists_List[idx].obj_list.remove(item)
+        bpy.context.scene.Polycount.MainUI.lists_List[list_idx].obj_list.remove(obj_idx)
         self.pc.Refresh(context, force=True)
         return {'FINISHED'}
 
+class DATA_OT_polycount_obj_list_clear(bpy.types.Operator):
+    """
+    Operator to remove objects from the list
+    """
+    bl_idname = "obj_list_clear.btn"
+    bl_label = "Clear list"
+    bl_description = "Remove all objects from the list"
+
+    pc = PolycountController()
+
+    @classmethod
+    def poll(cls, context):
+        # Enabled when the list contains, at least, one item
+        idx = context.scene.Polycount.MainUI.lists_List_Index
+        return len(context.scene.Polycount.MainUI.lists_List)>0 and \
+               len(context.scene.Polycount.MainUI.lists_List[idx].obj_list)>0
+
+    def execute(self, context):
+        # Index of the selected item in the list
+        list_idx = context.scene.Polycount.MainUI.lists_List_Index
+        items = len(context.scene.Polycount.MainUI.lists_List[list_idx].obj_list)
+        for obj_idx in reversed(range(items)):
+            bpy.context.scene.Polycount.MainUI.lists_List[list_idx].obj_list.remove(obj_idx)
+        self.pc.Refresh(context, force=True)
+        return {'FINISHED'}
+
+
+class DATA_OT_polycount_obj_list_select(bpy.types.Operator):
+    """
+    Operator to remove objects from the list
+    """
+    bl_idname = "obj_list_select.btn"
+    bl_label = "Select/Deselect Objects"
+    bl_description = "Select/Deselect all objects in the list"
+
+    select = bpy.props.BoolProperty(default=True)
+
+    @classmethod
+    def poll(cls, context):
+        # Enabled when the list contains, at least, one item
+        idx = context.scene.Polycount.MainUI.lists_List_Index
+        return len(context.scene.Polycount.MainUI.lists_List)>0 and \
+               len(context.scene.Polycount.MainUI.lists_List[idx].obj_list)>0
+
+    def execute(self, context):
+        # Index of the selected item in the list of obj_lists
+        idx = context.scene.Polycount.MainUI.lists_List_Index
+        for obj in context.scene.Polycount.MainUI.lists_List[idx].obj_list:
+            if not hasattr(obj, "object") or type(obj.object) != bpy.types.Object: continue
+            obj.object.select = self.select
+        return {'FINISHED'}
+
+class DATA_OT_polycount_obj_list_hide(bpy.types.Operator):
+    """
+    Operator to remove objects from the list
+    """
+    bl_idname = "obj_list_hide.btn"
+    bl_label = "Show/Hide Objects"
+    bl_description = "Show/Hide Objectsall object from the list"
+
+    hide = bpy.props.BoolProperty(default=False)
+
+    @classmethod
+    def poll(cls, context):
+        # Enabled when the list contains, at least, one item
+        idx = context.scene.Polycount.MainUI.lists_List_Index
+        return len(context.scene.Polycount.MainUI.lists_List)>0 and \
+               len(context.scene.Polycount.MainUI.lists_List[idx].obj_list)>0
+
+    def execute(self, context):
+        # Index of the selected item in the list of obj_lists
+        idx = context.scene.Polycount.MainUI.lists_List_Index
+        for obj in context.scene.Polycount.MainUI.lists_List[idx].obj_list:
+            if not hasattr(obj, "object") or type(obj.object) != bpy.types.Object: continue
+            obj.object.hide = self.hide
+        return {'FINISHED'}
 

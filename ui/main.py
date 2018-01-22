@@ -114,10 +114,20 @@ class VIEW3D_PT_polycount_object(bpy.types.Panel):
             row.prop(context.scene.Polycount.MainUI.lists_List[idx], "obj_list")
             row = box.row()
             row.template_list("DATA_UL_polycount_obj_list", "", context.scene.Polycount.MainUI.lists_List[idx], "obj_list", context.scene.Polycount.MainUI.lists_List[idx], "obj_list_Index")
-            row = box.row(align=False)
+            rowParent = box.row()
+            col = rowParent.column()
+            row = col.row(align=True)
             row.operator("obj_list_add.btn", icon='ZOOMIN', text="")
             row.operator("obj_list_remove.btn", icon='ZOOMOUT', text="")
-
+            row.operator("obj_list_clear.btn", icon='X', text="")
+            col = rowParent.column()
+            row = col.row(align=True)
+            row.operator("obj_list_select.btn", icon='RADIOBUT_ON', text="").select = True
+            row.operator("obj_list_select.btn", icon='RADIOBUT_OFF', text="").select = False
+            col = rowParent.column()
+            row = col.row(align=True)
+            row.operator("obj_list_hide.btn", icon='OUTLINER_OB_LAMP', text="").hide = False
+            row.operator("obj_list_hide.btn", icon='OUTLINER_DATA_LAMP', text="").hide = True
 
 class VIEW3D_PT_polycount_edit_mode(bpy.types.Panel):
     bl_label = "Edit Mode Polycount"
