@@ -17,7 +17,7 @@ class DATA_OT_polycount_lists_list_add(bpy.types.Operator):
     bl_label = "New List"
     bl_description = "Add list to the list"
 
-    name = bpy.props.StringProperty(name="name", default='New List')
+    name = bpy.props.StringProperty(name="name", default='List')
 
     def resolve_name_collision(self, name):
         names_in_list = [l.list_name for l in bpy.context.scene.Polycount.MainUI.lists_List]
@@ -76,4 +76,5 @@ class DATA_OT_polycount_lists_list_remove(bpy.types.Operator):
         bpy.context.scene.Polycount.MainUI.lists_List_Index = 0
         # The selected item is remove from the list
         bpy.context.scene.Polycount.MainUI.lists_List.remove(index)
+        if hasattr(context, "area") and context.area != None: context.area.tag_redraw()
         return {'FINISHED'}
