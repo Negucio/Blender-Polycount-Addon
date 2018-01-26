@@ -30,14 +30,48 @@ class Draw():
             if hasattr(context, "area") and context.area is not None: context.area.tag_redraw()
         self.PostPixelHandle = None
 
-    def DrawCell(self, text, position):
+    def DrawCell(self, text, position, color = None):
         """
         Draws a cell of the table
         :param text: Text in the cell
         :param position: 2D position of the cell
         """
+        if not text.isdigit():
+            blf.position(0, position[0], position[1], 0)
+            blf.draw(self.font_id, text)
+            return
+
+        self.digit_sep(text, position)
+        bgl.glColor3f(*color)
+
+    def digit_colors(self, text, position):
+        digits = len(text)
+
         blf.position(0, position[0], position[1], 0)
-        blf.draw(self.font_id, text)
+        blf.draw(self.font_id, "  "*(digits-3) + text[-3:])
+
+        v = 0.75
+
+        blf.position(0, position[0]-2, position[1], 0)
+        bgl.glColor3f(1.0, v, v)
+        blf.draw(self.font_id, "  "*(digits-6) + text[-6:-3] + "  "*3)
+
+        blf.position(0, position[0]-4, position[1], 0)
+        bgl.glColor3f(v, v, 1.0)
+        blf.draw(self.font_id, "  "*(digits-9) + text[-9:-6] + "  "*6)
+
+
+    def digit_sep(self, text, position, sep="."):
+        digits = len(text)
+
+        text_sep = text[-3:]
+
+        if digits > 3: text_sep = text[-6:-3] + sep + text_sep
+        if digits > 6: text_sep = text[-9:-6] + sep + text_sep
+        if digits > 9: text_sep = text[-12:-9] + sep + text_sep
+
+        blf.position(0, position[0], position[1], 0)
+        blf.draw(self.font_id, text_sep)
 
     def DrawLine(self, v1, v2):
         """
@@ -75,29 +109,30 @@ class Draw():
             blf.position(0, initX, y, 0)
             blf.draw(self.font_id, key)
 
-            if row == 0: bgl.glColor3f(*scn.Polycount.Draw.title_color)
-            else: bgl.glColor3f(*scn.Polycount.Draw.data_color)
+            color = scn.Polycount.Draw.title_color if row == 0 else scn.Polycount.Draw.data_color
+
+            bgl.glColor3f(*color)
 
             col = 1
             if scn.Polycount.Draw.triangles:
                 text = 'Tris'
                 if row > 0: text = str(content[key].Triangles)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y))
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
                 col = col + 1
             if scn.Polycount.Draw.faces:
                 text = 'Faces'
                 if row > 0: text = str(content[key].Faces)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y))
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
                 col = col + 1
             if scn.Polycount.Draw.quads:
                 text = 'Quads'
                 if row > 0: text = str(content[key].Quads)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y))
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
                 col = col + 1
             if scn.Polycount.Draw.ngons:
                 text = 'Ngons'
                 if row > 0: text = str(content[key].Ngons)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y))
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
             row = row + 2
 
         if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces) and (scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
