@@ -8,7 +8,13 @@ class DATA_UL_polycount_obj_list(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         layout.alignment = 'EXPAND'
         # The name of the object will be displayed when is added to the list
-        layout.label(item.object.name)
+        row = layout.row()
+        split = row.split(percentage=0.15)
+        split.prop(item.object, "hide", emboss=False, text="")
+        split = split.split(percentage=0.15)
+        split.prop(item.object, "select", text="", emboss=False, icon='RADIOBUT_ON' if item.object.select else 'RADIOBUT_OFF')
+        split = split.split()
+        split.label(item.object.name)
 
 
 class DATA_OT_polycount_obj_list_add(bpy.types.Operator):
@@ -74,6 +80,7 @@ class DATA_OT_polycount_obj_list_remove(bpy.types.Operator):
         self.pc.Refresh(context, force=True)
         return {'FINISHED'}
 
+
 class DATA_OT_polycount_obj_list_clear(bpy.types.Operator):
     """
     Operator to remove objects from the list
@@ -126,13 +133,14 @@ class DATA_OT_polycount_obj_list_select(bpy.types.Operator):
             obj.object.select = self.select
         return {'FINISHED'}
 
+
 class DATA_OT_polycount_obj_list_hide(bpy.types.Operator):
     """
     Operator to remove objects from the list
     """
     bl_idname = "obj_list_hide.btn"
     bl_label = "Show/Hide Objects"
-    bl_description = "Show/Hide Objectsall object from the list"
+    bl_description = "Show/Hide Objects all object from the list"
 
     hide = bpy.props.BoolProperty(default=False)
 

@@ -119,7 +119,7 @@ class Draw():
             y = initY - (cellSize[1] * row)
 
             if key == 'OBJECT': bgl.glColor3f(*scn.Polycount.Draw.sep_color)
-            else: bgl.glColor3f(*scn.Polycount.Draw.title_color)
+            else: bgl.glColor3f(*(scn.Polycount.Draw.title_color if content[key][1] is None else content[key][1]))
             blf.position(0, initX, y, 0)
             title = key
             max = int(scn.Polycount.Draw.width*10)
@@ -134,22 +134,22 @@ class Draw():
             col = 1
             if scn.Polycount.Draw.triangles:
                 text = 'Tris'
-                if row > 0: text = str(content[key].Triangles)
+                if row > 0: text = str(content[key][0].Triangles)
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
                 col = col + 1
             if scn.Polycount.Draw.faces:
                 text = 'Faces'
-                if row > 0: text = str(content[key].Faces)
+                if row > 0: text = str(content[key][0].Faces)
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
                 col = col + 1
             if scn.Polycount.Draw.quads:
                 text = 'Quads'
-                if row > 0: text = str(content[key].Quads)
+                if row > 0: text = str(content[key][0].Quads)
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
                 col = col + 1
             if scn.Polycount.Draw.ngons:
                 text = 'Ngons'
-                if row > 0: text = str(content[key].Ngons)
+                if row > 0: text = str(content[key][0].Ngons)
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
             row = row + 2
 
@@ -236,13 +236,14 @@ class Draw():
             content['OBJECT'] = ('Triangles', 'Quads', 'Ngons', 'Faces')
 
             # Data for each Polycount context (selected objects, scene, layer and list) will be stored in the dictionary
-            if scn.Polycount.ObjectMode.Selected:   content['Selected'] = scn.Polycount.ObjectMode.SelectedData
-            if scn.Polycount.ObjectMode.Scene:      content['Scene']    = scn.Polycount.ObjectMode.SceneData
-            if scn.Polycount.ObjectMode.Layer:      content['Layer']    = scn.Polycount.ObjectMode.LayerData
+            if scn.Polycount.ObjectMode.Selected:   content['Selected'] = (scn.Polycount.ObjectMode.SelectedData, None)
+            if scn.Polycount.ObjectMode.Scene:      content['Scene']    = (scn.Polycount.ObjectMode.SceneData, None)
+            if scn.Polycount.ObjectMode.Layer:      content['Layer']    = (scn.Polycount.ObjectMode.LayerData, None)
             lists = bpy.context.scene.Polycount.MainUI.lists_List
             if scn.Polycount.ObjectMode.List and len(lists)>0:
                 for l in lists:
-                    content[l.list_name] =  l.list_data
+                    if not l.list_visible: continue
+                    content[l.list_name] = (l.list_data, l.list_color)
 
             # Data will be displayed as a table
             pos = self.DrawTable(pos, cellRefSize, content)

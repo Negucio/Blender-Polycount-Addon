@@ -12,10 +12,14 @@ class ItemCollectionPropertyGroup(bpy.types.PropertyGroup):
     """
     Stores the properties of a UIList item
     """
+    #Settings
     list_name = bpy.props.StringProperty(default="")
+    list_visible = bpy.props.BoolProperty(default=True)
+    list_color = bpy.props.FloatVectorProperty(name="title_color", subtype='COLOR', default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
+    list_data = bpy.props.PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
+    #Collections
     obj_list = bpy.props.CollectionProperty(type=ItemListPropertyGroup)
     obj_list_Index = bpy.props.IntProperty(name="Index", default=0, min=0)
-    list_data = bpy.props.PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
 
 
 class ObjListPropertyGroup(bpy.types.PropertyGroup):

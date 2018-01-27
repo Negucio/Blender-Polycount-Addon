@@ -7,7 +7,12 @@ class DATA_UL_polycount_lists_list(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         layout.alignment = 'EXPAND'
         row = layout.row()
-        row.prop(item, "list_name", text="", emboss=False, icon_value=icon)
+        split = row.split(percentage=0.2)
+        split.prop(item, "list_visible", text="", emboss=False, icon='RESTRICT_VIEW_OFF' if item.list_visible else 'RESTRICT_VIEW_ON')
+        split = split.split(percentage=0.7)
+        split.prop(item, "list_name", text="", emboss=False, icon_value=icon)
+        split = split.split()
+        split.prop(item, "list_color", text="", icon_value=icon)
 
 class DATA_OT_polycount_lists_list_add(bpy.types.Operator):
     """

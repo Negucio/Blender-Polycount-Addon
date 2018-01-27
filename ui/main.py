@@ -126,8 +126,8 @@ class VIEW3D_PT_polycount_object(bpy.types.Panel):
             row.operator("obj_list_select.btn", icon='RADIOBUT_OFF', text="").select = False
             col = rowParent.column()
             row = col.row(align=True)
-            row.operator("obj_list_hide.btn", icon='OUTLINER_OB_LAMP', text="").hide = False
-            row.operator("obj_list_hide.btn", icon='OUTLINER_DATA_LAMP', text="").hide = True
+            row.operator("obj_list_hide.btn", icon='RESTRICT_VIEW_OFF', text="").hide = False
+            row.operator("obj_list_hide.btn", icon='RESTRICT_VIEW_ON', text="").hide = True
 
 class VIEW3D_PT_polycount_edit_mode(bpy.types.Panel):
     bl_label = "Edit Mode Polycount"
