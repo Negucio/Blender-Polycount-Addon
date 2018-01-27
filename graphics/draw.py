@@ -1,4 +1,4 @@
-import bpy, bgl, blf, collections
+import bpy, bgl, blf, collections, math
 from .. polycount.controller import PolycountController
 
 class Draw():
@@ -41,27 +41,42 @@ class Draw():
             blf.draw(self.font_id, text)
             return
 
-        self.digit_sep(text, position)
+        if not hasattr(bpy.context, "scene"): return
+        scn = bpy.context.scene
+        final_text = text if not scn.Polycount.Draw.sep_by_dot else self.digit_sep(text)
+        self.format_digits(final_text, position, color, scn)
+
         bgl.glColor3f(*color)
 
-    def digit_colors(self, text, position):
-        digits = len(text)
+
+    def format_digits(self, text, position, original_color, scene):
+        sep = scene.Polycount.Draw.sep_by_dot
+        color = scene.Polycount.Draw.sep_by_color
+
+        units = text[-3:] if not sep else text[-4:]
+        thousands = text[-6:-3] if not sep else text[-8:-4]
+        millions = text[-9:-6] if not sep else text[-12:-8]
+
+        offset = 0
 
         blf.position(0, position[0], position[1], 0)
-        blf.draw(self.font_id, "  "*(digits-3) + text[-3:])
+        if color: bgl.glColor3f(*scene.Polycount.Draw.millions_color)
+        text_width, text_height = blf.dimensions(self.font_id, millions)
+        blf.draw(self.font_id, millions)
+        offset += text_width + 1
 
-        v = 0.75
+        blf.position(0, position[0]+offset, position[1], 0)
+        if color: bgl.glColor3f(*scene.Polycount.Draw.thousands_color)
+        text_width, text_height = blf.dimensions(self.font_id, thousands)
+        blf.draw(self.font_id, thousands)
+        offset += text_width + 1
 
-        blf.position(0, position[0]-2, position[1], 0)
-        bgl.glColor3f(1.0, v, v)
-        blf.draw(self.font_id, "  "*(digits-6) + text[-6:-3] + "  "*3)
-
-        blf.position(0, position[0]-4, position[1], 0)
-        bgl.glColor3f(v, v, 1.0)
-        blf.draw(self.font_id, "  "*(digits-9) + text[-9:-6] + "  "*6)
+        blf.position(0, position[0]+offset, position[1], 0)
+        if color: bgl.glColor3f(*original_color)
+        blf.draw(self.font_id, units)
 
 
-    def digit_sep(self, text, position, sep="."):
+    def digit_sep(self, text, sep="."):
         digits = len(text)
 
         text_sep = text[-3:]
@@ -70,8 +85,7 @@ class Draw():
         if digits > 6: text_sep = text[-9:-6] + sep + text_sep
         if digits > 9: text_sep = text[-12:-9] + sep + text_sep
 
-        blf.position(0, position[0], position[1], 0)
-        blf.draw(self.font_id, text_sep)
+        return text_sep
 
     def DrawLine(self, v1, v2):
         """
@@ -107,7 +121,11 @@ class Draw():
             if key == 'OBJECT': bgl.glColor3f(*scn.Polycount.Draw.sep_color)
             else: bgl.glColor3f(*scn.Polycount.Draw.title_color)
             blf.position(0, initX, y, 0)
-            blf.draw(self.font_id, key)
+            title = key
+            max = int(scn.Polycount.Draw.width*10)
+            if len(key) > max:
+                title = key[0:max-3] + "..."
+            blf.draw(self.font_id, title)
 
             color = scn.Polycount.Draw.title_color if row == 0 else scn.Polycount.Draw.data_color
 
@@ -137,7 +155,7 @@ class Draw():
 
         if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces) and (scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
             triOrFac = 2 if scn.Polycount.Draw.triangles and scn.Polycount.Draw.faces else 1
-            sepX = initX + (cellSize[0] * triOrFac) + (scn.Polycount.Draw.font_size * 5)
+            sepX = initX + (cellSize[0] * triOrFac) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
             bgl.glColor3f(*scn.Polycount.Draw.sep_color)
             self.DrawLine((sepX, initY), (sepX, y))
         return (initX + (cellSize[0] * col) , y)
@@ -196,13 +214,13 @@ class Draw():
         # TODO: Should be dependant on the region limits, allowing to customize only the offsets
         # TODO: and keeping the limits to avoid drawing outside the 3dView.
         # Sets the coordinates in pixels of the top-left corner in the 3DView
-        initX = bpy.context.region.width - 400 + scn.Polycount.Draw.hor_Offset
+        initX = bpy.context.region.width - (450*scn.Polycount.Draw.width) + scn.Polycount.Draw.hor_Offset
         initY = bpy.context.region.height - 22 + scn.Polycount.Draw.vert_Offset
         pos = (initX, initY)
 
         # Sets the text and cell sizes based on the font size
         blf.size(self.font_id, scn.Polycount.Draw.font_size, 72)
-        cellRefSize = (scn.Polycount.Draw.font_size * 6, scn.Polycount.Draw.font_size - 4)
+        cellRefSize = ((scn.Polycount.Draw.font_size * 6) * scn.Polycount.Draw.width, (scn.Polycount.Draw.font_size - 4) * scn.Polycount.Draw.height)
 
         # Recalculates the polycount. Keeps the displayed data up to date.
         self.pc.Refresh(ctx)
