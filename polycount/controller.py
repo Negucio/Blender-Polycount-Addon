@@ -114,7 +114,8 @@ class PolycountController():
         for layer in range(len(bpy.context.scene.Polycount.MainUI.layer_idx)):
             if bpy.context.scene.Polycount.MainUI.layer_idx[layer]:
                 objs += [ob for ob in bpy.context.scene.objects if ob.layers[layer] and ob not in objs]
-                self.SetPolycount(objs, bpy.context.scene.Polycount.ObjectMode.LayerData)
+
+        self.SetPolycount(objs, bpy.context.scene.Polycount.ObjectMode.LayerData)
 
     def ListPolycount(self, context):
         if len(context.scene.Polycount.MainUI.lists_List) == 0: return
