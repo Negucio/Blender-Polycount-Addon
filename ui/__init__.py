@@ -1,9 +1,7 @@
 import bpy
 from . main import \
     VIEW3D_OT_polycount_display, \
-    VIEW3D_PT_polycount_main, \
-    VIEW3D_PT_polycount_object, \
-    VIEW3D_PT_polycount_edit_mode
+    VIEW3D_PT_polycount_main
 
 from . settings import VIEW3D_PT_polycount_settings
 
@@ -40,8 +38,6 @@ def register():
 
 
     bpy.utils.register_class(VIEW3D_PT_polycount_main)
-    bpy.utils.register_class(VIEW3D_PT_polycount_object)
-    bpy.utils.register_class(VIEW3D_PT_polycount_edit_mode)
     bpy.utils.register_class(VIEW3D_PT_polycount_settings)
 
 
@@ -49,8 +45,6 @@ def unregister():
     bpy.utils.unregister_class(VIEW3D_OT_polycount_display)
 
     bpy.utils.unregister_class(VIEW3D_PT_polycount_main)
-    bpy.utils.unregister_class(VIEW3D_PT_polycount_object)
-    bpy.utils.unregister_class(VIEW3D_PT_polycount_edit_mode)
     bpy.utils.unregister_class(VIEW3D_PT_polycount_settings)
 
     bpy.utils.unregister_class(DATA_OT_polycount_obj_list_add)

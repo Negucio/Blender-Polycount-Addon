@@ -39,4 +39,4 @@ class ObjListPropertyGroup(bpy.types.PropertyGroup):
     lists_List = bpy.props.CollectionProperty(type=ItemCollectionPropertyGroup)
 
     # Layer operator
-    layer_idx = bpy.props.BoolVectorProperty(size=20, subtype='LAYER', name='Select layer', update=layer_update_func)
+    layer_idx = bpy.props.BoolVectorProperty(size=20, subtype='LAYER', name='', update=layer_update_func)
