@@ -22,8 +22,8 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
     width = bpy.props.FloatProperty(name = "width", default = 1.2, min=1, max=1.5)
     height = bpy.props.FloatProperty(name = "height", default = 1, min=1, max=1.5)
 
-    hor_Offset = bpy.props.IntProperty(name = "HorOffset", default = 0)
-    vert_Offset = bpy.props.IntProperty(name = "VertOffset", default = 0)
+    hor_pos = bpy.props.FloatProperty(name = "hor_pos", default = 1, max=1, min=0)
+    vert_pos = bpy.props.FloatProperty(name = "vert_pos", default = 0, max=1, min=0)
     font_size = bpy.props.IntProperty(name = "FontSize", default = 14, max= 20, min=12)
     title_color = bpy.props.FloatVectorProperty(name="title_color", subtype='COLOR', default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
     data_color = bpy.props.FloatVectorProperty(name="data_color", subtype='COLOR', default=(1.0, 1.0, 1.0), min=0.0, max=1.0, description="color picker")

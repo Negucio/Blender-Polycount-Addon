@@ -17,8 +17,8 @@ class VIEW3D_PT_polycount_settings(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         col = layout.column(align=True)
-        col.prop(context.scene.Polycount.Draw, "hor_Offset", text="Offset X")
-        col.prop(context.scene.Polycount.Draw, "vert_Offset", text="Offset Y")
+        col.prop(context.scene.Polycount.Draw, "hor_pos", text="X")
+        col.prop(context.scene.Polycount.Draw, "vert_pos", text="Y")
         col.prop(context.scene.Polycount.Draw, "font_size", text="Font Size")
         col.prop(context.scene.Polycount.Draw, "width", text="Width")
         col.prop(context.scene.Polycount.Draw, "height", text="Height")

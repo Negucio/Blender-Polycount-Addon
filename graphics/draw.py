@@ -170,12 +170,6 @@ class Draw():
         initX = pos[0]
         initY = pos[1]
 
-        if objModeVisible:
-            line_y = initY + cellSize[1]
-            bgl.glColor3f(*scn.Polycount.Draw.sep_color)
-            cols = len(content['EDIT'])+0.5
-            self.DrawLine((initX, line_y), (initX+(cols*cellSize[0]), line_y))
-            initY = initY - cellSize[1]
 
         y = initY
 
@@ -215,6 +209,59 @@ class Draw():
 
             y = initY - (cellSize[1] * row)
 
+    def get_columns(self, scene):
+        # Initializes var to 1 because of the title column
+        obj_mode = 1
+        if scene.Polycount.Draw.ObjPolycount:
+            if scene.Polycount.Draw.triangles:  obj_mode += 1
+            if scene.Polycount.Draw.faces:  obj_mode += 1
+            if scene.Polycount.Draw.quads:  obj_mode += 1
+            if scene.Polycount.Draw.ngons:  obj_mode += 1
+
+        # Initializes var to 1 because of the title column
+        edit_mode = 1
+        if scene.Polycount.Draw.EditModePolycount:
+            if scene.Polycount.Draw.selected_tris:  edit_mode += 1
+            if scene.Polycount.Draw.selected_verts:  edit_mode += 1
+            if scene.Polycount.Draw.selected_edges:  edit_mode += 1
+            if scene.Polycount.Draw.selected_faces:  edit_mode += 1
+
+        return max(obj_mode, edit_mode)
+
+    def get_rows(self, scene):
+        # Initializes var to 1 because of the title column
+        obj_mode = 1
+        if scene.Polycount.Draw.ObjPolycount:
+            if scene.Polycount.ObjectMode.Selected:  obj_mode += 1
+            if scene.Polycount.ObjectMode.Scene:   obj_mode += 1
+            if scene.Polycount.ObjectMode.Layer:   obj_mode += 1
+            if scene.Polycount.ObjectMode.List:
+                obj_mode += len([l.list_visible for l in bpy.context.scene.Polycount.MainUI.lists_List])
+
+        # Initializes var to 1 because of the title column
+        edit_mode = 1
+        if scene.Polycount.Draw.EditModePolycount: edit_mode += 1
+
+        return obj_mode + edit_mode
+
+
+    def get_init_pos(self, max, size, perc=1, low_margin=20, high_margin=20, reverse=False):
+        # TODO: Check vertical drawing: Table goes outside of the view3d in perc=0 and more than 4 rows
+        pos = (max - size) * perc
+        if pos < low_margin:
+            pos = low_margin
+        elif pos > max-high_margin:
+            pos = max-high_margin
+        return pos if not reverse else max-pos
+
+
+    def draw_obj_edit_sep_line(self, pos, cellSize, color, cols):
+        line_y = pos[1] + cellSize[1]
+        bgl.glColor3f(*color)
+        line_cols = cols - 0.5
+        self.DrawLine((pos[0], line_y), (pos[0] + (line_cols * cellSize[0]), line_y))
+
+
     def DrawPolycount(self):
         ctx = bpy.context
         scn = ctx.scene
@@ -222,17 +269,26 @@ class Draw():
         # TODO: Constants should not be used in order to set the initial position.
         # TODO: Should be dependant on the region limits, allowing to customize only the offsets
         # TODO: and keeping the limits to avoid drawing outside the 3dView.
-        # Sets the coordinates in pixels of the top-left corner in the 3DView
-        initX = bpy.context.region.width - (450*scn.Polycount.Draw.width) + scn.Polycount.Draw.hor_Offset
-        initY = bpy.context.region.height - 22 + scn.Polycount.Draw.vert_Offset
-        pos = (initX, initY)
-
         # Sets the text and cell sizes based on the font size
         blf.size(self.font_id, scn.Polycount.Draw.font_size, 72)
-        cellRefSize = ((scn.Polycount.Draw.font_size * 6) * scn.Polycount.Draw.width, (scn.Polycount.Draw.font_size - 4) * scn.Polycount.Draw.height)
+        cellRefSize = ((scn.Polycount.Draw.font_size * 6) * scn.Polycount.Draw.width, (scn.Polycount.Draw.font_size * 0.7) * scn.Polycount.Draw.height)
+
+        # Sets the coordinates in pixels of the top-left corner in the 3DView
+        cols = self.get_columns(scn)
+        initX = self.get_init_pos(bpy.context.region.width, cellRefSize[0]*cols, perc=scn.Polycount.Draw.hor_pos)
+        rows = self.get_rows(scn)
+        initY = self.get_init_pos(bpy.context.region.height, cellRefSize[1]*rows, perc=scn.Polycount.Draw.vert_pos, reverse=True, high_margin=scn.Polycount.Draw.font_size*10)
+
+        pos = (initX, initY)
 
         # Recalculates the polycount. Keeps the displayed data up to date.
         self.pc.Refresh(ctx)
+
+        if not scn.Polycount.ObjectMode.Selected and \
+                not scn.Polycount.ObjectMode.Scene and \
+                not scn.Polycount.ObjectMode.Layer and \
+                (not scn.Polycount.ObjectMode.List or \
+                 len(bpy.context.scene.Polycount.MainUI.lists_List)==0): return
 
         # Global Polycount will be displayed if it is on in the ui and if any of its components is on
         objectMode = scn.Polycount.Draw.ObjPolycount and (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons)
@@ -240,27 +296,30 @@ class Draw():
         # Object/Global mode: This information will be displayed in real-time in Object and Edit Mode.
         if objectMode:
             # Global mode data is stored in an ordered dictionary
-            content = collections.OrderedDict()
+            contentObjMode = collections.OrderedDict()
             # Add the name of each component which will be accounted
-            content['OBJECT'] = ('Triangles', 'Quads', 'Ngons', 'Faces')
-
+            contentObjMode['OBJECT'] = ('Triangles', 'Quads', 'Ngons', 'Faces')
             # Data for each Polycount context (selected objects, scene, layer and list) will be stored in the dictionary
-            if scn.Polycount.ObjectMode.Selected:   content['Selected'] = (scn.Polycount.ObjectMode.SelectedData, None)
-            if scn.Polycount.ObjectMode.Scene:      content['Scene']    = (scn.Polycount.ObjectMode.SceneData, None)
-            if scn.Polycount.ObjectMode.Layer:      content['Layer']    = (scn.Polycount.ObjectMode.LayerData, None)
+            if scn.Polycount.ObjectMode.Selected:   contentObjMode['Selected'] = (scn.Polycount.ObjectMode.SelectedData, None)
+            if scn.Polycount.ObjectMode.Scene:      contentObjMode['Scene']    = (scn.Polycount.ObjectMode.SceneData, None)
+            if scn.Polycount.ObjectMode.Layer:      contentObjMode['Layer']    = (scn.Polycount.ObjectMode.LayerData, None)
             lists = bpy.context.scene.Polycount.MainUI.lists_List
             if scn.Polycount.ObjectMode.List and len(lists)>0:
                 for l in lists:
                     if not l.list_visible: continue
-                    content[l.list_name] = (l.list_data, l.list_color)
+                    contentObjMode[l.list_name] = (l.list_data, l.list_color)
 
             # Data will be displayed as a table
-            pos = self.DrawTable(pos, cellRefSize, content)
+            pos = self.DrawTable(pos, cellRefSize, contentObjMode)
 
         # EditMode Polycount will be displayed if it is on in the ui and if any of its components is on
         editMode = scn.Polycount.Draw.EditModePolycount and (scn.Polycount.Draw.selected_tris or scn.Polycount.Draw.selected_verts or scn.Polycount.Draw.selected_edges or scn.Polycount.Draw.selected_faces)
+
+        edit_mode_pos = (pos[0], pos[1]-cellRefSize[1])
         # Edit Mode: This information will be only displayed in Edit Mode
         if bpy.context.mode == 'EDIT_MESH' and editMode:
+            if objectMode: self.draw_obj_edit_sep_line(pos, cellRefSize, scn.Polycount.Draw.sep_color, cols)
+
             # Global mode data is stored in an ordered dictionary
             contentEditMode = collections.OrderedDict()
             # Add the name of each component which will be accounted
@@ -270,7 +329,7 @@ class Draw():
             contentEditMode['Selected'] = scn.Polycount.EditMode
 
             # Data will be displayed as a table
-            self.DrawEditModeTable(pos, cellRefSize, contentEditMode, objectMode)
+            self.DrawEditModeTable(edit_mode_pos, cellRefSize, contentEditMode, objectMode)
 
     def DisplayPolycount(self, context):
         """
