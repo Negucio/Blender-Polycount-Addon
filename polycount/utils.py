@@ -7,7 +7,7 @@ def has_solidify(object):
     """
     if not hasattr(object, "modifiers"): return False
     for mod in object.modifiers:
-        if mod.type == 'SOLIDIFY':
+        if mod.type == 'SOLIDIFY' and mod.show_viewport:
             return True
     return False
 
@@ -22,7 +22,7 @@ def get_levels_subsurf(object):
     levels = 0
     if not hasattr(object, "modifiers"): return levels
     for mod in object.modifiers:
-        if mod.type == 'SUBSURF':
+        if mod.type == 'SUBSURF' and mod.show_viewport:
             levels += mod.levels
 
     return levels
@@ -62,7 +62,7 @@ def get_mirror_axis(object):
     retVal = 0
     if not hasattr(object, "modifiers"): return retVal
     for mod in object.modifiers:
-        if mod.type == 'MIRROR':
+        if mod.type == 'MIRROR' and mod.show_viewport:
             mirror = mod
             break
 
