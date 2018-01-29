@@ -2,11 +2,13 @@
 class ObjectModeUI():
     def draw(self, context, layout):
         col = layout.column(align=True)
-        col.prop(context.scene.Polycount.Draw, "ObjPolycount", text="Obj Mode Polycount", icon='OBJECT_DATAMODE')
+        col.prop(context.scene.Polycount.Draw, "ObjPolycount", text="Obj Mode Count", icon='OBJECT_DATAMODE')
         if context.scene.Polycount.Draw.ObjPolycount:
             box = col.box()
+            box.label("Count Display:")
             self.PolygonTypes(context, box)
             self.ModifiersConfig(context, box)
+            box.label("Count Mode:")
             self.PolygonContext(context, box)
 
     def PolygonTypes(self, context, layout):
@@ -28,14 +30,15 @@ class ObjectModeUI():
         row.prop(context.scene.Polycount.ObjectMode.modifiers, "on", text="Modifiers (Approximate)", icon="MODIFIER")
         row = col.row(align=True)
         row.enabled =context.scene.Polycount.ObjectMode.modifiers.on
-        row.prop(context.scene.Polycount.ObjectMode.modifiers, "mirror", text="Mirr", icon='MOD_MIRROR')
-        row.prop(context.scene.Polycount.ObjectMode.modifiers, "subsurf", text="Subs", icon='MOD_SUBSURF')
-        row.prop(context.scene.Polycount.ObjectMode.modifiers, "solidify", text="Sldf", icon='MOD_SOLIDIFY')
+        row.prop(context.scene.Polycount.ObjectMode.modifiers, "mirror", text="Mirror", icon='MOD_MIRROR')
+        row.prop(context.scene.Polycount.ObjectMode.modifiers, "subsurf", text="Subsurf", icon='MOD_SUBSURF')
+        row.prop(context.scene.Polycount.ObjectMode.modifiers, "solidify", text="Solidify", icon='MOD_SOLIDIFY')
 
     def PolygonContext(self, context, layout):
         col = layout.column(align=True)
         row = col.row(align=True)
-        row.prop(context.scene.Polycount.ObjectMode, "Selected", text="Selected", icon='ZOOM_SELECTED')
+        row.prop(context.scene.Polycount.ObjectMode, "Selected", text="Selection", icon='ZOOM_SELECTED')
+        row = layout.row()
         row.prop(context.scene.Polycount.ObjectMode, "Scene", text="Scene", icon='SCENE_DATA')
         row = layout.row()
         self.LayerConfig(context, row)
@@ -68,18 +71,26 @@ class ObjectModeUI():
             row = layout.row()
             box = row.box()
             row = box.row()
-            row.label(text=context.scene.Polycount.MainUI.lists_List[idx].list_name)
-            row.prop(context.scene.Polycount.MainUI.lists_List[idx], "obj_list")
+
+            split = row.split(percentage=0.6)
+            split.label(text=context.scene.Polycount.MainUI.lists_List[idx].list_name + ' contents')
+            split = split.split()
+            split.prop(context.scene.Polycount.MainUI.lists_List[idx], "obj_list")
+
             row = box.row()
             row.template_list("DATA_UL_polycount_obj_list", "", context.scene.Polycount.MainUI.lists_List[idx], "obj_list", context.scene.Polycount.MainUI.lists_List[idx], "obj_list_Index")
             row_parent = box.row()
             col = row_parent.column()
             row = col.row(align=True)
+            #row.operator("obj_list_add.btn", text="Assign")
+            #row.operator("obj_list_remove.btn", text="Remove")
             row.operator("obj_list_add.btn", icon='ZOOMIN', text="")
             row.operator("obj_list_remove.btn", icon='ZOOMOUT', text="")
             row.operator("obj_list_clear.btn", icon='X', text="")
             col = row_parent.column()
             row = col.row(align=True)
+            #row.operator("obj_list_select.btn", text="Select").select = True
+            #row.operator("obj_list_select.btn", text="Deselect").select = False
             row.operator("obj_list_select.btn", icon='RADIOBUT_ON', text="").select = True
             row.operator("obj_list_select.btn", icon='RADIOBUT_OFF', text="").select = False
             col = row_parent.column()
@@ -90,7 +101,7 @@ class ObjectModeUI():
 class EditModeUI():
     def draw(self, context, layout):
         col = layout.column(align=True)
-        col.prop(context.scene.Polycount.Draw, "EditModePolycount", text="Edit Mode Polycount", icon='EDIT')
+        col.prop(context.scene.Polycount.Draw, "EditModePolycount", text="Edit Mode Count", icon='EDIT')
 
         if context.scene.Polycount.Draw.EditModePolycount:
             box = col.box()
