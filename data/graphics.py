@@ -7,6 +7,7 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
     # Scene data
     ObjPolycount = bpy.props.BoolProperty(default = True, description = 'Object Polycount')
     triangles = bpy.props.BoolProperty(default = True, description = 'Triangles*1 + Quads*2 + Ngons*(vertices - 2)')
+    percentage = bpy.props.BoolProperty(default = True, description = 'Percentage of triangles in relation to the scene')
     quads     = bpy.props.BoolProperty(default = True, description = '4-sided polygons')
     ngons     = bpy.props.BoolProperty(default = True, description = 'N-sided polygons')
     faces     = bpy.props.BoolProperty(default = True, description = 'Triangles + Quads + Ngons')

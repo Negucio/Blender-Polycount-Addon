@@ -30,7 +30,7 @@ class Draw():
             if hasattr(context, "area") and context.area is not None: context.area.tag_redraw()
         self.PostPixelHandle = None
 
-    def DrawCell(self, text, position, color=None):
+    def DrawCell(self, text, position, color):
         """
         Draws a cell of the table
         :param text: Text in the cell
@@ -38,6 +38,7 @@ class Draw():
         """
         if not text.isdigit() or color is None:
             blf.position(0, position[0], position[1], 0)
+            bgl.glColor3f(*color)
             blf.draw(self.font_id, text)
             return
 
@@ -137,11 +138,18 @@ class Draw():
                 if row > 0: text = str(content[key][0].Triangles)
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
                 col = col + 1
+            if scn.Polycount.Draw.percentage:
+                text = 'Tris/Scene'
+                scn_tris = bpy.context.scene.Polycount.ObjectMode.SceneData.Triangles
+                if row > 0: text = "{0:.2f}%".format(0.0 if scn_tris == 0 else (content[key][0].Triangles / scn_tris)*100)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                col = col + 1
             if scn.Polycount.Draw.faces:
                 text = 'Faces'
                 if row > 0: text = str(content[key][0].Faces)
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
                 col = col + 1
+
             if scn.Polycount.Draw.quads:
                 text = 'Quads'
                 if row > 0: text = str(content[key][0].Quads)
@@ -155,21 +163,28 @@ class Draw():
 
             y = initY - (cellSize[1] * row)
 
-        # Vertical line to separate Tris/Faces and Quads/Ngons
-        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces) and (scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
-            triOrFac = 2 if scn.Polycount.Draw.triangles and scn.Polycount.Draw.faces else 1
-            sepX = initX + (cellSize[0] * triOrFac) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
-            bgl.glColor3f(*scn.Polycount.Draw.sep_color)
-            self.DrawLine((sepX, initY), (sepX, y + (cellSize[1] *2)))
+        cols = 0
 
+        # Vertical line to separate Tris/Faces and Quads/Ngons
+        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.percentage) and (scn.Polycount.Draw.faces or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
+            cols = 2 if scn.Polycount.Draw.triangles and scn.Polycount.Draw.percentage else 1
+            sepX = initX + (cellSize[0] * cols) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
+            bgl.glColor3f(*scn.Polycount.Draw.sep_color)
+            self.DrawLine((sepX, initY), (sepX, y + (cellSize[1]*2)))
+
+        if (scn.Polycount.Draw.faces) and (scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
+            cols = cols+1
+            sepX = initX + (cellSize[0] * cols) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
+            bgl.glColor3f(*scn.Polycount.Draw.sep_color)
+            self.DrawLine((sepX, initY), (sepX, y + (cellSize[1]*2)))
+#
         return (initX , y)
 
-    def DrawEditModeTable(self, pos, cellSize, content, objModeVisible):
+    def DrawEditModeTable(self, pos, cellSize, content):
         scn = bpy.context.scene
 
         initX = pos[0]
         initY = pos[1]
-
 
         y = initY
 
@@ -214,6 +229,7 @@ class Draw():
         obj_mode = 1
         if scene.Polycount.Draw.ObjPolycount:
             if scene.Polycount.Draw.triangles:  obj_mode += 1
+            if scene.Polycount.Draw.percentage:  obj_mode += 1
             if scene.Polycount.Draw.faces:  obj_mode += 1
             if scene.Polycount.Draw.quads:  obj_mode += 1
             if scene.Polycount.Draw.ngons:  obj_mode += 1
@@ -291,7 +307,7 @@ class Draw():
                  len(bpy.context.scene.Polycount.MainUI.lists_List)==0): return
 
         # Global Polycount will be displayed if it is on in the ui and if any of its components is on
-        objectMode = scn.Polycount.Draw.ObjPolycount and (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons)
+        objectMode = scn.Polycount.Draw.ObjPolycount and (scn.Polycount.Draw.triangles or scn.Polycount.Draw.percentage or scn.Polycount.Draw.faces or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons)
 
         # Object/Global mode: This information will be displayed in real-time in Object and Edit Mode.
         if objectMode:
@@ -329,7 +345,7 @@ class Draw():
             contentEditMode['Selected'] = scn.Polycount.EditMode
 
             # Data will be displayed as a table
-            self.DrawEditModeTable(edit_mode_pos, cellRefSize, contentEditMode, objectMode)
+            self.DrawEditModeTable(edit_mode_pos, cellRefSize, contentEditMode)
 
     def DisplayPolycount(self, context):
         """

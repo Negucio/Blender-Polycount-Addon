@@ -15,6 +15,8 @@ class ObjectModeUI():
         col = layout.column(align=True)
         row = col.row(align=True)
         row.prop(context.scene.Polycount.Draw, "triangles", text="Tris", icon='IMAGE_ALPHA')
+        row.prop(context.scene.Polycount.Draw, "percentage", text="%", icon='IMAGE_ALPHA')
+        row = col.row(align=True)
         row.prop(context.scene.Polycount.Draw, "faces", text="Faces", icon='SNAP_FACE')
         row = col.row(align=True)
         row.prop(context.scene.Polycount.Draw, "quads", text="Quads", icon='MESH_PLANE')

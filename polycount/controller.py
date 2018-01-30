@@ -130,7 +130,8 @@ class PolycountController():
         if force or scene.Polycount.ObjectMode.Selected:
             self.SetPolycount(context.selected_objects, scene.Polycount.ObjectMode.SelectedData)
 
-        if force or scene.Polycount.ObjectMode.Scene:
+        # It is necessary to calculate the scene polycount if the percentage column is enabled
+        if force or scene.Polycount.ObjectMode.Scene or scene.Polycount.Draw.percentage:
             self.ScenePolycount()
 
         if force or scene.Polycount.ObjectMode.Layer:
