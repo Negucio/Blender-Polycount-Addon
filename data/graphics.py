@@ -7,17 +7,22 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
     # Scene data
     ObjPolycount = bpy.props.BoolProperty(default = True, description = 'Object Polycount')
     triangles = bpy.props.BoolProperty(default = True, description = 'Triangles*1 + Quads*2 + Ngons*(vertices - 2)')
-    percentage = bpy.props.BoolProperty(default = True, description = 'Percentage of triangles in relation to the scene')
-    quads     = bpy.props.BoolProperty(default = True, description = '4-sided polygons')
-    ngons     = bpy.props.BoolProperty(default = True, description = 'N-sided polygons')
-    faces     = bpy.props.BoolProperty(default = True, description = 'Triangles + Quads + Ngons')
+    percentage = bpy.props.BoolProperty(default = False, description = 'Percentage of triangles in relation to the scene')
+    quads     = bpy.props.BoolProperty(default = False, description = '4-sided polygons')
+    ngons     = bpy.props.BoolProperty(default = False, description = 'N-sided polygons')
+    faces     = bpy.props.BoolProperty(default = False, description = 'Triangles + Quads + Ngons')
+    # Which data will be displayed
+    Selected        = bpy.props.BoolProperty(default = True, description="Selected Object(s) Polycount")
+    Scene           = bpy.props.BoolProperty(default = True, description="Scene Polycount")
+    Layer           = bpy.props.BoolProperty(default = False, description="Layer(s) Polycount")
+    List            = bpy.props.BoolProperty(default = False, description="List Polycount")
 
     # Edit Mode data
     EditModePolycount = bpy.props.BoolProperty(default = True, description = 'Edit Mode Polycount')
     selected_tris = bpy.props.BoolProperty(default = True, description="Triangles*1 + Quads*2 + Ngons*(vertices - 2)")
-    selected_verts = bpy.props.BoolProperty(default = True, description="Selected Vertices Polycount")
-    selected_edges = bpy.props.BoolProperty(default = True, description="Selected Edges Polycount")
-    selected_faces = bpy.props.BoolProperty(default = True, description="Selected Faces Polycount")
+    selected_verts = bpy.props.BoolProperty(default = False, description="Selected Vertices Polycount")
+    selected_edges = bpy.props.BoolProperty(default = False, description="Selected Edges Polycount")
+    selected_faces = bpy.props.BoolProperty(default = False, description="Selected Faces Polycount")
 
     # Drawing settings
     width = bpy.props.FloatProperty(name = "width", default = 1.2, min=1, max=1.5)

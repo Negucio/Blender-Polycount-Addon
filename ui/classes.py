@@ -39,9 +39,9 @@ class ObjectModeUI():
     def PolygonContext(self, context, layout):
         col = layout.column(align=True)
         row = col.row(align=True)
-        row.prop(context.scene.Polycount.ObjectMode, "Selected", text="Selection", icon='ZOOM_SELECTED')
+        row.prop(context.scene.Polycount.Draw, "Selected", text="Selection", icon='ZOOM_SELECTED')
         row = layout.row()
-        row.prop(context.scene.Polycount.ObjectMode, "Scene", text="Scene", icon='SCENE_DATA')
+        row.prop(context.scene.Polycount.Draw, "Scene", text="Scene", icon='SCENE_DATA')
         row = layout.row()
         self.LayerConfig(context, row)
         row = layout.row()
@@ -49,21 +49,21 @@ class ObjectModeUI():
 
     def LayerConfig(self, context, layout):
         col = layout.column(align=True)
-        col.prop(context.scene.Polycount.ObjectMode, "Layer", text="Layer", icon='LAYER_ACTIVE')
-        if context.scene.Polycount.ObjectMode.Layer:
+        col.prop(context.scene.Polycount.Draw, "Layer", text="Layer", icon='LAYER_ACTIVE')
+        if context.scene.Polycount.Draw.Layer:
             box = col.box()
             box.prop(context.scene.Polycount.MainUI, 'layer_idx')
 
     def ListConfig(self, context, layout):
         col = layout.column(align=True)
-        col.prop(context.scene.Polycount.ObjectMode, "List", text="List", icon='COLLAPSEMENU')
-        if context.scene.Polycount.ObjectMode.List:
+        col.prop(context.scene.Polycount.Draw, "List", text="List", icon='COLLAPSEMENU')
+        if context.scene.Polycount.Draw.List:
             box = col.box()
             self.object_list_polycount(context, box)
 
     def object_list_polycount(self, context, layout):
         row = layout.row()
-        row.template_list("DATA_UL_polycount_lists_list", "", context.scene.Polycount.MainUI, "lists_List", context.scene.Polycount.MainUI, "lists_List_Index", rows=2, maxrows=5)
+        row.template_list("DATA_UL_polycount_lists_list", "", context.scene.Polycount.MainUI, "lists_List", context.scene.Polycount.MainUI, "lists_List_Index", rows=1, maxrows=5)
         col = row.column(align=True)
         col.operator("lists_list_add.btn", icon='ZOOMIN', text="")
         col.operator("lists_list_remove.btn", icon='ZOOMOUT', text="")
@@ -80,25 +80,19 @@ class ObjectModeUI():
             split.prop(context.scene.Polycount.MainUI.lists_List[idx], "obj_list")
 
             row = box.row()
-            row.template_list("DATA_UL_polycount_obj_list", "", context.scene.Polycount.MainUI.lists_List[idx], "obj_list", context.scene.Polycount.MainUI.lists_List[idx], "obj_list_Index")
-            row_parent = box.row()
-            col = row_parent.column()
+            row.template_list("DATA_UL_polycount_obj_list", "", context.scene.Polycount.MainUI.lists_List[idx], "obj_list", context.scene.Polycount.MainUI.lists_List[idx], "obj_list_Index", rows=1, maxrows=5)
+            col = box.column(align=True)
             row = col.row(align=True)
-            #row.operator("obj_list_add.btn", text="Assign")
-            #row.operator("obj_list_remove.btn", text="Remove")
-            row.operator("obj_list_add.btn", icon='ZOOMIN', text="")
-            row.operator("obj_list_remove.btn", icon='ZOOMOUT', text="")
-            row.operator("obj_list_clear.btn", icon='X', text="")
-            col = row_parent.column()
+            row.operator("obj_list_add.btn", text="Assign")
+            row.operator("obj_list_remove.btn", text="Remove")
+
             row = col.row(align=True)
-            #row.operator("obj_list_select.btn", text="Select").select = True
-            #row.operator("obj_list_select.btn", text="Deselect").select = False
-            row.operator("obj_list_select.btn", icon='RADIOBUT_ON', text="").select = True
-            row.operator("obj_list_select.btn", icon='RADIOBUT_OFF', text="").select = False
-            col = row_parent.column()
+            row.operator("obj_list_select.btn", text="Select All").select = True
+            row.operator("obj_list_select.btn", text="Deselect All").select = False
+
             row = col.row(align=True)
-            row.operator("obj_list_hide.btn", icon='RESTRICT_VIEW_OFF', text="").hide = False
-            row.operator("obj_list_hide.btn", icon='RESTRICT_VIEW_ON', text="").hide = True
+            row.operator("obj_list_hide.btn", text="Show All").hide = False
+            row.operator("obj_list_hide.btn", text="Hide All").hide = True
 
 class EditModeUI():
     def draw(self, context, layout):

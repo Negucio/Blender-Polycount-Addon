@@ -16,12 +16,6 @@ class ObjectModePropertyGroup(bpy.types.PropertyGroup):
     """
     Stores the global Polycount options
     """
-    # Which data will be displayed
-    Selected        = bpy.props.BoolProperty(default = True, description="Selected Object(s) Polycount")
-    Scene           = bpy.props.BoolProperty(default = True, description="Scene Polycount")
-    Layer           = bpy.props.BoolProperty(default = True, description="Layer(s) Polycount")
-    List            = bpy.props.BoolProperty(default = True, description="List Polycount")
-
     # The data itself
     SelectedData   = bpy.props.PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
     SceneData      = bpy.props.PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)

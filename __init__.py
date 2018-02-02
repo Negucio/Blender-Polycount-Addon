@@ -18,10 +18,10 @@
 
 bl_info = {
     "name": "Polycount",
-    "author": "Roberto Noya <negucio@gmail.com>",
+    "author": "Roberto Noya <negucio@gmail.com>, Oliver Villar <oliver@blendtuts.com>",
     "description": "Display triangle, quad, ngon and face count, in Object and Edit Mode",
-    "version": (1, 0, 3),
-    "blender": (2, 7, 8),
+    "version": (1, 0, 4),
+    "blender": (2, 7, 9),
     "location": "View3D > Tools",
     "warning": "",
     "wiki_url": "",

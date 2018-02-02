@@ -127,17 +127,17 @@ class PolycountController():
     def Refresh(self, context, force=False):
         # start_time = time.time()
         scene = context.scene
-        if force or scene.Polycount.ObjectMode.Selected:
+        if force or scene.Polycount.Draw.Selected:
             self.SetPolycount(context.selected_objects, scene.Polycount.ObjectMode.SelectedData)
 
         # It is necessary to calculate the scene polycount if the percentage column is enabled
-        if force or scene.Polycount.ObjectMode.Scene or scene.Polycount.Draw.percentage:
+        if force or scene.Polycount.Draw.Scene or scene.Polycount.Draw.percentage:
             self.ScenePolycount()
 
-        if force or scene.Polycount.ObjectMode.Layer:
+        if force or scene.Polycount.Draw.Layer:
             self.LayerPolycount()
 
-        if force or scene.Polycount.ObjectMode.List:
+        if force or scene.Polycount.Draw.List:
             self.ListPolycount(context)
 
         if hasattr(context, "area") and context.area != None: context.area.tag_redraw()
