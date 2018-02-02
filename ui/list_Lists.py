@@ -8,7 +8,7 @@ class DATA_UL_polycount_lists_list(bpy.types.UIList):
         layout.alignment = 'EXPAND'
         row = layout.row()
         split = row.split(percentage=0.2)
-        split.prop(item, "list_visible", text="", emboss=False, icon='RESTRICT_VIEW_OFF' if item.list_visible else 'RESTRICT_VIEW_ON')
+        split.prop(item, "list_visible", text="", emboss=False, icon='OUTLINER_OB_LAMP' if item.list_visible else 'LAMP')
         split = split.split(percentage=0.7)
         split.prop(item, "list_name", text="", emboss=False, icon_value=icon)
         split = split.split()

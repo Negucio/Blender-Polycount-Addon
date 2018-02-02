@@ -14,7 +14,7 @@ class DATA_UL_polycount_obj_list(bpy.types.UIList):
         split = split.split(percentage=0.15)
         split.prop(item.object, "select", text="", emboss=False, icon='RADIOBUT_ON' if item.object.select else 'RADIOBUT_OFF')
         split = split.split()
-        split.label(item.object.name)
+        split.prop(item.object, "name", text="", emboss=False, icon_value=icon)
 
 
 class DATA_OT_polycount_obj_list_add(bpy.types.Operator):
