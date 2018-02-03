@@ -22,6 +22,7 @@ class VIEW3D_PT_polycount_settings(bpy.types.Panel):
         col.prop(context.scene.Polycount.Draw, "font_size", text="Font Size")
         col.prop(context.scene.Polycount.Draw, "width", text="Width")
         col.prop(context.scene.Polycount.Draw, "height", text="Height")
+        col.prop(context.scene.Polycount.Draw, "digit_sep", text="Digit Separation")
 
         row = layout.row()
         col = row.column(align=True)
@@ -31,17 +32,23 @@ class VIEW3D_PT_polycount_settings(bpy.types.Panel):
         col = row.column(align=True)
         col.prop(context.scene.Polycount.Draw, "sep_color", text="Sep")
 
-        col = layout.column()
-        col.label("Separate large numbers:")
-        row = col.row(align=True)
+        colMain = layout.column()
+        colMain.label("Separate large numbers:")
+        box = colMain.box()
+        row = box.row()
         row.prop(context.scene.Polycount.Draw, "sep_by_color", text="By color", toggle=True)
-        row.prop(context.scene.Polycount.Draw, "sep_by_dot", text="By dot", toggle=True)
-        col.separator()
-        row = col.row()
+        row = box.row()
         col = row.column(align=True)
         col.prop(context.scene.Polycount.Draw, "thousands_color", text="Thousands")
         col = row.column(align=True)
         col.prop(context.scene.Polycount.Draw, "millions_color", text="Millions")
+
+        box = colMain.box()
+        row = box.row()
+        row.prop(context.scene.Polycount.Draw, "sep_by_char", text="By char", toggle=True)
+        row = box.row(align=True)
+        row.prop(context.scene.Polycount.Draw, "sep", expand=True)
+
 
 
 

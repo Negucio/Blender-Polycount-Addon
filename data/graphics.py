@@ -30,6 +30,7 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
 
     hor_pos = bpy.props.FloatProperty(name = "hor_pos", default = 1, max=1, min=0)
     vert_pos = bpy.props.FloatProperty(name = "vert_pos", default = 0, max=1, min=0)
+    digit_sep = bpy.props.FloatProperty(name = "vert_pos", default = 1, max=1.5, min=1)
     font_size = bpy.props.IntProperty(name = "FontSize", default = 14, max= 20, min=12)
     title_color = bpy.props.FloatVectorProperty(name="title_color", subtype='COLOR', default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
     data_color = bpy.props.FloatVectorProperty(name="data_color", subtype='COLOR', default=(1.0, 1.0, 1.0), min=0.0, max=1.0, description="color picker")
@@ -37,6 +38,16 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
 
     # Large numbers visualization settings
     sep_by_color = bpy.props.BoolProperty(default = True, description="Separate large numbers with colors")
-    sep_by_dot = bpy.props.BoolProperty(default = True, description="Separate large numbers with dots")
     thousands_color = bpy.props.FloatVectorProperty(name="thousands_color", subtype='COLOR', default=(1.0, 0.75, 0.75), min=0.0, max=1.0, description="color picker")
     millions_color = bpy.props.FloatVectorProperty(name="millions_color", subtype='COLOR', default=(0.75, 0.75, 1.0), min=0.0, max=1.0, description="color picker")
+
+    sep_by_char = bpy.props.BoolProperty(default = True, description="Separate large numbers with char")
+    sep = bpy.props.EnumProperty(
+        items=[
+            (' ', 'Space', 'Space'),
+            ('.', 'Dot', 'Dot'),
+            (',', 'Comma', 'Comma')
+        ],
+        name='sep',
+        default=' '
+    )

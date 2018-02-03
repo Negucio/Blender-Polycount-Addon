@@ -30,7 +30,7 @@ class Draw():
             if hasattr(context, "area") and context.area is not None: context.area.tag_redraw()
         self.PostPixelHandle = None
 
-    def DrawCell(self, text, position, color):
+    def DrawCell(self, text, position, color, width):
         """
         Draws a cell of the table
         :param text: Text in the cell
@@ -44,49 +44,35 @@ class Draw():
 
         if not hasattr(bpy.context, "scene"): return
         scn = bpy.context.scene
-        final_text = text if not scn.Polycount.Draw.sep_by_dot else self.digit_sep(text)
-        self.format_digits(final_text, position, color, scn)
+        self.format_digits_2(text, position, scn, width)
 
         bgl.glColor3f(*color)
 
-
-    def format_digits(self, text, position, original_color, scene):
-        sep = scene.Polycount.Draw.sep_by_dot
-        color = scene.Polycount.Draw.sep_by_color
-
-        units = text[-3:] if not sep else text[-4:]
-        thousands = text[-6:-3] if not sep else text[-8:-4]
-        millions = text[-9:-6] if not sep else text[-12:-8]
-
-        offset = 0
-
+    def draw_char(self, position, char, char_sample_width):
         blf.position(0, position[0], position[1], 0)
-        if color: bgl.glColor3f(*scene.Polycount.Draw.millions_color)
-        text_width, text_height = blf.dimensions(self.font_id, millions)
-        blf.draw(self.font_id, millions)
-        offset += text_width + 1
+        text_width, text_height = blf.dimensions(self.font_id, char_sample_width)
+        blf.draw(self.font_id, char)
+        return position[0] - text_width
 
-        blf.position(0, position[0]+offset, position[1], 0)
-        if color: bgl.glColor3f(*scene.Polycount.Draw.thousands_color)
-        text_width, text_height = blf.dimensions(self.font_id, thousands)
-        blf.draw(self.font_id, thousands)
-        offset += text_width + 1
+    def format_digits_2(self, text, position, scene, width):
+        sep = scene.Polycount.Draw.sep_by_char
+        color = scene.Polycount.Draw.sep_by_color
+        sep_char = scene.Polycount.Draw.sep
+        draw_pc = scene.Polycount.Draw
 
-        blf.position(0, position[0]+offset, position[1], 0)
-        if color: bgl.glColor3f(*original_color)
-        blf.draw(self.font_id, units)
+        pos = position[0]+width - (draw_pc.font_size * draw_pc.width * draw_pc.digit_sep * 1.75)
 
+        count = 0
+        for char in reversed(text):
+            pos = self.draw_char((pos, position[1]), char, char)
+            count += 1
 
-    def digit_sep(self, text, sep="."):
-        digits = len(text)
-
-        text_sep = text[-3:]
-
-        if digits > 3: text_sep = text[-6:-3] + sep + text_sep
-        if digits > 6: text_sep = text[-9:-6] + sep + text_sep
-        if digits > 9: text_sep = text[-12:-9] + sep + text_sep
-
-        return text_sep
+            if count % 3 == 0 and count < len(text):
+                if sep:
+                    pos = self.draw_char((pos, position[1]), ' ' + sep_char, '.')
+                if color:
+                    if count == 3: bgl.glColor3f(*scene.Polycount.Draw.thousands_color)
+                    elif count == 6: bgl.glColor3f(*scene.Polycount.Draw.millions_color)
 
     def DrawLine(self, v1, v2):
         """
@@ -134,51 +120,51 @@ class Draw():
 
             col = 1
             if scn.Polycount.Draw.triangles:
-                text = 'Tris'
+                text = 'Triangles'
                 if row > 0: text = str(content[key][0].Triangles)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.percentage:
                 text = 'Tris/Scene'
                 scn_tris = bpy.context.scene.Polycount.ObjectMode.SceneData.Triangles
                 if row > 0: text = "{0:.2f}%".format(0.0 if scn_tris == 0 else (content[key][0].Triangles / scn_tris)*100)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.faces:
                 text = 'Faces'
                 if row > 0: text = str(content[key][0].Faces)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
 
             if scn.Polycount.Draw.quads:
                 text = 'Quads'
                 if row > 0: text = str(content[key][0].Quads)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.ngons:
                 text = 'Ngons'
                 if row > 0: text = str(content[key][0].Ngons)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
             row = row + 2
 
             y = initY - (cellSize[1] * row)
 
         cols = 0
 
-        # Vertical line to separate Tris/Faces and Quads/Ngons
+        # Vertical line to separate Triangles/Faces and Quads/Ngons
         if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.percentage) and (scn.Polycount.Draw.faces or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
             cols = 2 if scn.Polycount.Draw.triangles and scn.Polycount.Draw.percentage else 1
             sepX = initX + (cellSize[0] * cols) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
             bgl.glColor3f(*scn.Polycount.Draw.sep_color)
             self.DrawLine((sepX, initY), (sepX, y + (cellSize[1]*2)))
 
-        if (scn.Polycount.Draw.faces) and (scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
+        if scn.Polycount.Draw.faces and (scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
             cols = cols+1
             sepX = initX + (cellSize[0] * cols) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
             bgl.glColor3f(*scn.Polycount.Draw.sep_color)
             self.DrawLine((sepX, initY), (sepX, y + (cellSize[1]*2)))
 
-        return (initX , y)
+        return initX, y
 
     def DrawEditModeTable(self, pos, cellSize, content):
         scn = bpy.context.scene
@@ -202,24 +188,24 @@ class Draw():
 
             col = 1
             if scn.Polycount.Draw.selected_tris:
-                text = 'Tris'
+                text = 'Triangles'
                 if row > 0: text = str(content[key].Triangles)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.selected_verts:
                 text = 'Verts'
                 if row > 0: text = str(content[key].Verts)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.selected_edges:
                 text = 'Edges'
                 if row > 0: text = str(content[key].Edges)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.selected_faces:
                 text = 'Faces'
                 if row > 0: text = str(content[key].Faces)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
             row = row + 2
 
             y = initY - (cellSize[1] * row)
@@ -339,7 +325,7 @@ class Draw():
             # Global mode data is stored in an ordered dictionary
             contentEditMode = collections.OrderedDict()
             # Add the name of each component which will be accounted
-            contentEditMode['EDIT'] = ('Tris', 'Verts', 'Edges', 'Faces')
+            contentEditMode['EDIT'] = ('Triangles', 'Verts', 'Edges', 'Faces')
             # In Edit mode, Polycount only accounts the selected components
             # Data for this context (selected components) will be stored in the dictionary
             contentEditMode['Selected'] = scn.Polycount.EditMode
