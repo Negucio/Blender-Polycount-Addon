@@ -5,6 +5,8 @@ from . main import \
 
 from . settings import VIEW3D_PT_polycount_settings
 
+from . misc import VIEW3D_PT_polycount_misc
+
 from . list_Objs import \
     DATA_OT_polycount_obj_list_add, \
     DATA_OT_polycount_obj_list_remove, \
@@ -39,6 +41,7 @@ def register():
 
     bpy.utils.register_class(VIEW3D_PT_polycount_main)
     bpy.utils.register_class(VIEW3D_PT_polycount_settings)
+    bpy.utils.register_class(VIEW3D_PT_polycount_misc)
 
 
 def unregister():
@@ -46,6 +49,7 @@ def unregister():
 
     bpy.utils.unregister_class(VIEW3D_PT_polycount_main)
     bpy.utils.unregister_class(VIEW3D_PT_polycount_settings)
+    bpy.utils.unregister_class(VIEW3D_PT_polycount_misc)
 
     bpy.utils.unregister_class(DATA_OT_polycount_obj_list_add)
     bpy.utils.unregister_class(DATA_OT_polycount_obj_list_remove)

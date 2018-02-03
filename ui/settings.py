@@ -48,9 +48,3 @@ class VIEW3D_PT_polycount_settings(bpy.types.Panel):
         row.prop(context.scene.Polycount.Draw, "sep_by_char", text="By char", toggle=True)
         row = box.row(align=True)
         row.prop(context.scene.Polycount.Draw, "sep", expand=True)
-
-
-
-
-
-
