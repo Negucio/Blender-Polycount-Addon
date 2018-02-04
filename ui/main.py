@@ -1,16 +1,15 @@
 import bpy
 from .. graphics.draw import Draw
 from .. polycount.controller import PolycountController
-from . classes import ObjectModeUI, EditModeUI
-
 
 class VIEW3D_OT_polycount_display(bpy.types.Operator):
     bl_idname = "display_polycount.btn"
     bl_label = "Display"
     bl_description = "Display polycount"
 
-    drawing = Draw()
-    pc = PolycountController()
+    def __init__(self):
+        self.drawing = Draw()
+        self.pc = PolycountController()
 
     def execute(self, context):
         if context.scene.Polycount.Display:
@@ -30,8 +29,12 @@ class VIEW3D_PT_polycount_main(bpy.types.Panel):
     bl_category = "Polycount"
     # bl_options = {'HIDE_HEADER'}
 
-    object_mode = ObjectModeUI()
-    edit_mode = EditModeUI()
+    def __init__(self):
+        # The import needs to be here so that ObjectModeUI and EditModeUI
+        # load in the register of this class and not before
+        from .classes import ObjectModeUI, EditModeUI
+        self.object_mode = ObjectModeUI()
+        self.edit_mode = EditModeUI()
 
     @classmethod
     def poll(cls, context):

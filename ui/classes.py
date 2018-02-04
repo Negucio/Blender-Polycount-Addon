@@ -1,5 +1,9 @@
+from .. icons import preview_collections
 
 class ObjectModeUI():
+    def __init__(self):
+        self.icons = preview_collections["main"]
+
     def draw(self, context, layout):
         col = layout.column(align=True)
         col.prop(context.scene.Polycount.Draw, "ObjPolycount", text="Obj Mode Count", icon='OBJECT_DATAMODE')
@@ -14,14 +18,13 @@ class ObjectModeUI():
     def PolygonTypes(self, context, layout):
         col = layout.column(align=True)
         row = col.row(align=True)
-        row.prop(context.scene.Polycount.Draw, "triangles", text="Tris", icon='IMAGE_ALPHA')
-        row.prop(context.scene.Polycount.Draw, "percentage", text="%", icon='IMAGE_ALPHA')
+        row.prop(context.scene.Polycount.Draw, "triangles", text="Tris", icon_value=self.icons["triangles"].icon_id)
+        row.prop(context.scene.Polycount.Draw, "percentage", text="%", icon_value=self.icons["percentage"].icon_id)
         row = col.row(align=True)
-        row.prop(context.scene.Polycount.Draw, "faces", text="Faces", icon='SNAP_FACE')
+        row.prop(context.scene.Polycount.Draw, "faces", text="Faces", icon_value=self.icons["faces"].icon_id)
         row = col.row(align=True)
-        row.prop(context.scene.Polycount.Draw, "quads", text="Quads", icon='MESH_PLANE')
-        row.prop(context.scene.Polycount.Draw, "ngons", text="Ngons", icon='SOLO_OFF')
-
+        row.prop(context.scene.Polycount.Draw, "quads", text="Quads", icon_value=self.icons["quads"].icon_id)
+        row.prop(context.scene.Polycount.Draw, "ngons", text="Ngons", icon_value=self.icons["ngons"].icon_id)
         # col = box.column()
         # col.alert = True
         # col.prop(context.scene.scene_polycount[0], "value", text="Budget", emboss=False)
@@ -95,6 +98,9 @@ class ObjectModeUI():
             row.operator("obj_list_hide.btn", text="Hide All").hide = True
 
 class EditModeUI():
+    def __init__(self):
+        self.icons = preview_collections["main"]
+
     def draw(self, context, layout):
         col = layout.column(align=True)
         col.prop(context.scene.Polycount.Draw, "EditModePolycount", text="Edit Mode Count", icon='EDIT')
@@ -106,7 +112,7 @@ class EditModeUI():
     def EditModeContext(self, context, layout):
         col = layout.column(align=True)
         row = col.row(align=True)
-        row.prop(context.scene.Polycount.Draw, "selected_tris", text="Tris", icon='MARKER_HLT')
+        row.prop(context.scene.Polycount.Draw, "selected_tris", text="Tris", icon_value=self.icons["selected_tris"].icon_id)
         row.prop(context.scene.Polycount.Draw, "selected_verts", text="Verts", icon='VERTEXSEL')
         row = col.row(align=True)
         row.prop(context.scene.Polycount.Draw, "selected_faces", text="Faces", icon='FACESEL')

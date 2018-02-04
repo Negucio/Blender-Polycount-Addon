@@ -29,6 +29,7 @@ bl_info = {
 
 
 import bpy
+from . import icons
 
 from . import preferences
 
@@ -42,6 +43,7 @@ from . import handler
 from . import ui
 
 def register():
+    icons.register()
     ui.register()
     data.register()
     preferences.register()
@@ -53,6 +55,7 @@ def unregister():
     preferences.register()
     data.unregister()
     ui.unregister()
+    icons.unregister()
 
     bpy.utils.unregister_module(__name__)
 
