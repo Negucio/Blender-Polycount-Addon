@@ -120,7 +120,7 @@ class Draw():
 
             col = 1
             if scn.Polycount.Draw.triangles:
-                text = 'Triangles'
+                text = 'Total Tris'
                 if row > 0: text = str(content[key][0].Triangles)
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
@@ -136,6 +136,11 @@ class Draw():
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
 
+            if scn.Polycount.Draw.pure_tris:
+                text = 'Triangles'
+                if row > 0: text = str(content[key][0].PureTriangles)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
+                col = col + 1
             if scn.Polycount.Draw.quads:
                 text = 'Quads'
                 if row > 0: text = str(content[key][0].Quads)
@@ -152,13 +157,13 @@ class Draw():
         cols = 0
 
         # Vertical line to separate Triangles/Faces and Quads/Ngons
-        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.percentage) and (scn.Polycount.Draw.faces or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
+        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.percentage) and (scn.Polycount.Draw.pure_tris or scn.Polycount.Draw.faces or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
             cols = 2 if scn.Polycount.Draw.triangles and scn.Polycount.Draw.percentage else 1
             sepX = initX + (cellSize[0] * cols) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
             bgl.glColor3f(*scn.Polycount.Draw.sep_color)
             self.DrawLine((sepX, initY), (sepX, y + (cellSize[1]*2)))
 
-        if scn.Polycount.Draw.faces and (scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
+        if scn.Polycount.Draw.faces and (scn.Polycount.Draw.pure_tris or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
             cols = cols+1
             sepX = initX + (cellSize[0] * cols) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
             bgl.glColor3f(*scn.Polycount.Draw.sep_color)
@@ -217,6 +222,7 @@ class Draw():
             if scene.Polycount.Draw.triangles:  obj_mode += 1
             if scene.Polycount.Draw.percentage:  obj_mode += 1
             if scene.Polycount.Draw.faces:  obj_mode += 1
+            if scene.Polycount.Draw.pure_tris:  obj_mode += 1
             if scene.Polycount.Draw.quads:  obj_mode += 1
             if scene.Polycount.Draw.ngons:  obj_mode += 1
 
@@ -300,7 +306,7 @@ class Draw():
             # Global mode data is stored in an ordered dictionary
             contentObjMode = collections.OrderedDict()
             # Add the name of each component which will be accounted
-            contentObjMode['OBJECT'] = ('Triangles', 'Quads', 'Ngons', 'Faces')
+            contentObjMode['OBJECT'] = ('Triangles', 'Quads', 'Ngons', 'Faces', "PureTriangles")
             # Data for each Polycount context (selected objects, scene, layer and list) will be stored in the dictionary
             if scn.Polycount.Draw.Selected:   contentObjMode['Selected'] = (scn.Polycount.ObjectMode.SelectedData, None)
             if scn.Polycount.Draw.Scene:      contentObjMode['Scene']    = (scn.Polycount.ObjectMode.SceneData, None)

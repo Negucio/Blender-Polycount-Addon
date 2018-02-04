@@ -17,14 +17,14 @@ class ObjectModeUI():
 
     def PolygonTypes(self, context, layout):
         col = layout.column(align=True)
-        row = col.row(align=True)
-        row.prop(context.scene.Polycount.Draw, "triangles", text="Tris", icon_value=self.icons["triangles"].icon_id)
-        row.prop(context.scene.Polycount.Draw, "percentage", text="%", icon_value=self.icons["percentage"].icon_id)
-        row = col.row(align=True)
-        row.prop(context.scene.Polycount.Draw, "faces", text="Faces", icon_value=self.icons["faces"].icon_id)
-        row = col.row(align=True)
-        row.prop(context.scene.Polycount.Draw, "quads", text="Quads", icon_value=self.icons["quads"].icon_id)
-        row.prop(context.scene.Polycount.Draw, "ngons", text="Ngons", icon_value=self.icons["ngons"].icon_id)
+        col.prop(context.scene.Polycount.Draw, "triangles", text="Total Tris", icon_value=self.icons["triangles"].icon_id)
+        col.prop(context.scene.Polycount.Draw, "percentage", text="%", icon_value=self.icons["percentage"].icon_id)
+        col.prop(context.scene.Polycount.Draw, "faces", text="Faces", icon_value=self.icons["faces"].icon_id)
+
+        col = layout.column(align=True)
+        col.prop(context.scene.Polycount.Draw, "pure_tris", text="Triangles", icon_value=self.icons["triangles"].icon_id)
+        col.prop(context.scene.Polycount.Draw, "quads", text="Quads", icon_value=self.icons["quads"].icon_id)
+        col.prop(context.scene.Polycount.Draw, "ngons", text="Ngons", icon_value=self.icons["ngons"].icon_id)
         # col = box.column()
         # col.alert = True
         # col.prop(context.scene.scene_polycount[0], "value", text="Budget", emboss=False)

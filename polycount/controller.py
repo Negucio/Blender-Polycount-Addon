@@ -78,6 +78,7 @@ class PolycountController():
             if not obj.Polycount.Updated: self.CalculatePolycount(obj)
 
             tris = obj.Polycount.Data.Triangles
+            pure_tris = obj.Polycount.Data.PureTriangles
             quads = obj.Polycount.Data.Quads
             ngons = obj.Polycount.Data.Ngons
             faces = obj.Polycount.Data.Faces
@@ -93,6 +94,7 @@ class PolycountController():
                     tris = quads * 2
                     faces = quads
                     ngons = 0
+                    pure_tris = 0
 
                 # TODO: The result is approximate. Merge and clipping should be taking into account
                 if mods.mirror: mirrorMult = 2 ** obj.Polycount.MirrorAxis
@@ -100,10 +102,11 @@ class PolycountController():
                 # TODO: The result is approximate. Should be calculated counting how many edges are border and adding to the account
                 if mods.solidify and obj.Polycount.HasSolidify: solidifyMult = 2
 
-            dataProperty.Triangles  += tris  * mirrorMult * solidifyMult
-            dataProperty.Quads      += quads * mirrorMult * solidifyMult
-            dataProperty.Ngons      += ngons * mirrorMult * solidifyMult
-            dataProperty.Faces      += faces * mirrorMult * solidifyMult
+            dataProperty.Triangles      += tris         * mirrorMult * solidifyMult
+            dataProperty.PureTriangles  += pure_tris    * mirrorMult * solidifyMult
+            dataProperty.Quads          += quads        * mirrorMult * solidifyMult
+            dataProperty.Ngons          += ngons        * mirrorMult * solidifyMult
+            dataProperty.Faces          += faces        * mirrorMult * solidifyMult
 
 
     def ScenePolycount(self):
