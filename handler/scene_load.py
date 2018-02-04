@@ -1,5 +1,6 @@
 import bpy
 from bpy.app.handlers import persistent
+from .. common_utils import get_preferences
 
 
 @persistent
@@ -9,6 +10,11 @@ def polycount_load_post(param):
     :param param: In order to append this function to the load_post handler, this has to receive a parameter. Always None.
     """
     scn = bpy.context.scene
+
+    if not scn.Polycount.polycounted:
+        prefs = get_preferences()
+        if prefs is not None: scn.Polycount.Draw.clone(prefs.persistent_settings)
+
     # At loading the .blend file, scene var "selected_verts" should be 0
     bpy.context.scene.Polycount.temp.selected_verts = 0
 

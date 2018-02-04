@@ -30,6 +30,8 @@ bl_info = {
 
 import bpy
 
+from . import preferences
+
 # Import blender classes to register
 from . import data
 
@@ -42,10 +44,13 @@ from . import ui
 def register():
     ui.register()
     data.register()
+    preferences.register()
     handler.register()
+
 
 def unregister():
     handler.unregister()
+    preferences.register()
     data.unregister()
     ui.unregister()
 

@@ -44,9 +44,10 @@ class ScnPolycountPropertyGroup(bpy.types.PropertyGroup):
     def display_polycount(self, context):
         bpy.ops.display_polycount.btn('EXEC_DEFAULT')
 
-    Display = bpy.props.BoolProperty(default=False, description="Display Polycount", update=display_polycount)
+    Display     = bpy.props.BoolProperty(default=False, description="Display Polycount", update=display_polycount)
     EditMode    = bpy.props.PointerProperty(options={'HIDDEN'}, type=EditModePropertyGroup)
     ObjectMode  = bpy.props.PointerProperty(options={'HIDDEN'}, type=ObjectModePropertyGroup)
-    Draw      = bpy.props.PointerProperty(options={'HIDDEN'}, type=DrawPropertyGroup)
+    Draw        = bpy.props.PointerProperty(options={'HIDDEN'}, type=DrawPropertyGroup)
     MainUI      = bpy.props.PointerProperty(options={'HIDDEN'}, type=ObjListPropertyGroup)
+    polycounted = bpy.props.BoolProperty(default=False)
     temp        = bpy.props.PointerProperty(options={'HIDDEN'}, type=ScnTempPropertyGroup)

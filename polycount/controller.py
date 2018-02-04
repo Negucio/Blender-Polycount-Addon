@@ -127,6 +127,9 @@ class PolycountController():
     def Refresh(self, context, force=False):
         # start_time = time.time()
         scene = context.scene
+
+        if not scene.Polycount.polycounted: scene.Polycount.polycounted = True
+
         if force or scene.Polycount.Draw.Selected:
             self.SetPolycount(context.selected_objects, scene.Polycount.ObjectMode.SelectedData)
 

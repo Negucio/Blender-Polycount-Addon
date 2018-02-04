@@ -3,7 +3,9 @@ from . main import \
     VIEW3D_OT_polycount_display, \
     VIEW3D_PT_polycount_main
 
-from . settings import VIEW3D_PT_polycount_settings
+from . settings import VIEW3D_PT_polycount_settings, \
+                       VIEW3D_OT_polycount_save_prefs, \
+                       VIEW3D_OT_polycount_reset_prefs
 
 from . misc import VIEW3D_PT_polycount_misc
 
@@ -38,8 +40,9 @@ def register():
     bpy.utils.register_class(DATA_OT_polycount_lists_list_remove)
     bpy.utils.register_class(DATA_UL_polycount_lists_list)
 
-
     bpy.utils.register_class(VIEW3D_PT_polycount_main)
+    bpy.utils.register_class(VIEW3D_OT_polycount_save_prefs)
+    bpy.utils.register_class(VIEW3D_OT_polycount_reset_prefs)
     bpy.utils.register_class(VIEW3D_PT_polycount_settings)
     bpy.utils.register_class(VIEW3D_PT_polycount_misc)
 
@@ -49,6 +52,8 @@ def unregister():
 
     bpy.utils.unregister_class(VIEW3D_PT_polycount_main)
     bpy.utils.unregister_class(VIEW3D_PT_polycount_settings)
+    bpy.utils.unregister_class(VIEW3D_OT_polycount_save_prefs)
+    bpy.utils.unregister_class(VIEW3D_OT_polycount_reset_prefs)
     bpy.utils.unregister_class(VIEW3D_PT_polycount_misc)
 
     bpy.utils.unregister_class(DATA_OT_polycount_obj_list_add)

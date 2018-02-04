@@ -3,6 +3,7 @@ from .. graphics.draw import Draw
 from .. polycount.controller import PolycountController
 from . classes import ObjectModeUI, EditModeUI
 
+
 class VIEW3D_OT_polycount_display(bpy.types.Operator):
     bl_idname = "display_polycount.btn"
     bl_label = "Display"
@@ -18,17 +19,16 @@ class VIEW3D_OT_polycount_display(bpy.types.Operator):
         else:
             self.drawing.HidePolycount(context)
 
-
         if hasattr(context, "area") and context.area is not None: context.area.tag_redraw()
-
         return {'FINISHED'}
+
 
 class VIEW3D_PT_polycount_main(bpy.types.Panel):
     bl_label = "Polycount"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS'
     bl_category = "Polycount"
-    #bl_options = {'HIDE_HEADER'}
+    # bl_options = {'HIDE_HEADER'}
 
     object_mode = ObjectModeUI()
     edit_mode = EditModeUI()
