@@ -1,6 +1,5 @@
 import bpy
 from . object import DataPropertyGroup
-from .. polycount.controller import PolycountController
 
 class ItemListPropertyGroup(bpy.types.PropertyGroup):
     """
@@ -26,13 +25,11 @@ class ObjListPropertyGroup(bpy.types.PropertyGroup):
     """
     Stores the data for the uiLists and the custom layer operator
     """
-    pc = PolycountController()
-
     def layer_update_func(self, context):
         """
         Called on when a layer is selected/deselected
         """
-        self.pc.Refresh(context, force=True)
+        context.scene.Polycount.controller.Refresh(context, force=True)
 
     # UILists
     lists_List_Index = bpy.props.IntProperty(name="Index", default=0, min=0)

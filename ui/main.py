@@ -1,19 +1,16 @@
 import bpy
 from .. graphics.draw import Draw
-from .. polycount.controller import PolycountController
 
 class VIEW3D_OT_polycount_display(bpy.types.Operator):
     bl_idname = "display_polycount.btn"
     bl_label = "Display"
     bl_description = "Display polycount"
 
-    def __init__(self):
-        self.drawing = Draw()
-        self.pc = PolycountController()
+    drawing = Draw()
 
     def execute(self, context):
         if context.scene.Polycount.Display:
-            self.pc.Refresh(context)
+            context.scene.Polycount.controller.Refresh(context)
             self.drawing.DisplayPolycount(context)
         else:
             self.drawing.HidePolycount(context)

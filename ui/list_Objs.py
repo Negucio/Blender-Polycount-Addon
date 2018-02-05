@@ -1,5 +1,4 @@
 import bpy
-from .. polycount.controller import PolycountController
 
 class DATA_UL_polycount_obj_list(bpy.types.UIList):
     """
@@ -25,8 +24,6 @@ class DATA_OT_polycount_obj_list_add(bpy.types.Operator):
     bl_label = "Add Object"
     bl_description = "Add object to the list"
 
-    pc = PolycountController()
-
     def add_obj_toList(self, idx, context, object):
         # Add the object to the list
 
@@ -50,7 +47,7 @@ class DATA_OT_polycount_obj_list_add(bpy.types.Operator):
             # Append the current object id to the ids
             # Ensures not having duplicated ids in the list
             self.add_obj_toList(idx, context, obj)
-        self.pc.Refresh(context, force=True)
+        context.scene.Polycount.controller.Refresh(context, force=True)
         return {'FINISHED'}
 
 
@@ -61,8 +58,6 @@ class DATA_OT_polycount_obj_list_remove(bpy.types.Operator):
     bl_idname = "obj_list_remove.btn"
     bl_label = "Remove Object"
     bl_description = "Remove object from the list"
-
-    pc = PolycountController()
 
     @classmethod
     def poll(cls, context):
@@ -77,7 +72,7 @@ class DATA_OT_polycount_obj_list_remove(bpy.types.Operator):
         obj_idx = context.scene.Polycount.MainUI.lists_List[list_idx].obj_list_Index
         # The selected item is removed from the list
         bpy.context.scene.Polycount.MainUI.lists_List[list_idx].obj_list.remove(obj_idx)
-        self.pc.Refresh(context, force=True)
+        context.scene.Polycount.controller.Refresh(context, force=True)
         return {'FINISHED'}
 
 
@@ -88,8 +83,6 @@ class DATA_OT_polycount_obj_list_clear(bpy.types.Operator):
     bl_idname = "obj_list_clear.btn"
     bl_label = "Clear list"
     bl_description = "Remove all objects from the list"
-
-    pc = PolycountController()
 
     @classmethod
     def poll(cls, context):
@@ -104,7 +97,7 @@ class DATA_OT_polycount_obj_list_clear(bpy.types.Operator):
         items = len(context.scene.Polycount.MainUI.lists_List[list_idx].obj_list)
         for obj_idx in reversed(range(items)):
             bpy.context.scene.Polycount.MainUI.lists_List[list_idx].obj_list.remove(obj_idx)
-        self.pc.Refresh(context, force=True)
+        context.scene.Polycount.controller.Refresh(context, force=True)
         return {'FINISHED'}
 
 

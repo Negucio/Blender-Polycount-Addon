@@ -1,5 +1,4 @@
-import bpy, bgl, blf, collections, math
-from .. polycount.controller import PolycountController
+import bpy, bgl, blf, collections
 
 class Draw():
     """
@@ -8,7 +7,6 @@ class Draw():
     def __init__(self):
         self.PostPixelHandle = None # Stores the draw handler
         self.font_id = 0
-        self.pc = PolycountController()
 
     def handle_add(self, context, DrawFunction):
         """
@@ -17,7 +15,7 @@ class Draw():
         :param DrawFunction: The function which will compose and display the information
         """
         if self.PostPixelHandle is None:
-            self.PostPixelHandle = bpy.types.SpaceView3D.draw_handler_add(DrawFunction, (), 'WINDOW', 'POST_PIXEL')
+            self.PostPixelHandle = bpy.types.SpaceView3D.draw_handler_add(DrawFunction, (context,), 'WINDOW', 'POST_PIXEL')
             if hasattr(context, "area") and context.area is not None: context.area.tag_redraw()
 
     def handle_remove(self, context):
@@ -273,9 +271,8 @@ class Draw():
         self.DrawLine((pos[0], line_y), (pos[0] + (line_cols * cellSize[0]), line_y))
 
 
-    def DrawPolycount(self):
-        ctx = bpy.context
-        scn = ctx.scene
+    def DrawPolycount(self, context):
+        scn = context.scene
 
         # TODO: Constants should not be used in order to set the initial position.
         # TODO: Should be dependant on the region limits, allowing to customize only the offsets
@@ -293,7 +290,7 @@ class Draw():
         pos = (initX, initY)
 
         # Recalculates the polycount. Keeps the displayed data up to date.
-        self.pc.Refresh(ctx)
+        context.scene.Polycount.controller.Refresh(context)
 
         if not scn.Polycount.Draw.Selected and \
                 not scn.Polycount.Draw.Scene and \

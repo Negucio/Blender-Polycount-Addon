@@ -3,6 +3,8 @@ from . import DataPropertyGroup
 from . graphics import DrawPropertyGroup
 from . ui import ObjListPropertyGroup
 
+from .. polycount.controller import PolycountController
+
 class ModifiersPropertyGroup(bpy.types.PropertyGroup):
     """
     Stores the visibility of the modifiers mirror, subsurf and solidify in the polycount
@@ -43,6 +45,8 @@ class ScnTempPropertyGroup(bpy.types.PropertyGroup):
 class ScnPolycountPropertyGroup(bpy.types.PropertyGroup):
     def display_polycount(self, context):
         bpy.ops.display_polycount.btn('EXEC_DEFAULT')
+
+    controller = PolycountController()
 
     Display     = bpy.props.BoolProperty(default=False, description="Display Polycount", update=display_polycount)
     EditMode    = bpy.props.PointerProperty(options={'HIDDEN'}, type=EditModePropertyGroup)
