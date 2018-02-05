@@ -86,10 +86,10 @@ class PolycountController():
             mirrorMult = 1
             solidifyMult = 1
 
-            mods = bpy.context.scene.Polycount.ObjectMode.modifiers
+            draw = bpy.context.scene.Polycount.Draw
             levels = get_levels_subsurf(obj)
-            if mods.on:
-                if mods.subsurf and levels > 0:
+            if draw.modifiers:
+                if draw.subsurf and levels > 0:
                     quads = calculate_subsurf(obj, obj.Polycount.Data.PureTriangles, obj.Polycount.Data.Quads, obj.Polycount.Data.Ngons)
                     tris = quads * 2
                     faces = quads
@@ -97,10 +97,10 @@ class PolycountController():
                     pure_tris = 0
 
                 # TODO: The result is approximate. Merge and clipping should be taking into account
-                if mods.mirror: mirrorMult = 2 ** obj.Polycount.MirrorAxis
+                if draw.mirror: mirrorMult = 2 ** obj.Polycount.MirrorAxis
 
                 # TODO: The result is approximate. Should be calculated counting how many edges are border and adding to the account
-                if mods.solidify and obj.Polycount.HasSolidify: solidifyMult = 2
+                if draw.solidify and obj.Polycount.HasSolidify: solidifyMult = 2
 
             dataProperty.Triangles      += tris         * mirrorMult * solidifyMult
             dataProperty.PureTriangles  += pure_tris    * mirrorMult * solidifyMult

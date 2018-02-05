@@ -8,9 +8,14 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
         'ObjPolycount',
         'triangles',
         'percentage',
+        'pure_tris',
         'quads',
         'ngons',
         'faces',
+        'modifiers',
+        'mirror',
+        'subsurf',
+        'solidify',
         'Selected',
         'Scene',
         'Layer',
@@ -44,6 +49,12 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
     quads = bpy.props.BoolProperty(default=False, description='4-sided polygons')
     ngons = bpy.props.BoolProperty(default=False, description='N-sided polygons')
     faces = bpy.props.BoolProperty(default=False, description='Triangles + Quads + Ngons')
+
+    # Which modifiers will be took into consideration in the polycount
+    modifiers   = bpy.props.BoolProperty(default=True, description="Modifiers affects Polycount")
+    mirror      = bpy.props.BoolProperty(default=True, description="Mirror modifier affects Polycount")
+    subsurf     = bpy.props.BoolProperty(default=True, description="Subsurf modifier affects Polycount")
+    solidify    = bpy.props.BoolProperty(default=True, description="Solidify modifier affects Polycount")
 
     # Which data will be displayed
     Selected = bpy.props.BoolProperty(default=True, description="Selected Object(s) Polycount")

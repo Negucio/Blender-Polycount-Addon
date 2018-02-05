@@ -5,15 +5,6 @@ from . ui import ObjListPropertyGroup
 
 from .. polycount.controller import PolycountController
 
-class ModifiersPropertyGroup(bpy.types.PropertyGroup):
-    """
-    Stores the visibility of the modifiers mirror, subsurf and solidify in the polycount
-    """
-    on = bpy.props.BoolProperty(default=True, description="Modifiers affects Polycount")
-    mirror = bpy.props.BoolProperty(default=True, description="Mirror modifier affects Polycount")
-    subsurf = bpy.props.BoolProperty(default=True, description="Subsurf modifier affects Polycount")
-    solidify = bpy.props.BoolProperty(default=True, description="Solidify modifier affects Polycount")
-
 class ObjectModePropertyGroup(bpy.types.PropertyGroup):
     """
     Stores the global Polycount options
@@ -22,9 +13,6 @@ class ObjectModePropertyGroup(bpy.types.PropertyGroup):
     SelectedData   = bpy.props.PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
     SceneData      = bpy.props.PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
     LayerData      = bpy.props.PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
-
-    # Which modifiers will be took into consideration in the polycount
-    modifiers   = bpy.props.PointerProperty(options={'HIDDEN'}, type=ModifiersPropertyGroup)
 
 class EditModePropertyGroup(bpy.types.PropertyGroup):
     """

@@ -32,12 +32,12 @@ class ObjectModeUI():
     def ModifiersConfig(self, context, layout):
         col = layout.column(align=True)
         row = col.row(align=True)
-        row.prop(context.scene.Polycount.ObjectMode.modifiers, "on", text="Modifiers (Approximate)", icon="MODIFIER")
+        row.prop(context.scene.Polycount.Draw, "modifiers", text="Modifiers (Approximate)", icon="MODIFIER")
         row = col.row(align=True)
-        row.enabled =context.scene.Polycount.ObjectMode.modifiers.on
-        row.prop(context.scene.Polycount.ObjectMode.modifiers, "mirror", text="Mirror", icon='MOD_MIRROR')
-        row.prop(context.scene.Polycount.ObjectMode.modifiers, "subsurf", text="Subsurf", icon='MOD_SUBSURF')
-        row.prop(context.scene.Polycount.ObjectMode.modifiers, "solidify", text="Solidify", icon='MOD_SOLIDIFY')
+        row.enabled =context.scene.Polycount.Draw.modifiers
+        row.prop(context.scene.Polycount.Draw, "mirror", text="Mirror", icon='MOD_MIRROR')
+        row.prop(context.scene.Polycount.Draw, "subsurf", text="Subsurf", icon='MOD_SUBSURF')
+        row.prop(context.scene.Polycount.Draw, "solidify", text="Solidify", icon='MOD_SOLIDIFY')
 
     def PolygonContext(self, context, layout):
         col = layout.column(align=True)
