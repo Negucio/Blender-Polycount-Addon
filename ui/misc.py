@@ -17,6 +17,8 @@ class VIEW3D_PT_polycount_misc(bpy.types.Panel):
         tris = col.operator("mesh.select_face_by_sides", text="Select Tris")
         tris.number = 3
         tris.type = 'EQUAL'
+        tris.extend = False
         ngons = col.operator("mesh.select_face_by_sides", text="Select Ngons")
         ngons.number = 4
         ngons.type = 'GREATER'
+        ngons.extend = False
