@@ -18,7 +18,7 @@ class ObjectModeUI():
     def PolygonTypes(self, context, layout):
         col = layout.column(align=True)
         col.prop(context.scene.Polycount.Draw, "triangles", text="Total Tris", icon_value=self.icons["triangles"].icon_id)
-        col.prop(context.scene.Polycount.Draw, "percentage", text="%", icon_value=self.icons["percentage"].icon_id)
+        col.prop(context.scene.Polycount.Draw, "percentage", text="Percentage", icon_value=self.icons["percentage"].icon_id)
         col.prop(context.scene.Polycount.Draw, "faces", text="Faces", icon_value=self.icons["faces"].icon_id)
 
         col = layout.column(align=True)

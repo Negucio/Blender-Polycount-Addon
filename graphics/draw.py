@@ -125,9 +125,12 @@ class Draw():
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.percentage:
-                text = 'Tris/Scene'
-                scn_tris = bpy.context.scene.Polycount.ObjectMode.SceneData.Triangles
-                if row > 0: text = "{0:.2f}%".format(0.0 if scn_tris == 0 else (content[key][0].Triangles / scn_tris)*100)
+                text = 'Percentage'
+                if row > 0:
+                    sel_tris = bpy.context.scene.Polycount.ObjectMode.SelectedData.Triangles
+                    col_tris = content[key][0].Triangles
+                    text = "{0:.2f}%".format(0.0 if col_tris == 0 else (sel_tris/col_tris)*100)
+                    if key == 'Selection': text = ""
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.faces:
@@ -228,7 +231,7 @@ class Draw():
 
         # Initializes var to 1 because of the title column
         edit_mode = 1
-        if scene.Polycount.Draw.EditModePolycount and bpy.context.mode=='EDIT_MESH':
+        if scene.Polycount.Draw.EditModePolycount and bpy.context.mode == 'EDIT_MESH':
             if scene.Polycount.Draw.selected_tris:  edit_mode += 1
             if scene.Polycount.Draw.selected_verts:  edit_mode += 1
             if scene.Polycount.Draw.selected_edges:  edit_mode += 1
@@ -248,7 +251,7 @@ class Draw():
 
         # Initializes var to 1 because of the title column
         edit_mode = 1
-        if scene.Polycount.Draw.EditModePolycount and bpy.context.mode=='EDIT_MESH': edit_mode += 1
+        if scene.Polycount.Draw.EditModePolycount and bpy.context.mode == 'EDIT_MESH': edit_mode += 1
 
         return obj_mode + edit_mode
 
@@ -308,7 +311,7 @@ class Draw():
             # Add the name of each component which will be accounted
             contentObjMode['OBJECT'] = ('Triangles', 'Quads', 'Ngons', 'Faces', "PureTriangles")
             # Data for each Polycount context (selected objects, scene, layer and list) will be stored in the dictionary
-            if scn.Polycount.Draw.Selected:   contentObjMode['Selected'] = (scn.Polycount.ObjectMode.SelectedData, None)
+            if scn.Polycount.Draw.Selected:   contentObjMode['Selection'] = (scn.Polycount.ObjectMode.SelectedData, None)
             if scn.Polycount.Draw.Scene:      contentObjMode['Scene']    = (scn.Polycount.ObjectMode.SceneData, None)
             if scn.Polycount.Draw.Layer:      contentObjMode['Layer']    = (scn.Polycount.ObjectMode.LayerData, None)
             lists = bpy.context.scene.Polycount.MainUI.lists_List
