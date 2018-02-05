@@ -67,8 +67,6 @@ class VIEW3D_PT_polycount_settings(bpy.types.Panel):
         col_display = row.column(align=True)
         col_display.prop(context.scene.Polycount.Draw, "sep_color", text="Sep")
 
-        layout.separator()
-
         col_large_numbers = layout.column(align=True)
         col_large_numbers.label("Separate large numbers:")
 
@@ -83,13 +81,11 @@ class VIEW3D_PT_polycount_settings(bpy.types.Panel):
         col.prop(context.scene.Polycount.Draw, "millions_color", text="Millions")
 
         box = col_large_numbers.box()
-        col_sep = box.column(align=True)
+        col_sep = box.column()
         row = col_sep.row()
         row.prop(context.scene.Polycount.Draw, "sep_by_char", text="By char", toggle=True)
         row = col_sep.row(align=True)
         row.prop(context.scene.Polycount.Draw, "sep", expand=True)
-
-        layout.separator()
 
         col_config = layout.column(align=True)
         col_config.label("Configuration:")
