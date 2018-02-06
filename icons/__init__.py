@@ -20,7 +20,8 @@ def register():
             "percentage"    : "Percentage.png",
             "quads"         : "Quads.png",
             "selected_tris" : "Triangle_Selection_Edit_Mode.png",
-            "triangles"     : "Triangles.png"
+            "triangles"     : "Triangles.png",
+            "total_tris"    : "Total_Tris.png",
             }
 
     for key, f in icons.items():

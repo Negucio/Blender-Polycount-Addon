@@ -17,9 +17,9 @@ class ObjectModeUI():
 
     def PolygonTypes(self, context, layout):
         col = layout.column(align=True)
-        col.prop(context.scene.Polycount.Draw, "triangles", text="Total Tris", icon_value=self.icons["triangles"].icon_id)
-        col.prop(context.scene.Polycount.Draw, "percentage", text="Percentage", icon_value=self.icons["percentage"].icon_id)
+        col.prop(context.scene.Polycount.Draw, "triangles", text="Total Tris", icon_value=self.icons["total_tris"].icon_id)
         col.prop(context.scene.Polycount.Draw, "faces", text="Faces", icon_value=self.icons["faces"].icon_id)
+        col.prop(context.scene.Polycount.Draw, "percentage", text="Percentage", icon_value=self.icons["percentage"].icon_id)
 
         col = layout.column(align=True)
         col.prop(context.scene.Polycount.Draw, "pure_tris", text="Triangles", icon_value=self.icons["triangles"].icon_id)
@@ -42,7 +42,7 @@ class ObjectModeUI():
     def PolygonContext(self, context, layout):
         col = layout.column(align=True)
         row = col.row(align=True)
-        row.prop(context.scene.Polycount.Draw, "Selected", text="Selection", icon='ZOOM_SELECTED')
+        row.prop(context.scene.Polycount.Draw, "Selected", text="Selection", icon='RESTRICT_SELECT_OFF')
         row = layout.row()
         row.prop(context.scene.Polycount.Draw, "Scene", text="Scene", icon='SCENE_DATA')
         row = layout.row()
