@@ -1,6 +1,6 @@
 import bpy
 from . import DataPropertyGroup
-from . graphics import DrawPropertyGroup
+from . settings import DrawPropertyGroup
 from . ui import ObjListPropertyGroup
 
 from .. polycount.controller import PolycountController

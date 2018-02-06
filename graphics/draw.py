@@ -72,18 +72,6 @@ class Draw():
                     if count == 3: bgl.glColor3f(*scene.Polycount.Draw.thousands_color)
                     elif count == 6: bgl.glColor3f(*scene.Polycount.Draw.millions_color)
 
-    def get_cols(self, scn):
-        first = 0
-        second = 0
-        if scn.Polycount.Draw.triangles: first += 1
-        if scn.Polycount.Draw.faces: first += 1
-
-        second += first
-
-        if scn.Polycount.Draw.percentage: second += 1
-
-        return first, second
-
     def DrawLine(self, v1, v2):
         """
         Draws a line between the 2D position v1 and the 2D position v2
@@ -113,80 +101,76 @@ class Draw():
         initY = pos[1]
 
         y = initY
-
         for key in content:
-            if key == 'OBJECT': bgl.glColor3f(*scn.Polycount.Draw.sep_color)
-            else: bgl.glColor3f(*(scn.Polycount.Draw.title_color if content[key][1] is None else content[key][1]))
-            blf.position(0, initX, y, 0)
+            title_color = scn.Polycount.Draw.sep_color if key == 'OBJECT' else (scn.Polycount.Draw.title_color if content[key][1] is None else content[key][1])
+            bgl.glColor3f(*title_color)
+
             title = key
-            max = int(scn.Polycount.Draw.width*10)
-            if len(key) > max:
-                title = key[0:max-3] + "..."
+            max_chars = int(scn.Polycount.Draw.width * (9 + (5*scn.Polycount.Draw.title_sep)))
+
+            perc = ''
+            if scn.Polycount.Draw.percentage and row > 0 and key != 'Selection':
+                sel_tris = bpy.context.scene.Polycount.ObjectMode.SelectedData.Triangles
+                col_tris = content[key][0].Triangles
+                perc = " {0}%".format(int(0 if col_tris == 0 else (sel_tris / col_tris) * 100))
+                max_chars -= len(perc)
+
+            if len(key) > max_chars:
+                title = key[0:max_chars-2] + "..."
+
+            blf.position(0, initX, y, 0)
             blf.draw(self.font_id, title)
 
-            color = scn.Polycount.Draw.title_color if row == 0 else scn.Polycount.Draw.data_color
+            if perc:
+                title_width, title_height = blf.dimensions(self.font_id, title)
+                bgl.glColor3f(*scn.Polycount.Draw.perc_color)
+                blf.position(0, initX+title_width, y, 0)
+                blf.draw(self.font_id, perc)
 
+            color = scn.Polycount.Draw.title_color if row == 0 else scn.Polycount.Draw.data_color
             bgl.glColor3f(*color)
+
+            x = initX + (40*scn.Polycount.Draw.title_sep)
 
             col = 1
             if scn.Polycount.Draw.triangles:
                 text = 'Total Tris'
                 if row > 0: text = str(content[key][0].Triangles)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
+                self.DrawCell(text, (x + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.faces:
                 text = 'Faces'
                 if row > 0: text = str(content[key][0].Faces)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
-                col = col + 1
-            if scn.Polycount.Draw.percentage:
-                text = 'Percentage'
-                if row > 0:
-                    sel_tris = bpy.context.scene.Polycount.ObjectMode.SelectedData.Triangles
-                    col_tris = content[key][0].Triangles
-                    text = "{0:.2f}%".format(0.0 if col_tris == 0 else (sel_tris/col_tris)*100)
-                    if key == 'Selection': text = ""
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
+                self.DrawCell(text, (x + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
 
             if scn.Polycount.Draw.pure_tris:
                 text = 'Triangles'
                 if row > 0: text = str(content[key][0].PureTriangles)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
+                self.DrawCell(text, (x + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.quads:
                 text = 'Quads'
                 if row > 0: text = str(content[key][0].Quads)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
+                self.DrawCell(text, (x + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
             if scn.Polycount.Draw.ngons:
                 text = 'Ngons'
                 if row > 0: text = str(content[key][0].Ngons)
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
+                self.DrawCell(text, (x + (cellSize[0] * col), y), color, cellSize[0])
             row = row + 2
 
             y = initY - (cellSize[1] * row)
 
-        cols = self.get_cols(scn)
-
-        # Vertical line to separate TotalTris/Faces and Percentage/Tris/Quads/Ngons
-        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces) and scn.Polycount.Draw.percentage:
-            sepX = initX + (cellSize[0] * cols[0]) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
-            col = scn.Polycount.Draw.sep_color
-            bgl.glColor4f(*(col[0], col[1], col[2], 0.25))
-            # It's necessary calling this bgl function in order to enable the alpha drawing
-            bgl.glEnable(bgl.GL_BLEND)
-            self.DrawLine((sepX, initY), (sepX, y + (cellSize[1]*2)))
-            bgl.glEnd()
-            bgl.glDisable(bgl.GL_BLEND)
 
         # Vertical line to separate Percentage and Tris/Quads/Ngons
-        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces or scn.Polycount.Draw.percentage) and (scn.Polycount.Draw.pure_tris or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
-            sepX = initX + (cellSize[0] * cols[1]) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
+        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces) and (scn.Polycount.Draw.pure_tris or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
+            cols = 2 if scn.Polycount.Draw.triangles and scn.Polycount.Draw.faces else 1
+            sepX = x + (cellSize[0] * cols) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
             bgl.glColor3f(*scn.Polycount.Draw.sep_color)
             self.DrawLine((sepX, initY), (sepX, y + (cellSize[1]*2)))
 
-        return initX, y
+        return x, y
 
 
     def DrawEditModeTable(self, pos, cellSize, content):
@@ -238,7 +222,7 @@ class Draw():
         obj_mode = 1
         if scene.Polycount.Draw.ObjPolycount:
             if scene.Polycount.Draw.triangles:  obj_mode += 1
-            if scene.Polycount.Draw.percentage:  obj_mode += 1
+            #if scene.Polycount.Draw.percentage:  obj_mode += 1
             if scene.Polycount.Draw.faces:  obj_mode += 1
             if scene.Polycount.Draw.pure_tris:  obj_mode += 1
             if scene.Polycount.Draw.quads:  obj_mode += 1
@@ -297,7 +281,7 @@ class Draw():
 
         # Sets the coordinates in pixels of the top-left corner in the 3DView
         cols = self.get_columns(scn)
-        initX = self.get_init_pos(bpy.context.region.width, cellRefSize[0]*cols, perc=scn.Polycount.Draw.hor_pos)
+        initX = self.get_init_pos(bpy.context.region.width, cellRefSize[0]*cols+(40*scn.Polycount.Draw.title_sep), perc=scn.Polycount.Draw.hor_pos)
         rows = self.get_rows(scn)
         initY = self.get_init_pos(bpy.context.region.height, cellRefSize[1]*rows, perc=scn.Polycount.Draw.vert_pos, reverse=True, high_margin=scn.Polycount.Draw.font_size*10)
 

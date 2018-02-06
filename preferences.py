@@ -1,6 +1,6 @@
 import bpy
 from . common_utils import get_addon_name
-from . data.graphics import DrawPropertyGroup
+from . data.settings import DrawPropertyGroup
 
 class PolycountPreferences(bpy.types.AddonPreferences):
     bl_idname = get_addon_name()

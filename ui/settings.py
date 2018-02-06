@@ -58,6 +58,7 @@ class VIEW3D_PT_polycount_settings(bpy.types.Panel):
         col_display.prop(context.scene.Polycount.Draw, "width", text="Width")
         col_display.prop(context.scene.Polycount.Draw, "height", text="Height")
         col_display.prop(context.scene.Polycount.Draw, "digit_sep", text="Digit Separation")
+        col_display.prop(context.scene.Polycount.Draw, "title_sep", text="Title Horiz. Separation")
 
         row = col_display.row(align=True)
         col_display = row.column(align=True)
@@ -66,6 +67,8 @@ class VIEW3D_PT_polycount_settings(bpy.types.Panel):
         col_display.prop(context.scene.Polycount.Draw, "data_color", text="Data")
         col_display = row.column(align=True)
         col_display.prop(context.scene.Polycount.Draw, "sep_color", text="Sep")
+        col_display = row.column(align=True)
+        col_display.prop(context.scene.Polycount.Draw, "perc_color", text="Perc")
 
         col_large_numbers = layout.column(align=True)
         col_large_numbers.label("Separate large numbers:")

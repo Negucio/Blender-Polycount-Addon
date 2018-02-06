@@ -1,5 +1,5 @@
 import bpy
-from . graphics import DrawPropertyGroup
+from . settings import DrawPropertyGroup
 from . object import DataPropertyGroup, ObjPolycountPropertyGroup
 from . scene import EditModePropertyGroup, ObjectModePropertyGroup, ScnTempPropertyGroup, ScnPolycountPropertyGroup
 from . ui import ItemListPropertyGroup, ItemCollectionPropertyGroup, ObjListPropertyGroup

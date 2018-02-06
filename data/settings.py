@@ -30,10 +30,12 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
         'hor_pos',
         'vert_pos',
         'digit_sep',
+        'title_sep',
         'font_size',
         'title_color',
         'data_color',
         'sep_color',
+        'perc_color',
         'sep_by_color',
         'thousands_color',
         'millions_color',
@@ -75,11 +77,13 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
 
     hor_pos = bpy.props.FloatProperty(name="hor_pos", default=1, max=1, min=0)
     vert_pos = bpy.props.FloatProperty(name="vert_pos", default=0, max=1, min=0)
-    digit_sep = bpy.props.FloatProperty(name="vert_pos", default=1, max=1.5, min=1)
+    digit_sep = bpy.props.FloatProperty(name="digit_sep", default=1, max=1.5, min=1)
+    title_sep = bpy.props.FloatProperty(name="title_sep", default=0.5, max=1, min=0)
     font_size = bpy.props.IntProperty(name="FontSize", default=14, max=20, min=12)
     title_color = bpy.props.FloatVectorProperty(name="title_color", subtype='COLOR', default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
     data_color = bpy.props.FloatVectorProperty(name="data_color", subtype='COLOR', default=(1.0, 1.0, 1.0), min=0.0, max=1.0, description="color picker")
     sep_color = bpy.props.FloatVectorProperty(name="sep_color", subtype='COLOR', default=(0.5, 1.0, 0.5), min=0.0, max=1.0, description="color picker")
+    perc_color = bpy.props.FloatVectorProperty(name="perc_color", subtype='COLOR', default=(0.5, 0.75, 1.0), min=0.0, max=1.0, description="color picker")
 
     # Large numbers visualization settings
     sep_by_color = bpy.props.BoolProperty(default=True, description="Separate large numbers with colors")
