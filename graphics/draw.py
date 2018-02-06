@@ -72,6 +72,18 @@ class Draw():
                     if count == 3: bgl.glColor3f(*scene.Polycount.Draw.thousands_color)
                     elif count == 6: bgl.glColor3f(*scene.Polycount.Draw.millions_color)
 
+    def get_cols(self, scn):
+        first = 0
+        second = 0
+        if scn.Polycount.Draw.triangles: first += 1
+        if scn.Polycount.Draw.faces: first += 1
+
+        second += first
+
+        if scn.Polycount.Draw.percentage: second += 1
+
+        return first, second
+
     def DrawLine(self, v1, v2):
         """
         Draws a line between the 2D position v1 and the 2D position v2
@@ -122,6 +134,11 @@ class Draw():
                 if row > 0: text = str(content[key][0].Triangles)
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
+            if scn.Polycount.Draw.faces:
+                text = 'Faces'
+                if row > 0: text = str(content[key][0].Faces)
+                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
+                col = col + 1
             if scn.Polycount.Draw.percentage:
                 text = 'Percentage'
                 if row > 0:
@@ -129,11 +146,6 @@ class Draw():
                     col_tris = content[key][0].Triangles
                     text = "{0:.2f}%".format(0.0 if col_tris == 0 else (sel_tris/col_tris)*100)
                     if key == 'Selection': text = ""
-                self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
-                col = col + 1
-            if scn.Polycount.Draw.faces:
-                text = 'Faces'
-                if row > 0: text = str(content[key][0].Faces)
                 self.DrawCell(text, (initX + (cellSize[0] * col), y), color, cellSize[0])
                 col = col + 1
 
@@ -155,22 +167,27 @@ class Draw():
 
             y = initY - (cellSize[1] * row)
 
-        cols = 0
+        cols = self.get_cols(scn)
 
-        # Vertical line to separate Triangles/Faces and Quads/Ngons
-        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.percentage) and (scn.Polycount.Draw.pure_tris or scn.Polycount.Draw.faces or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
-            cols = 2 if scn.Polycount.Draw.triangles and scn.Polycount.Draw.percentage else 1
-            sepX = initX + (cellSize[0] * cols) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
-            bgl.glColor3f(*scn.Polycount.Draw.sep_color)
+        # Vertical line to separate TotalTris/Faces and Percentage/Tris/Quads/Ngons
+        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces) and scn.Polycount.Draw.percentage:
+            sepX = initX + (cellSize[0] * cols[0]) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
+            col = scn.Polycount.Draw.sep_color
+            bgl.glColor4f(*(col[0], col[1], col[2], 0.25))
+            # It's necessary calling this bgl function in order to enable the alpha drawing
+            bgl.glEnable(bgl.GL_BLEND)
             self.DrawLine((sepX, initY), (sepX, y + (cellSize[1]*2)))
+            bgl.glEnd()
+            bgl.glDisable(bgl.GL_BLEND)
 
-        if scn.Polycount.Draw.faces and (scn.Polycount.Draw.pure_tris or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
-            cols = cols+1
-            sepX = initX + (cellSize[0] * cols) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
+        # Vertical line to separate Percentage and Tris/Quads/Ngons
+        if (scn.Polycount.Draw.triangles or scn.Polycount.Draw.faces or scn.Polycount.Draw.percentage) and (scn.Polycount.Draw.pure_tris or scn.Polycount.Draw.quads or scn.Polycount.Draw.ngons):
+            sepX = initX + (cellSize[0] * cols[1]) + (scn.Polycount.Draw.font_size * (5*scn.Polycount.Draw.width))
             bgl.glColor3f(*scn.Polycount.Draw.sep_color)
             self.DrawLine((sepX, initY), (sepX, y + (cellSize[1]*2)))
 
         return initX, y
+
 
     def DrawEditModeTable(self, pos, cellSize, content):
         scn = bpy.context.scene
@@ -274,9 +291,6 @@ class Draw():
     def DrawPolycount(self, context):
         scn = context.scene
 
-        # TODO: Constants should not be used in order to set the initial position.
-        # TODO: Should be dependant on the region limits, allowing to customize only the offsets
-        # TODO: and keeping the limits to avoid drawing outside the 3dView.
         # Sets the text and cell sizes based on the font size
         blf.size(self.font_id, scn.Polycount.Draw.font_size, 72)
         cellRefSize = ((scn.Polycount.Draw.font_size * 6) * scn.Polycount.Draw.width, (scn.Polycount.Draw.font_size * 0.7) * scn.Polycount.Draw.height)
