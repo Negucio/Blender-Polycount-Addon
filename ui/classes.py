@@ -17,9 +17,7 @@ class ObjectModeUI():
 
     def PolygonTypes(self, context, layout):
         col = layout.column(align=True)
-        row = col.row(align=True)
-        row.prop(context.scene.Polycount.Draw, "triangles", text="Total Tris", icon_value=self.icons["total_tris"].icon_id)
-        row.prop(context.scene.Polycount.Draw, "percentage", text="", icon_value=self.icons["percentage"].icon_id)
+        col.prop(context.scene.Polycount.Draw, "triangles", text="Total Tris", icon_value=self.icons["total_tris"].icon_id)
         col.prop(context.scene.Polycount.Draw, "faces", text="Faces", icon_value=self.icons["faces"].icon_id)
 
 
@@ -45,6 +43,7 @@ class ObjectModeUI():
         col = layout.column(align=True)
         row = col.row(align=True)
         row.prop(context.scene.Polycount.Draw, "Selected", text="Selection", icon='RESTRICT_SELECT_OFF')
+        row.prop(context.scene.Polycount.Draw, "percentage", text="", icon_value=self.icons["percentage"].icon_id)
         row = layout.row()
         row.prop(context.scene.Polycount.Draw, "Scene", text="Scene", icon='SCENE_DATA')
         row = layout.row()
@@ -54,7 +53,7 @@ class ObjectModeUI():
 
     def LayerConfig(self, context, layout):
         col = layout.column(align=True)
-        col.prop(context.scene.Polycount.Draw, "Layer", text="Layer", icon='LAYER_ACTIVE')
+        col.prop(context.scene.Polycount.Draw, "Layer", text="Layer", icon='RENDERLAYERS')  # icon='LAYER_ACTIVE')
         if context.scene.Polycount.Draw.Layer:
             box = col.box()
             box.prop(context.scene.Polycount.MainUI, 'layer_idx')
