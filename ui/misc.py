@@ -1,6 +1,8 @@
 import bpy
+from bpy.types import Panel
 
-class VIEW3D_PT_polycount_misc(bpy.types.Panel):
+
+class VIEW3D_PT_polycount_misc(Panel):
     bl_label = "Misc"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS'

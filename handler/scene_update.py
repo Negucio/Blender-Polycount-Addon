@@ -1,4 +1,5 @@
-import bpy, bmesh
+import bpy
+import bmesh
 from bpy.app.handlers import persistent
 
 
@@ -7,13 +8,15 @@ def edit_mode_count(act_obj):
     """
     In Edit Mode, the polycount for the active object will be updated
     when the number of selected vertices changes
-    :param obj: The active object
+    :param act_obj: The active object
     """
     # If it is not in Edit Mode goes out
-    if bpy.context.mode != 'EDIT_MESH' or act_obj.mode != 'EDIT': return
+    if bpy.context.mode != 'EDIT_MESH' or act_obj.mode != 'EDIT':
+        return
     bm = bmesh.from_edit_mesh(act_obj.data)
     if bm is not None:
-        if hasattr(bm.verts, "ensure_lookup_table"): bm.verts.ensure_lookup_table()
+        if hasattr(bm.verts, "ensure_lookup_table"):
+            bm.verts.ensure_lookup_table()
         verts_sel = [v for v in bm.verts if v.select]
         if bpy.context.scene.Polycount.temp.selected_verts != len(verts_sel):
             # If the number of selected vertices of the active object has changed,
@@ -29,7 +32,8 @@ def polycount_scene_update_post(scene):
     :param scene: At appending this function to the scene_update_post, it receives the scene as a parameter.
     """
     obj = scene.objects.active
-    if obj is None or not hasattr(obj, 'Polycount') or not hasattr(obj.Polycount, 'Updated'): return
+    if obj is None or not hasattr(obj, 'Polycount') or not hasattr(obj.Polycount, 'Updated'):
+        return
 
     # "is_updated_data" is True when an object changes.
     if obj.is_updated_data:
@@ -39,7 +43,5 @@ def polycount_scene_update_post(scene):
             scene.Polycount.temp.selected_verts = 0
 
     # In Edit Mode
-    if scene.Polycount.Draw.EditModePolycount: edit_mode_count(obj)
-
-
-
+    if scene.Polycount.Draw.EditModePolycount:
+        edit_mode_count(obj)

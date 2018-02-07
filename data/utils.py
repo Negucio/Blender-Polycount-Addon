@@ -1,20 +1,20 @@
 
-
-def reset_data_property(dataProperty):
+def reset_data_property(data_property):
     """
     Resets the content of the DataPropertyGroup instance which is receive as a parameter
-    :param dataProperty: Receives a blender python DataPropertyGroup instance
+    :param data_property: Receives a blender python DataPropertyGroup instance
     :return:
     """
-    # If the dataProperty has not these attributes, it is not a DataPropertyGroup instance
-    if not hasattr(dataProperty, "Triangles") or \
-            not hasattr(dataProperty, "PureTriangles") or \
-            not hasattr(dataProperty, "Quads") or \
-            not hasattr(dataProperty, "Ngons") or \
-            not hasattr(dataProperty, "Faces"): return
+    # If the data_property has not these attributes, it is not a DataPropertyGroup instance
+    tris = hasattr(data_property, "Triangles")
+    ptris = hasattr(data_property, "PureTriangles")
+    quads = hasattr(data_property, "Quads")
+    ngons = hasattr(data_property, "Ngons")
+    faces = hasattr(data_property, "Faces")
 
-    dataProperty.Triangles = 0
-    dataProperty.PureTriangles = 0
-    dataProperty.Quads = 0
-    dataProperty.Ngons = 0
-    dataProperty.Faces = 0
+    if tris and ptris and quads and ngons and faces:
+        data_property.Triangles = 0
+        data_property.PureTriangles = 0
+        data_property.Quads = 0
+        data_property.Ngons = 0
+        data_property.Faces = 0

@@ -1,6 +1,9 @@
 import bpy
+from bpy.props import StringProperty
+from bpy.types import UIList, Operator
 
-class DATA_UL_polycount_lists_list(bpy.types.UIList):
+
+class DATA_UL_polycount_lists_list(UIList):
     """
     List to contain lists of objects
     """
@@ -8,13 +11,15 @@ class DATA_UL_polycount_lists_list(bpy.types.UIList):
         layout.alignment = 'EXPAND'
         row = layout.row()
         split = row.split(percentage=0.2)
-        split.prop(item, "list_visible", text="", emboss=False, icon='OUTLINER_OB_LAMP' if item.list_visible else 'LAMP')
+        icon_visible = 'OUTLINER_OB_LAMP' if item.list_visible else 'LAMP'
+        split.prop(item, "list_visible", text="", emboss=False, icon=icon_visible)
         split = split.split(percentage=0.7)
         split.prop(item, "list_name", text="", emboss=False, icon_value=icon)
         split = split.split()
         split.prop(item, "list_color", text="", icon_value=icon)
 
-class DATA_OT_polycount_lists_list_add(bpy.types.Operator):
+
+class DATA_OT_polycount_lists_list_add(Operator):
     """
     Operator to add objects to the list
     """
@@ -22,10 +27,10 @@ class DATA_OT_polycount_lists_list_add(bpy.types.Operator):
     bl_label = "New List"
     bl_description = "Add list to the list"
 
-    name = bpy.props.StringProperty(name="name", default='List')
+    name = StringProperty(name="name", default='List')
 
-    def resolve_name_collision(self, name):
-        names_in_list = [l.list_name for l in bpy.context.scene.Polycount.MainUI.lists_List]
+    def resolve_name_collision(self, name, context):
+        names_in_list = [l.list_name for l in context.scene.Polycount.MainUI.lists_List]
         ret_name = name
         count = 1
         # While the name is already in the list...
@@ -35,22 +40,23 @@ class DATA_OT_polycount_lists_list_add(bpy.types.Operator):
             count = count+1
         return ret_name
 
-    def add_toList(self, name):
+    def add_to_list(self, name, context):
         # Add the new list to the list
-        item = bpy.context.scene.Polycount.MainUI.lists_List.add()
-        items = len(bpy.context.scene.Polycount.MainUI.lists_List)
+        item = context.scene.Polycount.MainUI.lists_List.add()
+        items = len(context.scene.Polycount.MainUI.lists_List)
         # Sets the focus/index on the new list
-        bpy.context.scene.Polycount.MainUI.lists_List_Index = items-1
+        context.scene.Polycount.MainUI.lists_List_Index = items-1
 
-        item.list_name = self.resolve_name_collision(name)
+        item.list_name = self.resolve_name_collision(name, context)
 
     @classmethod
     def poll(cls, context):
         return True
 
     def execute(self, context):
-        self.add_toList(self.name)
-        if hasattr(context, "area") and context.area != None: context.area.tag_redraw()
+        self.add_to_list(self.name, context)
+        if hasattr(context, "area") and context.area is not None:
+            context.area.tag_redraw()
 
         # # If any object(s) in the scene is/are selected at creating the new list, it/they will be added to it
         # if len(context.selected_objects)>0: bpy.ops.obj_list_add.btn('EXEC_DEFAULT')
@@ -62,7 +68,8 @@ class DATA_OT_polycount_lists_list_add(bpy.types.Operator):
         # A dialog asking for the list name will be displayed
         return wm.invoke_props_dialog(self)
 
-class DATA_OT_polycount_lists_list_remove(bpy.types.Operator):
+
+class DATA_OT_polycount_lists_list_remove(Operator):
     """
     Operator to remove the selected object list from the list
     """
@@ -82,5 +89,6 @@ class DATA_OT_polycount_lists_list_remove(bpy.types.Operator):
         bpy.context.scene.Polycount.MainUI.lists_List_Index = 0
         # The selected item is remove from the list
         bpy.context.scene.Polycount.MainUI.lists_List.remove(index)
-        if hasattr(context, "area") and context.area != None: context.area.tag_redraw()
+        if hasattr(context, "area") and context.area is not None:
+            context.area.tag_redraw()
         return {'FINISHED'}

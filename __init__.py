@@ -27,20 +27,16 @@ bl_info = {
     "wiki_url": "",
     "category": "3D View"}
 
-
-import bpy
 from . import icons
-
 from . import preferences
-
 # Import blender classes to register
 from . import data
-
 # Import handler functions to register
 from . import handler
-
 # Import Panels, Operators and Lists which compose the interface
 from . import ui
+from bpy.utils import unregister_module
+
 
 def register():
     icons.register()
@@ -57,7 +53,8 @@ def unregister():
     ui.unregister()
     icons.unregister()
 
-    bpy.utils.unregister_module(__name__)
+    unregister_module(__name__)
+
 
 if __name__ == "__main__":
     register()

@@ -1,7 +1,9 @@
 import bpy
 from .. graphics.draw import Draw
+from bpy.types import Operator, Panel
 
-class VIEW3D_OT_polycount_display(bpy.types.Operator):
+
+class VIEW3D_OT_polycount_display(Operator):
     bl_idname = "display_polycount.btn"
     bl_label = "Display"
     bl_description = "Display polycount"
@@ -10,16 +12,17 @@ class VIEW3D_OT_polycount_display(bpy.types.Operator):
 
     def execute(self, context):
         if context.scene.Polycount.Display:
-            context.scene.Polycount.controller.Refresh(context)
-            self.drawing.DisplayPolycount(context)
+            context.scene.Polycount.controller.refresh(context)
+            self.drawing.display_polycount(context)
         else:
-            self.drawing.HidePolycount(context)
+            self.drawing.hide_polycount(context)
 
-        if hasattr(context, "area") and context.area is not None: context.area.tag_redraw()
+        if hasattr(context, "area") and context.area is not None:
+            context.area.tag_redraw()
         return {'FINISHED'}
 
 
-class VIEW3D_PT_polycount_main(bpy.types.Panel):
+class VIEW3D_PT_polycount_main(Panel):
     bl_label = "Polycount"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS'

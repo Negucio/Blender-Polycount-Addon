@@ -1,18 +1,33 @@
-import bpy, bmesh
+import bpy
+import bmesh
 from . utils import get_mirror_axis, calculate_subsurf, has_solidify, get_levels_subsurf
 from .. data.utils import reset_data_property
 
-class PolycountController():
-    def PolycountObjectMode(self, object, polygons, bmesh=False):
-        if object == None or not hasattr(object, 'type') or object.type != 'MESH': return None
-        if not hasattr(object, 'Polycount'): return None
+
+class PolycountController:
+
+    def object_mode(self, obj, polygons, bm=False):
+        """
+
+        :param obj:
+        :param polygons:
+        :param bm: bmesh
+        :return:
+        """
+        if obj is None or not hasattr(obj, 'type') or obj.type != 'MESH':
+            return None
+        if not hasattr(obj, 'Polycount'):
+            return None
         pure_tris = 0
         face_tris = 0
         quads = 0
         ngons = 0
-        if bmesh: polygons.ensure_lookup_table()
+
+        if bm:
+            polygons.ensure_lookup_table()
+
         for poly in polygons:
-            v = len(poly.verts) if bmesh else len(poly.vertices)
+            v = len(poly.verts) if bm else len(poly.vertices)
 
             if v == 3:
                 pure_tris += 1
@@ -26,18 +41,20 @@ class PolycountController():
         tris = pure_tris + face_tris
         faces = pure_tris + quads + ngons
 
-        object.Polycount.Data.PureTriangles = pure_tris
-        object.Polycount.Data.Triangles = tris
-        object.Polycount.Data.Quads = quads
-        object.Polycount.Data.Ngons = ngons
-        object.Polycount.Data.Faces = faces
-        object.Polycount.MirrorAxis = get_mirror_axis(object)
-        object.Polycount.HasSolidify = has_solidify(object)
-        object.Polycount.Updated = True
+        obj.Polycount.Data.PureTriangles = pure_tris
+        obj.Polycount.Data.Triangles = tris
+        obj.Polycount.Data.Quads = quads
+        obj.Polycount.Data.Ngons = ngons
+        obj.Polycount.Data.Faces = faces
+        obj.Polycount.MirrorAxis = get_mirror_axis(obj)
+        obj.Polycount.HasSolidify = has_solidify(obj)
+        obj.Polycount.Updated = True
 
-    def PolycountEditMode(self, object, bm):
-        if object == None or not hasattr(object, 'type') or object.type != 'MESH': return None
-        if not hasattr(object, 'Polycount'): return None
+    def edit_mode(self, obj, bm):
+        if obj is None or not hasattr(obj, 'type') or obj.type != 'MESH':
+            return None
+        if not hasattr(obj, 'Polycount'):
+            return None
 
         scn = bpy.context.scene
 
@@ -60,22 +77,23 @@ class PolycountController():
         scn.Polycount.EditMode.Edges = len(edges)
         scn.Polycount.EditMode.Faces = len(faces)
 
-
-    def CalculatePolycount(self, obj):
-        if (bpy.context.mode == 'EDIT_MESH' and bpy.context.active_object == obj):
+    def calculate_polycount(self, obj):
+        if bpy.context.mode == 'EDIT_MESH' and bpy.context.active_object == obj:
             bm = bmesh.from_edit_mesh(obj.data)
-            self.PolycountObjectMode(obj, bm.faces, bmesh=True)
-            self.PolycountEditMode(obj, bm)
+            self.object_mode(obj, bm.faces, bm=True)
+            self.edit_mode(obj, bm)
         else:
-            self.PolycountObjectMode(obj, obj.data.polygons, bmesh=False)
+            self.object_mode(obj, obj.data.polygons, bm=False)
 
-
-    def SetPolycount(self, objects, dataProperty):
-        if (objects == None): return
-        reset_data_property(dataProperty)
+    def set_data(self, objects, data_property):
+        if objects is None:
+            return
+        reset_data_property(data_property)
         for obj in objects:
-            if obj.type != 'MESH': continue
-            if not obj.Polycount.Updated: self.CalculatePolycount(obj)
+            if obj.type != 'MESH':
+                continue
+            if not obj.Polycount.Updated:
+                self.calculate_polycount(obj)
 
             tris = obj.Polycount.Data.Triangles
             pure_tris = obj.Polycount.Data.PureTriangles
@@ -83,70 +101,72 @@ class PolycountController():
             ngons = obj.Polycount.Data.Ngons
             faces = obj.Polycount.Data.Faces
 
-            mirrorMult = 1
-            solidifyMult = 1
+            mirror_mult = 1
+            solidify_mult = 1
 
             draw = bpy.context.scene.Polycount.Draw
             levels = get_levels_subsurf(obj)
             if draw.modifiers:
                 if draw.subsurf and levels > 0:
-                    quads = calculate_subsurf(obj, obj.Polycount.Data.PureTriangles, obj.Polycount.Data.Quads, obj.Polycount.Data.Ngons)
+                    data = obj.Polycount.Data
+                    quads = calculate_subsurf(obj, data.PureTriangles, data.Quads, data.Ngons)
                     tris = quads * 2
                     faces = quads
                     ngons = 0
                     pure_tris = 0
 
-                # TODO: The result is approximate. Merge and clipping should be taking into account
-                if draw.mirror: mirrorMult = 2 ** obj.Polycount.MirrorAxis
+                # TODO: Approximate. Merge and clipping should be taking into account
+                if draw.mirror:
+                    mirror_mult = 2 ** obj.Polycount.MirrorAxis
 
-                # TODO: The result is approximate. Should be calculated counting how many edges are border and adding to the account
-                if draw.solidify and obj.Polycount.HasSolidify: solidifyMult = 2
+                # TODO: Approximate. Should be calculated counting how many edges are border and adding to the account
+                if draw.solidify and obj.Polycount.HasSolidify:
+                    solidify_mult = 2
 
-            dataProperty.Triangles      += tris         * mirrorMult * solidifyMult
-            dataProperty.PureTriangles  += pure_tris    * mirrorMult * solidifyMult
-            dataProperty.Quads          += quads        * mirrorMult * solidifyMult
-            dataProperty.Ngons          += ngons        * mirrorMult * solidifyMult
-            dataProperty.Faces          += faces        * mirrorMult * solidifyMult
+            data_property.Triangles += tris * mirror_mult * solidify_mult
+            data_property.PureTriangles += pure_tris * mirror_mult * solidify_mult
+            data_property.Quads += quads * mirror_mult * solidify_mult
+            data_property.Ngons += ngons * mirror_mult * solidify_mult
+            data_property.Faces += faces * mirror_mult * solidify_mult
 
+    def scene_polycount(self):
+        self.set_data(bpy.context.scene.objects, bpy.context.scene.Polycount.ObjectMode.SceneData)
 
-    def ScenePolycount(self):
-        self.SetPolycount(bpy.context.scene.objects, bpy.context.scene.Polycount.ObjectMode.SceneData)
-
-    def LayerPolycount(self):
+    def layer_polycount(self):
         objs = []
         for layer in range(len(bpy.context.scene.Polycount.MainUI.layer_idx)):
             if bpy.context.scene.Polycount.MainUI.layer_idx[layer]:
                 objs += [ob for ob in bpy.context.scene.objects if ob.layers[layer] and ob not in objs]
 
-        self.SetPolycount(objs, bpy.context.scene.Polycount.ObjectMode.LayerData)
+        self.set_data(objs, bpy.context.scene.Polycount.ObjectMode.LayerData)
 
-    def ListPolycount(self, context):
-        if len(context.scene.Polycount.MainUI.lists_List) == 0: return
+    def list_polycount(self, context):
+        if len(context.scene.Polycount.MainUI.lists_List) == 0:
+            return
         for l in context.scene.Polycount.MainUI.lists_List:
             objs = [o.object for o in l.obj_list]
-            self.SetPolycount(objs, l.list_data)
+            self.set_data(objs, l.list_data)
 
-
-    def Refresh(self, context, force=False):
+    def refresh(self, context, force=False):
         # start_time = time.time()
         scene = context.scene
 
-        if not scene.Polycount.polycounted: scene.Polycount.polycounted = True
+        if not scene.Polycount.polycounted:
+            scene.Polycount.polycounted = True
 
-        # It is necessary to calculate the selection polycount if the percentage column is enabled
+        # It is necessary to calculate_polycount the selection polycount if the percentage column is enabled
         if force or scene.Polycount.Draw.Selected or scene.Polycount.Draw.percentage:
-            self.SetPolycount(context.selected_objects, scene.Polycount.ObjectMode.SelectedData)
+            self.set_data(context.selected_objects, scene.Polycount.ObjectMode.SelectedData)
 
         if force or scene.Polycount.Draw.Scene:
-            self.ScenePolycount()
+            self.scene_polycount()
 
         if force or scene.Polycount.Draw.Layer:
-            self.LayerPolycount()
+            self.layer_polycount()
 
         if force or scene.Polycount.Draw.List:
-            self.ListPolycount(context)
+            self.list_polycount(context)
 
-        if hasattr(context, "area") and context.area != None: context.area.tag_redraw()
+        if hasattr(context, "area") and context.area is not None:
+            context.area.tag_redraw()
         # print("--- %s seconds ---" % (time.time() - start_time))
-
-

@@ -1,5 +1,6 @@
 import bpy
 from os import path
+from bpy.utils import previews
 
 """
 Based on https://blender.stackexchange.com/questions/41565/loading-icons-into-custom-addon/58830#58830
@@ -10,18 +11,18 @@ Thanks batFINGER
 icon_dir = path.dirname(__file__)
 preview_collections = {}
 
+
 def register():
-    import bpy.utils.previews
-    pcoll = bpy.utils.previews.new()
+    pcoll = previews.new()
 
     icons = {
-            "faces"         : "Faces.png",
-            "ngons"         : "Ngons.png",
-            "percentage"    : "Percentage.png",
-            "quads"         : "Quads.png",
-            "selected_tris" : "Triangle_Selection_Edit_Mode.png",
-            "triangles"     : "Triangles.png",
-            "total_tris"    : "Total_Tris.png",
+            "faces": "Faces.png",
+            "ngons": "Ngons.png",
+            "percentage": "Percentage.png",
+            "quads": "Quads.png",
+            "selected_tris": "Triangle_Selection_Edit_Mode.png",
+            "triangles": "Triangles.png",
+            "total_tris": "Total_Tris.png",
             }
 
     for key, f in icons.items():
@@ -32,5 +33,5 @@ def register():
 
 def unregister():
     for pcoll in preview_collections.values():
-        bpy.utils.previews.remove(pcoll)
+        previews.remove(pcoll)
     preview_collections.clear()

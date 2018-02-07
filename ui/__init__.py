@@ -22,47 +22,49 @@ from . list_Lists import \
     DATA_OT_polycount_lists_list_remove, \
     DATA_UL_polycount_lists_list
 
+from bpy.utils import register_class, unregister_class
+
 
 def register():
     """
     All interface-related classes are explicitly registered.
     """
-    bpy.utils.register_class(VIEW3D_OT_polycount_display)
+    register_class(VIEW3D_OT_polycount_display)
 
-    bpy.utils.register_class(DATA_OT_polycount_obj_list_add)
-    bpy.utils.register_class(DATA_OT_polycount_obj_list_remove)
-    bpy.utils.register_class(DATA_OT_polycount_obj_list_select)
-    bpy.utils.register_class(DATA_OT_polycount_obj_list_hide)
-    bpy.utils.register_class(DATA_OT_polycount_obj_list_clear)
-    bpy.utils.register_class(DATA_UL_polycount_obj_list)
+    register_class(DATA_OT_polycount_obj_list_add)
+    register_class(DATA_OT_polycount_obj_list_remove)
+    register_class(DATA_OT_polycount_obj_list_select)
+    register_class(DATA_OT_polycount_obj_list_hide)
+    register_class(DATA_OT_polycount_obj_list_clear)
+    register_class(DATA_UL_polycount_obj_list)
 
-    bpy.utils.register_class(DATA_OT_polycount_lists_list_add)
-    bpy.utils.register_class(DATA_OT_polycount_lists_list_remove)
-    bpy.utils.register_class(DATA_UL_polycount_lists_list)
+    register_class(DATA_OT_polycount_lists_list_add)
+    register_class(DATA_OT_polycount_lists_list_remove)
+    register_class(DATA_UL_polycount_lists_list)
 
-    bpy.utils.register_class(VIEW3D_PT_polycount_main)
-    bpy.utils.register_class(VIEW3D_OT_polycount_save_prefs)
-    bpy.utils.register_class(VIEW3D_OT_polycount_reset_prefs)
-    bpy.utils.register_class(VIEW3D_PT_polycount_settings)
-    bpy.utils.register_class(VIEW3D_PT_polycount_misc)
+    register_class(VIEW3D_PT_polycount_main)
+    register_class(VIEW3D_OT_polycount_save_prefs)
+    register_class(VIEW3D_OT_polycount_reset_prefs)
+    register_class(VIEW3D_PT_polycount_settings)
+    register_class(VIEW3D_PT_polycount_misc)
 
 
 def unregister():
-    bpy.utils.unregister_class(VIEW3D_OT_polycount_display)
+    unregister_class(VIEW3D_OT_polycount_display)
 
-    bpy.utils.unregister_class(VIEW3D_PT_polycount_main)
-    bpy.utils.unregister_class(VIEW3D_PT_polycount_settings)
-    bpy.utils.unregister_class(VIEW3D_OT_polycount_save_prefs)
-    bpy.utils.unregister_class(VIEW3D_OT_polycount_reset_prefs)
-    bpy.utils.unregister_class(VIEW3D_PT_polycount_misc)
+    unregister_class(VIEW3D_PT_polycount_main)
+    unregister_class(VIEW3D_PT_polycount_settings)
+    unregister_class(VIEW3D_OT_polycount_save_prefs)
+    unregister_class(VIEW3D_OT_polycount_reset_prefs)
+    unregister_class(VIEW3D_PT_polycount_misc)
 
-    bpy.utils.unregister_class(DATA_OT_polycount_obj_list_add)
-    bpy.utils.unregister_class(DATA_OT_polycount_obj_list_remove)
-    bpy.utils.unregister_class(DATA_OT_polycount_obj_list_select)
-    bpy.utils.unregister_class(DATA_OT_polycount_obj_list_hide)
-    bpy.utils.unregister_class(DATA_OT_polycount_obj_list_clear)
-    bpy.utils.unregister_class(DATA_UL_polycount_obj_list)
+    unregister_class(DATA_OT_polycount_obj_list_add)
+    unregister_class(DATA_OT_polycount_obj_list_remove)
+    unregister_class(DATA_OT_polycount_obj_list_select)
+    unregister_class(DATA_OT_polycount_obj_list_hide)
+    unregister_class(DATA_OT_polycount_obj_list_clear)
+    unregister_class(DATA_UL_polycount_obj_list)
 
-    bpy.utils.unregister_class(DATA_OT_polycount_lists_list_add)
-    bpy.utils.unregister_class(DATA_OT_polycount_lists_list_remove)
-    bpy.utils.unregister_class(DATA_UL_polycount_lists_list)
+    unregister_class(DATA_OT_polycount_lists_list_add)
+    unregister_class(DATA_OT_polycount_lists_list_remove)
+    unregister_class(DATA_UL_polycount_lists_list)
