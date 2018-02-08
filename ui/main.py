@@ -29,12 +29,13 @@ class VIEW3D_PT_polycount_main(Panel):
     bl_category = "Polycount"
     # bl_options = {'HIDE_HEADER'}
 
-    def __init__(self):
+    @classmethod
+    def register(cls):
         # The import needs to be here so that ObjectModeUI and EditModeUI
         # load in the register of this class and not before
         from .classes import ObjectModeUI, EditModeUI
-        self.object_mode = ObjectModeUI()
-        self.edit_mode = EditModeUI()
+        cls.object_mode = ObjectModeUI()
+        cls.edit_mode = EditModeUI()
 
     @classmethod
     def poll(cls, context):
