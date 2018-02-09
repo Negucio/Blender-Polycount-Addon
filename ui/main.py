@@ -33,7 +33,7 @@ class VIEW3D_PT_polycount_main(Panel):
     def register(cls):
         # The import needs to be here so that ObjectModeUI and EditModeUI
         # load in the register of this class and not before
-        from .classes import ObjectModeUI, EditModeUI
+        from . classes import ObjectModeUI, EditModeUI
         cls.object_mode = ObjectModeUI()
         cls.edit_mode = EditModeUI()
 

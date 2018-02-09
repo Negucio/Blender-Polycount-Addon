@@ -2,7 +2,7 @@ import bpy
 from . settings import DrawPropertyGroup
 from . object import DataPropertyGroup, ObjPolycountPropertyGroup
 from . scene import EditModePropertyGroup, ObjectModePropertyGroup, ScnTempPropertyGroup, ScnPolycountPropertyGroup
-from . ui import ItemListPropertyGroup, ItemCollectionPropertyGroup, ObjListPropertyGroup
+from . ui import ItemCollectionPropertyGroup, ListsListPropertyGroup
 from bpy.utils import register_class, unregister_class
 from bpy.props import PointerProperty
 from bpy.types import Object, Scene
@@ -15,12 +15,11 @@ def register():
     """
     register_class(DataPropertyGroup)
     register_class(DrawPropertyGroup)
-    register_class(ItemListPropertyGroup)
     register_class(ItemCollectionPropertyGroup)
     register_class(ObjPolycountPropertyGroup)
     register_class(EditModePropertyGroup)
     register_class(ObjectModePropertyGroup)
-    register_class(ObjListPropertyGroup)
+    register_class(ListsListPropertyGroup)
     register_class(ScnTempPropertyGroup)
     register_class(ScnPolycountPropertyGroup)
 
@@ -37,12 +36,11 @@ def unregister():
 
     unregister_class(DataPropertyGroup)
     unregister_class(DrawPropertyGroup)
-    unregister_class(ItemListPropertyGroup)
     unregister_class(ItemCollectionPropertyGroup)
     unregister_class(ObjPolycountPropertyGroup)
     unregister_class(EditModePropertyGroup)
     unregister_class(ObjectModePropertyGroup)
-    unregister_class(ObjListPropertyGroup)
+    unregister_class(ListsListPropertyGroup)
     unregister_class(ScnTempPropertyGroup)
     unregister_class(ScnPolycountPropertyGroup)
 

@@ -1,4 +1,3 @@
-import bpy
 from . main import \
     VIEW3D_OT_polycount_display, \
     VIEW3D_PT_polycount_main
@@ -9,14 +8,6 @@ from . settings import VIEW3D_PT_polycount_settings, \
 
 from . misc import VIEW3D_PT_polycount_misc
 
-from . list_Objs import \
-    DATA_OT_polycount_obj_list_add, \
-    DATA_OT_polycount_obj_list_remove, \
-    DATA_UL_polycount_obj_list, \
-    DATA_OT_polycount_obj_list_select, \
-    DATA_OT_polycount_obj_list_hide, \
-    DATA_OT_polycount_obj_list_clear
-
 from . list_Lists import \
     DATA_OT_polycount_lists_list_add, \
     DATA_OT_polycount_lists_list_remove, \
@@ -24,19 +15,15 @@ from . list_Lists import \
 
 from bpy.utils import register_class, unregister_class
 
+from . import list
+
 
 def register():
     """
     All interface-related classes are explicitly registered.
     """
+    list.register()
     register_class(VIEW3D_OT_polycount_display)
-
-    register_class(DATA_OT_polycount_obj_list_add)
-    register_class(DATA_OT_polycount_obj_list_remove)
-    register_class(DATA_OT_polycount_obj_list_select)
-    register_class(DATA_OT_polycount_obj_list_hide)
-    register_class(DATA_OT_polycount_obj_list_clear)
-    register_class(DATA_UL_polycount_obj_list)
 
     register_class(DATA_OT_polycount_lists_list_add)
     register_class(DATA_OT_polycount_lists_list_remove)
@@ -68,3 +55,4 @@ def unregister():
     unregister_class(DATA_OT_polycount_lists_list_add)
     unregister_class(DATA_OT_polycount_lists_list_remove)
     unregister_class(DATA_UL_polycount_lists_list)
+    list.unregister()

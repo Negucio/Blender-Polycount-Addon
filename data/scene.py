@@ -1,7 +1,7 @@
 import bpy
 from . import DataPropertyGroup
 from . settings import DrawPropertyGroup
-from . ui import ObjListPropertyGroup
+from . ui import ListsListPropertyGroup
 
 from .. polycount.controller import PolycountController
 
@@ -47,6 +47,6 @@ class ScnPolycountPropertyGroup(PropertyGroup):
     EditMode = PointerProperty(options={'HIDDEN'}, type=EditModePropertyGroup)
     ObjectMode = PointerProperty(options={'HIDDEN'}, type=ObjectModePropertyGroup)
     Draw = PointerProperty(options={'HIDDEN'}, type=DrawPropertyGroup)
-    MainUI = PointerProperty(options={'HIDDEN'}, type=ObjListPropertyGroup)
+    MainUI = PointerProperty(options={'HIDDEN'}, type=ListsListPropertyGroup)
     polycounted = BoolProperty(default=False)
     temp = PointerProperty(options={'HIDDEN'}, type=ScnTempPropertyGroup)

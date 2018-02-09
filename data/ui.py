@@ -2,16 +2,11 @@ import bpy
 from . object import DataPropertyGroup
 from bpy.props import PointerProperty, StringProperty, FloatVectorProperty, BoolProperty,\
     PointerProperty, CollectionProperty, IntProperty, BoolVectorProperty
+from bpy.types import PropertyGroup, Object
 
+from .. ui.list import ObjListPropertyGroup
 
-class ItemListPropertyGroup(bpy.types.PropertyGroup):
-    """
-    Stores the properties of a UIList item
-    """
-    object = PointerProperty(name="object", type=bpy.types.Object)
-
-
-class ItemCollectionPropertyGroup(bpy.types.PropertyGroup):
+class ItemCollectionPropertyGroup(PropertyGroup):
     """
     Stores the properties of a UIList item
     """
@@ -22,11 +17,10 @@ class ItemCollectionPropertyGroup(bpy.types.PropertyGroup):
                                      default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
     list_data = PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
     # Collections
-    obj_list = CollectionProperty(type=ItemListPropertyGroup)
-    obj_list_Index = IntProperty(name="Index", default=0, min=0)
+    list = PointerProperty(type=ObjListPropertyGroup)
 
 
-class ObjListPropertyGroup(bpy.types.PropertyGroup):
+class ListsListPropertyGroup(PropertyGroup):
     """
     Stores the data for the uiLists and the custom layer operator
     """

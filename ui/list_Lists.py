@@ -57,10 +57,6 @@ class DATA_OT_polycount_lists_list_add(Operator):
         self.add_to_list(self.name, context)
         if hasattr(context, "area") and context.area is not None:
             context.area.tag_redraw()
-
-        # # If any object(s) in the scene is/are selected at creating the new list, it/they will be added to it
-        # if len(context.selected_objects)>0: bpy.ops.obj_list_add.btn('EXEC_DEFAULT')
-
         return {'FINISHED'}
 
     def invoke(self, context, event):

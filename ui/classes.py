@@ -1,4 +1,4 @@
-
+from . list.utils import draw_list
 from .. icons import preview_collections
 
 
@@ -86,32 +86,9 @@ class ObjectModeUI:
 
         if len(ui.lists_List) > 0:
             idx = ui.lists_List_Index
-            row = layout.row()
-            box = row.box()
-            row = box.row()
-
-            split = row.split(percentage=0.6)
-            split.label(text=ui.lists_List[idx].list_name + ' contents')
-            split = split.split()
-            split.prop(ui.lists_List[idx], "obj_list")
-
-            row = box.row()
-            row.template_list("DATA_UL_polycount_obj_list", "",
-                              ui.lists_List[idx], "obj_list",
-                              ui.lists_List[idx], "obj_list_Index",
-                              rows=1, maxrows=5)
-            col = box.column(align=True)
-            row = col.row(align=True)
-            row.operator("obj_list_add.btn", text="Assign")
-            row.operator("obj_list_remove.btn", text="Remove")
-
-            row = col.row(align=True)
-            row.operator("obj_list_select.btn", text="Select All").select = True
-            row.operator("obj_list_select.btn", text="Deselect All").select = False
-
-            row = col.row(align=True)
-            row.operator("obj_list_hide.btn", text="Show All").hide = False
-            row.operator("obj_list_hide.btn", text="Hide All").hide = True
+            data_path = "scene.Polycount.MainUI.lists_List[{0}].list".format(idx)
+            title = ui.lists_List[idx].list_name + ' contents'
+            draw_list(context, data_path, layout, title, tuple_buttons=(True, False, True, True))
 
 
 class EditModeUI:
