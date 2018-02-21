@@ -39,20 +39,14 @@ def register():
 def unregister():
     unregister_class(VIEW3D_OT_polycount_display)
 
-    unregister_class(VIEW3D_PT_polycount_main)
-    unregister_class(VIEW3D_PT_polycount_settings)
     unregister_class(VIEW3D_OT_polycount_save_prefs)
     unregister_class(VIEW3D_OT_polycount_reset_prefs)
-    unregister_class(VIEW3D_PT_polycount_misc)
-
-    unregister_class(DATA_OT_polycount_obj_list_add)
-    unregister_class(DATA_OT_polycount_obj_list_remove)
-    unregister_class(DATA_OT_polycount_obj_list_select)
-    unregister_class(DATA_OT_polycount_obj_list_hide)
-    unregister_class(DATA_OT_polycount_obj_list_clear)
-    unregister_class(DATA_UL_polycount_obj_list)
 
     unregister_class(DATA_OT_polycount_lists_list_add)
     unregister_class(DATA_OT_polycount_lists_list_remove)
     unregister_class(DATA_UL_polycount_lists_list)
+
     list.unregister()
+    unregister_class(VIEW3D_PT_polycount_main)
+    unregister_class(VIEW3D_PT_polycount_settings)
+    unregister_class(VIEW3D_PT_polycount_misc)

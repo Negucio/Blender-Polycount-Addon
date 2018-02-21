@@ -1,8 +1,15 @@
 import bpy
 from bpy.props import BoolProperty, StringProperty
 from bpy.types import Operator, UIList
+from . utils import get_property, PREFIX
 
-from . utils import get_property
+class_ids = {'add': PREFIX + "obj_list_add.btn",
+           'remove': PREFIX + "obj_list_remove.btn",
+           'clear': PREFIX + "obj_list_clear.btn",
+           'select': PREFIX + "obj_list_select.btn",
+           'hide': PREFIX + "obj_list_hide.btn",
+           'list': PREFIX + "DATA_UL_obj_list"
+           }
 
 class ListOperator():
     def updata_data_path(self, context):
@@ -83,6 +90,8 @@ class DATA_UL_obj_list(UIList):
     """
     List to contain objects (only meshes)
     """
+    bl_idname = class_ids['list']
+
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         layout.alignment = 'EXPAND'
         # The name of the object will be displayed when is added to the list
@@ -100,9 +109,10 @@ class DATA_OT_obj_list_add(ObjQuantityOperator, Operator):
     """
     Operator to add objects to the list
     """
-    bl_idname = "obj_list_add.btn"
+    bl_idname = class_ids['add']
     bl_label = "Add Object(s)"
     bl_description = "Add selected object(s) to the list"
+
 
     @classmethod
     def poll(cls, context):
@@ -117,7 +127,7 @@ class DATA_OT_obj_list_remove(ObjQuantityOperator, Operator):
     """
     Operator to remove objects from the list
     """
-    bl_idname = "obj_list_remove.btn"
+    bl_idname = class_ids['remove']
     bl_label = "Remove Object"
     bl_description = "Remove object from the list"
 
@@ -134,7 +144,7 @@ class DATA_OT_obj_list_clear(ObjQuantityOperator, Operator):
     """
     Operator to remove all the objects from the list
     """
-    bl_idname = "obj_list_clear.btn"
+    bl_idname = class_ids['clear']
     bl_label = "Clear list"
     bl_description = "Remove all objects from the list"
 
@@ -151,7 +161,7 @@ class DATA_OT_obj_list_select(ObjSelectionOperator, Operator):
     """
     Operator to select/deselect objects from the list
     """
-    bl_idname = "obj_list_select.btn"
+    bl_idname = class_ids['select']
     bl_label = "Select/Deselect Objects"
     bl_description = "Select/Deselect all objects in the list"
 
@@ -170,7 +180,7 @@ class DATA_OT_obj_list_hide(ObjVisibilityOperator, Operator):
     """
     Operator to show/hide objects from the list
     """
-    bl_idname = "obj_list_hide.btn"
+    bl_idname = class_ids['hide']
     bl_label = "Show/Hide Objects"
     bl_description = "Show/Hide Objects all object from the list"
 
