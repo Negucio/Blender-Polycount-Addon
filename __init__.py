@@ -20,7 +20,7 @@ bl_info = {
     "name": "Polycount",
     "author": "Roberto Noya <negucio@gmail.com>, Oliver Villar <oliver@blendtuts.com>",
     "description": "Display triangle, quad, ngon and face count, in Object and Edit Mode",
-    "version": (1, 0, 5),
+    "version": (1, 0, 6),
     "blender": (2, 7, 9),
     "location": "View3D > Tools",
     "warning": "",
@@ -48,7 +48,7 @@ def register():
 
 def unregister():
     handler.unregister()
-    preferences.register()
+    preferences.unregister()
     data.unregister()
     ui.unregister()
     icons.unregister()
