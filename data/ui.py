@@ -2,7 +2,7 @@ import bpy
 from . object import DataPropertyGroup
 from bpy.props import PointerProperty, StringProperty, FloatVectorProperty, BoolProperty,\
     PointerProperty, CollectionProperty, IntProperty, BoolVectorProperty
-from bpy.types import PropertyGroup, Object
+from bpy.types import PropertyGroup, Group
 
 from .. ui.list import ObjListPropertyGroup
 
@@ -20,7 +20,15 @@ class ItemCollectionPropertyGroup(PropertyGroup):
     list = PointerProperty(type=ObjListPropertyGroup)
 
 
-class ListsListPropertyGroup(PropertyGroup):
+class GrpPropertyGroup(PropertyGroup):
+    """
+    Stores the properties of a UIGroup item
+    """
+    group = PointerProperty(name="object", type=Group)
+    visible = BoolProperty(name="visible", default=True)
+    select = BoolProperty(name="select", default=False)
+
+class MainUIPropertyGroup(PropertyGroup):
     """
     Stores the data for the uiLists and the custom layer operator
     """
@@ -36,3 +44,11 @@ class ListsListPropertyGroup(PropertyGroup):
 
     # Layer operator
     layer_idx = BoolVectorProperty(size=20, subtype='LAYER', name='', update=layer_update_func)
+
+    # UIGroups
+    grp_list = CollectionProperty(type=GrpPropertyGroup)
+    grp_list_index = IntProperty(name="Index", default=0, min=0)
+
+
+
+

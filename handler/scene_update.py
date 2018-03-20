@@ -35,6 +35,10 @@ def polycount_scene_update_post(scene):
     if obj is None or not hasattr(obj, 'Polycount') or not hasattr(obj.Polycount, 'Updated'):
         return
 
+    if scene.Polycount.temp.groups != len(bpy.data.groups):
+        bpy.context.scene.Polycount.temp.groups = len(bpy.data.groups)
+        bpy.ops.groups_list_refresh.btn('EXEC_DEFAULT')
+
     # "is_updated_data" is True when an object changes.
     if obj.is_updated_data:
         obj.Polycount.Updated = False

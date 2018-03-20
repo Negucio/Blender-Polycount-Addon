@@ -1,3 +1,4 @@
+import bpy
 from . list.utils import draw_list
 from .. icons import preview_collections
 
@@ -55,6 +56,8 @@ class ObjectModeUI:
         self.layer_config(context, row)
         row = layout.row()
         self.list_config(context, row)
+        row = layout.row()
+        self.groups_config(context, row)
 
     def layer_config(self, context, layout):
         col = layout.column(align=True)
@@ -89,6 +92,17 @@ class ObjectModeUI:
             data_path = "scene.Polycount.MainUI.lists_List[{0}].list".format(idx)
             title = ui.lists_List[idx].list_name + ' contents'
             draw_list(context, data_path, layout, title, tuple_buttons=(True, False, True, True))
+
+    def groups_config(self, context, layout):
+        col = layout.column(align=True)
+        draw_pc = context.scene.Polycount.Draw
+        ui = context.scene.Polycount.MainUI
+        box = col.box()
+        row = box.row()
+        row.template_list("DATA_UL_polycount_groups_list", "",
+                          ui, "grp_list",
+                          ui, "grp_list_index",
+                          rows=1, maxrows=5)
 
 
 class EditModeUI:
