@@ -96,13 +96,15 @@ class ObjectModeUI:
     def groups_config(self, context, layout):
         col = layout.column(align=True)
         draw_pc = context.scene.Polycount.Draw
+        col.prop(draw_pc, "Group", text="Group", icon='GROUP')
         ui = context.scene.Polycount.MainUI
-        box = col.box()
-        row = box.row()
-        row.template_list("DATA_UL_polycount_groups_list", "",
-                          ui, "grp_list",
-                          ui, "grp_list_index",
-                          rows=1, maxrows=5)
+        if draw_pc.Group:
+            box = col.box()
+            row = box.row()
+            row.template_list("DATA_UL_polycount_groups_list", "",
+                              ui, "grp_list",
+                              ui, "grp_list_index",
+                              rows=1, maxrows=5)
 
 
 class EditModeUI:

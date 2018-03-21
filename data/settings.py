@@ -22,6 +22,7 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
         'Scene',
         'Layer',
         'List',
+        'Group',
         'EditModePolycount',
         'selected_tris',
         'selected_verts',
@@ -65,6 +66,7 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
     Scene = BoolProperty(default=True, description="Scene Polycount")
     Layer = BoolProperty(default=False, description="Layer(s) Polycount")
     List = BoolProperty(default=False, description="List Polycount")
+    Group = BoolProperty(default=False, description="Group Polycount")
 
     # Edit Mode data
     EditModePolycount = BoolProperty(default=True, description='Edit Mode Polycount')

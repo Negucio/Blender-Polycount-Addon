@@ -147,6 +147,13 @@ class PolycountController:
             objs = [o.object for o in l.list.obj_list]
             self.set_data(objs, l.list_data)
 
+    def group_polycount(self, context):
+        if len(context.scene.Polycount.MainUI.grp_list) == 0:
+            return
+        for item in context.scene.Polycount.MainUI.grp_list:
+            objs = [o for o in item.group.objects]
+            self.set_data(objs, item.group_data)
+
     def refresh(self, context, force=False):
         # start_time = time.time()
         scene = context.scene
@@ -166,6 +173,9 @@ class PolycountController:
 
         if force or scene.Polycount.Draw.List:
             self.list_polycount(context)
+
+        if force or scene.Polycount.Draw.Group:
+            self.group_polycount(context)
 
         if hasattr(context, "area") and context.area is not None:
             context.area.tag_redraw()

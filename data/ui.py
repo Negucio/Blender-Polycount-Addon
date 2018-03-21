@@ -24,9 +24,14 @@ class GrpPropertyGroup(PropertyGroup):
     """
     Stores the properties of a UIGroup item
     """
+    def hide_update_func(self, context):
+        for obj in self.group.objects:
+            obj.hide = self.group_hide
+
     group = PointerProperty(name="object", type=Group)
-    visible = BoolProperty(name="visible", default=True)
-    select = BoolProperty(name="select", default=False)
+    group_visible = BoolProperty(name="visible", default=True)
+    group_hide = BoolProperty(name="select", default=False, update=hide_update_func)
+    group_data = PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
 
 class MainUIPropertyGroup(PropertyGroup):
     """
@@ -38,6 +43,13 @@ class MainUIPropertyGroup(PropertyGroup):
         """
         context.scene.Polycount.controller.refresh(context, force=True)
 
+    def select_update_func(self, context):
+        for obj in bpy.data.objects:
+            obj.select = False
+        grp = self.grp_list[self.grp_list_index].group
+        for obj in grp.objects:
+            obj.select = True
+
     # UILists
     lists_List_Index = IntProperty(name="Index", default=0, min=0)
     lists_List = CollectionProperty(type=ItemCollectionPropertyGroup)
@@ -47,7 +59,7 @@ class MainUIPropertyGroup(PropertyGroup):
 
     # UIGroups
     grp_list = CollectionProperty(type=GrpPropertyGroup)
-    grp_list_index = IntProperty(name="Index", default=0, min=0)
+    grp_list_index = IntProperty(name="Index", default=0, min=0, update=select_update_func)
 
 
 

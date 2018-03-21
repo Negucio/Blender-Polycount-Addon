@@ -353,7 +353,14 @@ class Draw:
                 for l in lists:
                     if not l.list_visible:
                         continue
-                    content_obj_mode[l.list_name] = (l.list_data, l.list_color)
+                    content_obj_mode["L_" + l.list_name] = (l.list_data, l.list_color)
+
+            groups = bpy.context.scene.Polycount.MainUI.grp_list
+            if draw_pc.Group and len(groups) > 0:
+                for grp in groups:
+                    if not grp.group_visible:
+                        continue
+                    content_obj_mode["G_" + grp.group.name] = (grp.group_data, None)
 
             # Data will be displayed as a table
             pos = self.draw_table(pos, cell_ref_size, content_obj_mode)

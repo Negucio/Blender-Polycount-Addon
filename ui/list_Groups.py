@@ -11,11 +11,11 @@ class DATA_UL_polycount_groups_list(UIList):
         layout.alignment = 'EXPAND'
         row = layout.row()
         split = row.split(percentage=0.15)
-        icon_visible = 'OUTLINER_OB_LAMP' if item.visible else 'LAMP'
-        split.prop(item, "visible", emboss=False, text="", icon=icon_visible)
+        icon_visible = 'OUTLINER_OB_LAMP' if item.group_visible else 'LAMP'
+        split.prop(item, "group_visible", emboss=False, text="", icon=icon_visible)
         split = split.split(percentage=0.15)
-        icon_select = 'RADIOBUT_ON' if item.select else 'RADIOBUT_OFF'
-        split.prop(item, "select", text="", emboss=False, icon=icon_select)
+        icon_select = 'VISIBLE_IPO_OFF' if item.group_hide else 'VISIBLE_IPO_ON'
+        split.prop(item, "group_hide", text="", emboss=False, icon=icon_select)
         split = split.split()
         split.prop(item.group, "name", text="", emboss=False, icon_value=icon)
 
