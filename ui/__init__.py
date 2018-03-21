@@ -15,6 +15,7 @@ from . list_Lists import \
 
 from . list_Groups import \
     DATA_OT_polycount_groups_list_refresh, \
+    DATA_OT_polycount_groups_list_to_list, \
     DATA_UL_polycount_groups_list
 
 from bpy.utils import register_class, unregister_class
@@ -34,6 +35,7 @@ def register():
     register_class(DATA_UL_polycount_lists_list)
 
     register_class(DATA_OT_polycount_groups_list_refresh)
+    register_class(DATA_OT_polycount_groups_list_to_list)
     register_class(DATA_UL_polycount_groups_list)
 
     register_class(VIEW3D_PT_polycount_main)
@@ -50,6 +52,7 @@ def unregister():
     unregister_class(VIEW3D_OT_polycount_reset_prefs)
 
     unregister_class(DATA_OT_polycount_groups_list_refresh)
+    unregister_class(DATA_OT_polycount_groups_list_to_list)
     unregister_class(DATA_UL_polycount_groups_list)
 
     unregister_class(DATA_OT_polycount_lists_list_add)

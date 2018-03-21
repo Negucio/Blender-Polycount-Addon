@@ -46,3 +46,31 @@ class DATA_OT_polycount_groups_list_refresh(Operator):
             if area.type in ['VIEW_3D']:
                 area.tag_redraw()
         return {'FINISHED'}
+
+
+class DATA_OT_polycount_groups_list_to_list(Operator):
+    """
+    Operator to create a list with the objects in the selected group
+    """
+    bl_idname = "groups_list_to_list.btn"
+    bl_label = "GroupToList"
+    bl_description = "Creates a list from the group"
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        mainUI = context.scene.Polycount.MainUI
+        grp = mainUI.grp_list[mainUI.grp_list_index]
+        bpy.ops.lists_list_add.btn('EXEC_DEFAULT', name=grp.group.name)
+        new_list = mainUI.lists_List[len(mainUI.lists_List)-1]
+
+        for obj in [o for o in grp.group.objects if o.type == 'MESH']:
+            item = new_list.list.obj_list.add()
+            item.object = obj
+
+        for area in bpy.context.screen.areas:
+            if area.type in ['VIEW_3D']:
+                area.tag_redraw()
+        return {'FINISHED'}

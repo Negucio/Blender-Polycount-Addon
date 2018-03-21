@@ -105,7 +105,8 @@ class ObjectModeUI:
                               ui, "grp_list",
                               ui, "grp_list_index",
                               rows=1, maxrows=5)
-
+            col = row.column(align=True)
+            col.operator("groups_list_to_list.btn", icon='COLLAPSEMENU', text="")
 
 class EditModeUI:
     def __init__(self):
