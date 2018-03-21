@@ -2,7 +2,7 @@ import bpy
 import bgl
 import blf
 import collections
-
+from .. common_utils import redraw
 
 class Draw:
     """
@@ -20,8 +20,7 @@ class Draw:
         """
         if self.PostPixelHandle is None:
             self.PostPixelHandle = bpy.types.SpaceView3D.draw_handler_add(draw_func, (context,), 'WINDOW', 'POST_PIXEL')
-            if hasattr(context, "area") and context.area is not None:
-                context.area.tag_redraw()
+            redraw()
 
     def handle_remove(self, context):
         """
@@ -30,8 +29,7 @@ class Draw:
         """
         if self.PostPixelHandle is not None:
             bpy.types.SpaceView3D.draw_handler_remove(self.PostPixelHandle, 'WINDOW')
-            if hasattr(context, "area") and context.area is not None:
-                context.area.tag_redraw()
+            redraw()
         self.PostPixelHandle = None
 
     def draw_cell(self, text, position, color, width):

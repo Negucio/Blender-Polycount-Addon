@@ -1,6 +1,7 @@
 import bpy
 from bpy.props import StringProperty
 from bpy.types import UIList, Operator
+from .. common_utils import redraw
 
 
 class DATA_UL_polycount_groups_list(UIList):
@@ -41,10 +42,7 @@ class DATA_OT_polycount_groups_list_refresh(Operator):
             item = context.scene.Polycount.MainUI.grp_list.add()
             item.group = grp
 
-        # TODO: Substitute all other tag_redraws in the code for this approach
-        for area in bpy.context.screen.areas:
-            if area.type in ['VIEW_3D']:
-                area.tag_redraw()
+        redraw()
         return {'FINISHED'}
 
 
@@ -70,7 +68,5 @@ class DATA_OT_polycount_groups_list_to_list(Operator):
             item = new_list.list.obj_list.add()
             item.object = obj
 
-        for area in bpy.context.screen.areas:
-            if area.type in ['VIEW_3D']:
-                area.tag_redraw()
+        redraw()
         return {'FINISHED'}

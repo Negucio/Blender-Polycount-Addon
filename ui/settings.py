@@ -1,7 +1,7 @@
 import bpy
 from .. common_utils import get_preferences
 from bpy.types import Operator, Panel
-
+from .. common_utils import redraw
 
 class SettingsConfirmDialogOp(Operator):
     bl_label = "Are you sure?. This action will save global User Settings"
@@ -31,8 +31,7 @@ class VIEW3D_OT_polycount_reset_prefs(SettingsConfirmDialogOp):
         prefs = get_preferences()
         context.scene.Polycount.Draw.reset()
         prefs.persistent_settings.reset()
-        if hasattr(context, "area") and context.area is not None:
-            context.area.tag_redraw()
+        redraw()
         bpy.ops.wm.save_userpref()
         return {'FINISHED'}
 

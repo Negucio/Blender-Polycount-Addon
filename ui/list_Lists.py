@@ -1,6 +1,7 @@
 import bpy
 from bpy.props import StringProperty
 from bpy.types import UIList, Operator
+from .. common_utils import redraw
 
 
 class DATA_UL_polycount_lists_list(UIList):
@@ -55,8 +56,7 @@ class DATA_OT_polycount_lists_list_add(Operator):
 
     def execute(self, context):
         self.add_to_list(self.name, context)
-        if hasattr(context, "area") and context.area is not None:
-            context.area.tag_redraw()
+        redraw()
         return {'FINISHED'}
 
     def invoke(self, context, event):
@@ -85,6 +85,5 @@ class DATA_OT_polycount_lists_list_remove(Operator):
         bpy.context.scene.Polycount.MainUI.lists_List_Index = 0
         # The selected item is remove from the list
         bpy.context.scene.Polycount.MainUI.lists_List.remove(index)
-        if hasattr(context, "area") and context.area is not None:
-            context.area.tag_redraw()
+        redraw()
         return {'FINISHED'}

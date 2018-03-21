@@ -2,7 +2,7 @@ import bpy
 import bmesh
 from . utils import get_mirror_axis, calculate_subsurf, has_solidify, get_levels_subsurf
 from .. data.utils import reset_data_property
-
+from .. common_utils import redraw
 
 class PolycountController:
 
@@ -177,6 +177,5 @@ class PolycountController:
         if force or scene.Polycount.Draw.Group:
             self.group_polycount(context)
 
-        if hasattr(context, "area") and context.area is not None:
-            context.area.tag_redraw()
+        redraw()
         # print("--- %s seconds ---" % (time.time() - start_time))

@@ -1,7 +1,7 @@
 import bpy
 from .. graphics.draw import Draw
 from bpy.types import Operator, Panel
-
+from .. common_utils import redraw
 
 class VIEW3D_OT_polycount_display(Operator):
     bl_idname = "display_polycount.btn"
@@ -17,8 +17,7 @@ class VIEW3D_OT_polycount_display(Operator):
         else:
             self.drawing.hide_polycount(context)
 
-        if hasattr(context, "area") and context.area is not None:
-            context.area.tag_redraw()
+        redraw()
         return {'FINISHED'}
 
 
