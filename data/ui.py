@@ -32,6 +32,8 @@ class GrpPropertyGroup(PropertyGroup):
     group_visible = BoolProperty(name="visible", default=True)
     group_hide = BoolProperty(name="select", default=False, update=hide_update_func)
     group_data = PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
+    group_color = FloatVectorProperty(name="title_color", subtype='COLOR',
+                                     default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
 
 class MainUIPropertyGroup(PropertyGroup):
     """

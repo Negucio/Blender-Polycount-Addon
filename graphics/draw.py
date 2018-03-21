@@ -360,7 +360,7 @@ class Draw:
                 for grp in groups:
                     if not grp.group_visible:
                         continue
-                    content_obj_mode["G_" + grp.group.name] = (grp.group_data, None)
+                    content_obj_mode["G_" + grp.group.name] = (grp.group_data, grp.group_color)
 
             # Data will be displayed as a table
             pos = self.draw_table(pos, cell_ref_size, content_obj_mode)

@@ -16,8 +16,10 @@ class DATA_UL_polycount_groups_list(UIList):
         split = split.split(percentage=0.15)
         icon_select = 'VISIBLE_IPO_OFF' if item.group_hide else 'VISIBLE_IPO_ON'
         split.prop(item, "group_hide", text="", emboss=False, icon=icon_select)
-        split = split.split()
+        split = split.split(percentage=0.65)
         split.prop(item.group, "name", text="", emboss=False, icon_value=icon)
+        split = split.split()
+        split.prop(item, "group_color", text="", icon_value=icon)
 
 
 class DATA_OT_polycount_groups_list_refresh(Operator):
