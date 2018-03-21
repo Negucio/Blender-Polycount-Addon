@@ -90,7 +90,7 @@ class ObjectModeUI:
         if len(ui.lists_List) > 0:
             idx = ui.lists_List_Index
             data_path = "scene.Polycount.MainUI.lists_List[{0}].list".format(idx)
-            title = ui.lists_List[idx].list_name + ' contents'
+            title = ui.lists_List[idx].list_name
             draw_list(context, data_path, layout, title, tuple_buttons=(True, False, True, True))
 
     def groups_config(self, context, layout):
