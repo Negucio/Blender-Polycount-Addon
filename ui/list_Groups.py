@@ -58,7 +58,7 @@ class DATA_OT_polycount_groups_list_to_list(Operator):
 
     @classmethod
     def poll(cls, context):
-        return True
+        return len(context.scene.Polycount.MainUI.grp_list) > 0
 
     def execute(self, context):
         mainUI = context.scene.Polycount.MainUI
