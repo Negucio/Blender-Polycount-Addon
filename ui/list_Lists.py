@@ -87,3 +87,25 @@ class DATA_OT_polycount_lists_list_remove(Operator):
         bpy.context.scene.Polycount.MainUI.lists_List.remove(index)
         redraw()
         return {'FINISHED'}
+
+
+class DATA_OT_polycount_lists_list_to_group(Operator):
+    bl_idname = "lists_list_to_group.btn"
+    bl_label = "Convert list to group"
+    bl_description = "Convert list to group"
+
+    @classmethod
+    def poll(cls, context):
+        # Enabled when the list contains, at least, one item
+        return len(bpy.context.scene.Polycount.MainUI.lists_List) > 0
+
+    def execute(self, context):
+        # Index of the selected item in the list
+        index = context.scene.Polycount.MainUI.lists_List_Index
+        list = context.scene.Polycount.MainUI.lists_List[index]
+        grp = bpy.data.groups.new(list.list_name)
+        for obj in list.list.obj_list:
+            grp.objects.link(obj.object)
+
+        redraw()
+        return {'FINISHED'}

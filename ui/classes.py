@@ -82,10 +82,14 @@ class ObjectModeUI:
         row.template_list("DATA_UL_polycount_lists_list", "",
                           ui, "lists_List",
                           ui, "lists_List_Index",
-                          rows=1, maxrows=5)
-        col = row.column(align=True)
-        col.operator("lists_list_add.btn", icon='ZOOMIN', text="")
-        col.operator("lists_list_remove.btn", icon='ZOOMOUT', text="")
+                          rows=2, maxrows=5)
+        col = row.column()
+        inner_row = col.row()
+        inner_col = inner_row.column(align=True)
+        inner_col.operator("lists_list_add.btn", icon='ZOOMIN', text="")
+        inner_col.operator("lists_list_remove.btn", icon='ZOOMOUT', text="")
+        inner_row = col.row()
+        inner_row.operator("lists_list_to_group.btn", icon='GROUP', text="")
 
         if len(ui.lists_List) > 0:
             idx = ui.lists_List_Index

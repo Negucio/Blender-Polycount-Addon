@@ -11,6 +11,7 @@ from . misc import VIEW3D_PT_polycount_misc
 from . list_Lists import \
     DATA_OT_polycount_lists_list_add, \
     DATA_OT_polycount_lists_list_remove, \
+    DATA_OT_polycount_lists_list_to_group, \
     DATA_UL_polycount_lists_list
 
 from . list_Groups import \
@@ -32,6 +33,7 @@ def register():
 
     register_class(DATA_OT_polycount_lists_list_add)
     register_class(DATA_OT_polycount_lists_list_remove)
+    register_class(DATA_OT_polycount_lists_list_to_group)
     register_class(DATA_UL_polycount_lists_list)
 
     register_class(DATA_OT_polycount_groups_list_refresh)
@@ -57,6 +59,7 @@ def unregister():
 
     unregister_class(DATA_OT_polycount_lists_list_add)
     unregister_class(DATA_OT_polycount_lists_list_remove)
+    unregister_class(DATA_OT_polycount_lists_list_to_group)
     unregister_class(DATA_UL_polycount_lists_list)
 
     list.unregister()
