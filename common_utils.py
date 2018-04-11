@@ -1,10 +1,8 @@
 import bpy
-import os
-
+from . import bl_info
 
 def get_addon_name():
-    return os.path.basename(os.path.dirname(os.path.abspath(__file__)))
-
+    return bl_info["name"]
 
 def get_preferences():
     addon_name = get_addon_name()
