@@ -1,7 +1,7 @@
 import bpy
 import bmesh
 from bpy.app.handlers import persistent
-
+from .. common_utils import redraw
 
 # scene_update_post
 def edit_mode_count(act_obj):
@@ -25,12 +25,44 @@ def edit_mode_count(act_obj):
             act_obj.Polycount.Updated = False
 
 
+def check_removed_objs(scene):
+    """
+    Checks if any mesh object is deleted from the current scene.
+    If it is, the function seeks for those deleted objects in all the polycount lists in the scene
+    and it removes the deleted objects from them
+    :param scene: Current scene
+    """
+    meshes = len([o for o in scene.objects if o.type == "MESH"])
+    if meshes == scene.Polycount.temp.mesh_objs:
+        return
+
+    if meshes < scene.Polycount.temp.mesh_objs:
+        for l in scene.Polycount.MainUI.lists_List:
+            if len(l.list.obj_list) == [o for o in l.list.obj_list
+                                        if o.object is not None and o.object.name in scene.objects]:
+                continue
+
+            not_in_scene = []
+            for i in range(len(l.list.obj_list)):
+                obj = l.list.obj_list[i].object
+                if obj is None or (obj is not None and obj.name not in scene.objects):
+                    not_in_scene.append(i)
+
+            for ob in reversed(not_in_scene):
+                l.list.obj_list.remove(ob)
+
+        redraw()
+
+    scene.Polycount.temp.mesh_objs = meshes
+
 @persistent
 def polycount_scene_update_post(scene):
     """
     Called on after updating scene data
     :param scene: At appending this function to the scene_update_post, it receives the scene as a parameter.
     """
+    check_removed_objs(scene)
+
     obj = scene.objects.active
     if obj is None or not hasattr(obj, 'Polycount') or not hasattr(obj.Polycount, 'Updated'):
         return

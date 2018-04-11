@@ -17,6 +17,8 @@ def polycount_load_post(param):
         if prefs is not None:
             scn.Polycount.Draw.clone(prefs.persistent_settings)
 
+    scn.Polycount.temp.mesh_objs = len([o for o in scn.objects if o.type == "MESH"])
+
     # At loading the .blend file, scene var "selected_verts" should be 0
     bpy.context.scene.Polycount.temp.selected_verts = 0
 

@@ -144,7 +144,9 @@ class PolycountController:
         if len(context.scene.Polycount.MainUI.lists_List) == 0:
             return
         for l in context.scene.Polycount.MainUI.lists_List:
-            objs = [o.object for o in l.list.obj_list]
+            objs = [o.object for o in l.list.obj_list
+                    if o.object is not None and
+                    o.object.name in context.scene.objects]
             self.set_data(objs, l.list_data)
 
     def group_polycount(self, context):

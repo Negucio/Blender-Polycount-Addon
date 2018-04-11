@@ -93,16 +93,17 @@ class DATA_UL_obj_list(UIList):
     bl_idname = class_ids['list']
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-        layout.alignment = 'EXPAND'
-        # The name of the object will be displayed when is added to the list
-        row = layout.row()
-        split = row.split(percentage=0.15)
-        split.prop(item.object, "hide", emboss=False, text="")
-        split = split.split(percentage=0.15)
-        icon_select = 'RADIOBUT_ON' if item.object.select else 'RADIOBUT_OFF'
-        split.prop(item.object, "select", text="", emboss=False, icon=icon_select)
-        split = split.split()
-        split.prop(item.object, "name", text="", emboss=False, icon_value=icon)
+        if item.object is not None:
+            layout.alignment = 'EXPAND'
+            # The name of the object will be displayed when is added to the list
+            row = layout.row()
+            split = row.split(percentage=0.15)
+            split.prop(item.object, "hide", emboss=False, text="")
+            split = split.split(percentage=0.15)
+            icon_select = 'RADIOBUT_ON' if item.object.select else 'RADIOBUT_OFF'
+            split.prop(item.object, "select", text="", emboss=False, icon=icon_select)
+            split = split.split()
+            split.prop(item.object, "name", text="", emboss=False, icon_value=icon)
 
 
 class DATA_OT_obj_list_add(ObjQuantityOperator, Operator):
