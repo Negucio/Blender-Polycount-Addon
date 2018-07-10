@@ -14,7 +14,7 @@ class SettingsConfirmDialogOp(Operator):
 
 class VIEW3D_OT_polycount_save_prefs(SettingsConfirmDialogOp):
     bl_idname = "save_prefs_polycount.btn"
-    bl_description = "Make current configuration persistant"
+    bl_description = "Make current configuration persistent"
 
     def execute(self, context):
         prefs = get_preferences()
