@@ -330,7 +330,7 @@ class Draw:
             return
 
         # Global Polycount will be displayed if it is on in the ui and if any of its components is on
-        any_selected = draw_pc.triangles or draw_pc.percentage or draw_pc.faces or draw_pc.quads or draw_pc.ngons
+        any_selected = draw_pc.triangles or draw_pc.percentage or draw_pc.faces or draw_pc.quads or draw_pc.ngons or draw_pc.pure_tris
         object_mode = draw_pc.ObjPolycount and any_selected
 
         # Object/Global mode: This information will be displayed in real-time in Object and Edit Mode.
