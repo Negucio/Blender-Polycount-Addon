@@ -35,6 +35,9 @@ class GrpPropertyGroup(PropertyGroup):
     group_color = FloatVectorProperty(name="title_color", subtype='COLOR',
                                      default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
 
+class WindowDisplayPropertyGroup(bpy.types.PropertyGroup):
+    display = bpy.props.BoolProperty(default=False)
+
 class MainUIPropertyGroup(PropertyGroup):
     """
     Stores the data for the uiLists and the custom layer operator
@@ -62,6 +65,12 @@ class MainUIPropertyGroup(PropertyGroup):
     # UIGroups
     grp_list = CollectionProperty(type=GrpPropertyGroup)
     grp_list_index = IntProperty(name="Index", default=0, min=0, update=select_update_func)
+
+    window_display = CollectionProperty(type=WindowDisplayPropertyGroup)
+
+
+
+
 
 
 

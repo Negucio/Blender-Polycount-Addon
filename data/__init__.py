@@ -2,7 +2,7 @@ import bpy
 from . settings import DrawPropertyGroup
 from . object import DataPropertyGroup, ObjPolycountPropertyGroup
 from . scene import EditModePropertyGroup, ObjectModePropertyGroup, ScnTempPropertyGroup, ScnPolycountPropertyGroup
-from . ui import ItemCollectionPropertyGroup, MainUIPropertyGroup, GrpPropertyGroup
+from . ui import ItemCollectionPropertyGroup, MainUIPropertyGroup, GrpPropertyGroup, WindowDisplayPropertyGroup
 from bpy.utils import register_class, unregister_class
 from bpy.props import PointerProperty
 from bpy.types import Object, Scene
@@ -13,6 +13,7 @@ def register():
     All Polycount blender classes are explicitly registered.
     Object and Scene Polycount variables are declared
     """
+    register_class(WindowDisplayPropertyGroup)
     register_class(DataPropertyGroup)
     register_class(DrawPropertyGroup)
     register_class(ItemCollectionPropertyGroup)
@@ -35,6 +36,7 @@ def unregister():
     del bpy.types.Object.Polycount
     del bpy.types.Scene.Polycount
 
+    unregister_class(WindowDisplayPropertyGroup)
     unregister_class(DataPropertyGroup)
     unregister_class(DrawPropertyGroup)
     unregister_class(ItemCollectionPropertyGroup)

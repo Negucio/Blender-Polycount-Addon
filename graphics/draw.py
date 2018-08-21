@@ -2,7 +2,8 @@ import bpy
 import bgl
 import blf
 import collections
-from .. common_utils import redraw
+from ..common_utils import redraw, get_region, manage_windows
+
 
 class Draw:
     """
@@ -304,6 +305,12 @@ class Draw:
 
     def draw_polycount(self, context):
         scn = context.scene
+
+        region = get_region(context)
+        manage_windows(region, scn)
+        if not context.scene.Polycount.MainUI.window_display[region.id].display:
+            return
+
         draw_pc = scn.Polycount.Draw
 
         # Sets the text and cell sizes based on the font size

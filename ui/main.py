@@ -1,7 +1,8 @@
 import bpy
 from .. graphics.draw import Draw
 from bpy.types import Operator, Panel
-from .. common_utils import redraw
+from ..common_utils import redraw, get_region
+
 
 class VIEW3D_OT_polycount_display(Operator):
     bl_idname = "display_polycount.btn"
@@ -41,10 +42,15 @@ class VIEW3D_PT_polycount_main(Panel):
         return True
 
     def draw(self, context):
+        region = get_region(context)
         layout = self.layout
+        #self.displayPC.PolycountDisplay = context.scene.Polycount.Display and context.region is not None and context.region.id is 4
         icon = 'OUTLINER_OB_LAMP' if context.scene.Polycount.Display else 'LAMP'
-        row = layout.row()
+        row = layout.row(align=True)
         row.prop(context.scene.Polycount, "Display", text="Polycount", icon=icon)
+        if len(context.scene.Polycount.MainUI.window_display)>0:
+            icon = "VISIBLE_IPO_ON" if context.scene.Polycount.MainUI.window_display[region.id].display else "VISIBLE_IPO_OFF"
+            row.prop(context.scene.Polycount.MainUI.window_display[region.id], "display", text="", icon=icon)
 
         layout.separator()
         self.object_mode.draw(context, self.layout)
