@@ -1,5 +1,6 @@
 from . main import \
     VIEW3D_OT_polycount_display, \
+    VIEW3D_OT_polycount_other_windows_display, \
     VIEW3D_PT_polycount_main
 
 from . settings import VIEW3D_PT_polycount_settings, \
@@ -30,6 +31,7 @@ def register():
     """
     list.register()
     register_class(VIEW3D_OT_polycount_display)
+    register_class(VIEW3D_OT_polycount_other_windows_display)
 
     register_class(DATA_OT_polycount_lists_list_add)
     register_class(DATA_OT_polycount_lists_list_remove)
@@ -49,6 +51,7 @@ def register():
 
 def unregister():
     unregister_class(VIEW3D_OT_polycount_display)
+    unregister_class(VIEW3D_OT_polycount_other_windows_display)
 
     unregister_class(VIEW3D_OT_polycount_save_prefs)
     unregister_class(VIEW3D_OT_polycount_reset_prefs)

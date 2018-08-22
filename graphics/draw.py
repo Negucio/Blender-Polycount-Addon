@@ -2,7 +2,7 @@ import bpy
 import bgl
 import blf
 import collections
-from ..common_utils import redraw, get_region, manage_windows
+from ..common_utils import redraw, get_region
 
 
 class Draw:
@@ -303,11 +303,26 @@ class Draw:
         line_cols = cols - 0.5
         self.draw_line((pos[0], line_y), (pos[0] + (line_cols * cell_size[0]), line_y))
 
+    def manage_windows(self, region, scene):
+        if region is None:
+            return
+
+        windows = len(scene.Polycount.MainUI.window_display)
+        if windows > region.id:
+            return
+        count = 0
+        while windows <= region.id + 1 or count > 100:
+            item = scene.Polycount.MainUI.window_display.add()
+            windows = len(scene.Polycount.MainUI.window_display)
+            if count == region.id:
+                item.display = True
+            count = count + 1
+
     def draw_polycount(self, context):
         scn = context.scene
 
         region = get_region(context)
-        manage_windows(region, scn)
+        self.manage_windows(region, scn)
         if not context.scene.Polycount.MainUI.window_display[region.id].display:
             return
 

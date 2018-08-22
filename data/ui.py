@@ -36,7 +36,7 @@ class GrpPropertyGroup(PropertyGroup):
                                      default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
 
 class WindowDisplayPropertyGroup(bpy.types.PropertyGroup):
-    display = bpy.props.BoolProperty(default=False)
+    display = bpy.props.BoolProperty(default=True, description="Display Polycount in this 3DView")
 
 class MainUIPropertyGroup(PropertyGroup):
     """
@@ -67,6 +67,7 @@ class MainUIPropertyGroup(PropertyGroup):
     grp_list_index = IntProperty(name="Index", default=0, min=0, update=select_update_func)
 
     window_display = CollectionProperty(type=WindowDisplayPropertyGroup)
+    window_display_temp = BoolProperty(default=False, description="Display Polycount in this 3DView")
 
 
 

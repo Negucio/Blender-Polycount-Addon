@@ -21,18 +21,3 @@ def get_region(context):
             return r
 
     return None
-
-def manage_windows(region, scene):
-    if region is None:
-        return
-
-    windows = len(scene.Polycount.MainUI.window_display)
-    if windows > region.id:
-        return
-    count = 0
-    while windows<=region.id+1 or count>100:
-        item = scene.Polycount.MainUI.window_display.add()
-        windows = len(scene.Polycount.MainUI.window_display)
-        if count == region.id:
-            item.display = True
-        count=count+1
