@@ -321,10 +321,10 @@ class Draw:
     def draw_polycount(self, context):
         scn = context.scene
 
-        region = get_region(context)
-        self.manage_windows(region, scn)
-        if not context.scene.Polycount.MainUI.window_display[region.id].display:
-            return
+        # region = get_region(context)
+        # self.manage_windows(region, scn)
+        # if not context.scene.Polycount.MainUI.window_display[region.id].display:
+        #     return
 
         draw_pc = scn.Polycount.Draw
 
@@ -375,12 +375,12 @@ class Draw:
                         continue
                     content_obj_mode["L_" + l.list_name] = (l.list_data, l.list_color)
 
-            groups = bpy.context.scene.Polycount.MainUI.grp_list
-            if draw_pc.Group and len(groups) > 0:
-                for grp in groups:
-                    if not grp.group_visible:
-                        continue
-                    content_obj_mode["G_" + grp.group.name] = (grp.group_data, grp.group_color)
+            # groups = bpy.context.scene.Polycount.MainUI.grp_list
+            # if draw_pc.Group and len(groups) > 0:
+            #     for grp in groups:
+            #         if not grp.group_visible:
+            #             continue
+            #         content_obj_mode["G_" + grp.group.name] = (grp.group_data, grp.group_color)
 
             # Data will be displayed as a table
             pos = self.draw_table(pos, cell_ref_size, content_obj_mode)

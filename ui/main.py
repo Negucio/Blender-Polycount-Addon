@@ -30,8 +30,8 @@ class VIEW3D_OT_polycount_other_windows_display(Operator):
     show: bpy.props.BoolProperty(default=True)
 
     def execute(self, context):
-        region = get_region(context)
-        manage_window_visualization(context, region.id, self.show)
+        #region = get_region(context)
+        #manage_window_visualization(context, region.id, self.show)
         redraw()
         return {'FINISHED'}
 
