@@ -56,29 +56,26 @@ def check_removed_objs(scene):
     scene.Polycount.temp.mesh_objs = meshes
 
 @persistent
-def polycount_scene_update_post(scene):
+def polycount_depsgraph_update_post(scene):
     """
     Called on after updating scene data
     :param scene: At appending this function to the scene_update_post, it receives the scene as a parameter.
     """
-    pass
-    # check_removed_objs(scene)
-    #
-    # obj = scene.objects.active
-    # if obj is None or not hasattr(obj, 'Polycount') or not hasattr(obj.Polycount, 'Updated'):
-    #     return
-    #
+    check_removed_objs(scene)
+
+    obj = bpy.context.active_object
+    if obj is None or not hasattr(obj, 'Polycount') or not hasattr(obj.Polycount, 'Updated'):
+        return
+
     # if scene.Polycount.temp.groups != len(bpy.data.groups):
     #     bpy.context.scene.Polycount.temp.groups = len(bpy.data.groups)
     #     bpy.ops.groups_list_refresh.btn('EXEC_DEFAULT')
-    #
-    # # "is_updated_data" is True when an object changes.
-    # if obj.is_updated_data:
-    #     obj.Polycount.Updated = False
-    #     if obj.mode != 'EDIT' and scene.Polycount.temp.selected_verts != 0:
-    #         # When the active object is not in Edit mode selected_verts should be 0
-    #         scene.Polycount.temp.selected_verts = 0
-    #
-    # # In Edit Mode
-    # if scene.Polycount.Draw.EditModePolycount:
-    #     edit_mode_count(obj)
+
+    obj.Polycount.Updated = False
+    if obj.mode != 'EDIT' and scene.Polycount.temp.selected_verts != 0:
+        # When the active object is not in Edit mode selected_verts should be 0
+        scene.Polycount.temp.selected_verts = 0
+
+    # In Edit Mode
+    if scene.Polycount.Draw.EditModePolycount:
+        edit_mode_count(obj)
