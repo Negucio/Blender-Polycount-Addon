@@ -5,11 +5,11 @@ class ObjPropertyGroup(PropertyGroup):
     """
     Stores the properties of a UIList item
     """
-    object = PointerProperty(name="object", type=Object)
+    object: PointerProperty(name="object", type=Object)
 
 class ObjListPropertyGroup(PropertyGroup):
     """
     Stores the properties of a UIList item
     """
-    obj_list = CollectionProperty(type=ObjPropertyGroup)
-    obj_list_index = IntProperty(name="Index", default=0, min=0)
+    obj_list: CollectionProperty(type=ObjPropertyGroup)
+    obj_list_index: IntProperty(name="Index", default=0, min=0)

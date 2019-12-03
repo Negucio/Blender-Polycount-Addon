@@ -27,7 +27,7 @@ class VIEW3D_OT_polycount_other_windows_display(Operator):
     bl_label = "Display"
     bl_description = "Display polycount in the other 3DViews"
 
-    show = bpy.props.BoolProperty(default=True)
+    show: bpy.props.BoolProperty(default=True)
 
     def execute(self, context):
         region = get_region(context)
@@ -38,7 +38,7 @@ class VIEW3D_OT_polycount_other_windows_display(Operator):
 class VIEW3D_PT_polycount_main(Panel):
     bl_label = "Polycount"
     bl_space_type = 'VIEW_3D'
-    bl_region_type = 'TOOLS'
+    bl_region_type = 'UI'
     bl_category = "Polycount"
     # bl_options = {'HIDE_HEADER'}
 
@@ -59,16 +59,16 @@ class VIEW3D_PT_polycount_main(Panel):
         if len(wd)==0 or not context.scene.Polycount.Display:
             col = layout.column(align=True)
             col.enabled=False
-            col.prop(context.scene.Polycount.MainUI, "window_display_temp", text="", icon="VISIBLE_IPO_OFF")
+            col.prop(context.scene.Polycount.MainUI, "window_display_temp", text="", icon="HIDE_OFF")
         else:
-            icon = "VISIBLE_IPO_ON" if wd[region.id].display else "VISIBLE_IPO_OFF"
+            icon = "HIDE_ON" if wd[region.id].display else "HIDE_OFF"
             layout.prop(wd[region.id], "display", text="", icon=icon)
 
     def other_windows_display_buttons(self, layout):
         box = layout.box()
         col = box.column(align=True)
         row = col.row()
-        row.label("Other 3D Views")
+        row.label(text="Other 3D Views")
         row = col.row(align=True)
         row.operator("display_other_windows_display.btn", text="Show").show = True
         row.operator("display_other_windows_display.btn", text="Hide").show = False
@@ -78,7 +78,7 @@ class VIEW3D_PT_polycount_main(Panel):
         layout = self.layout
 
         col = layout.column(align=True)
-        icon = 'OUTLINER_OB_LAMP' if context.scene.Polycount.Display else 'LAMP'
+        icon = 'RESTRICT_VIEW_OFF' if context.scene.Polycount.Display else 'RESTRICT_VIEW_ON'
         row = col.row(align=True)
         row.prop(context.scene.Polycount, "Display", text="Polycount", icon=icon)
         self.window_display_button(context, row, region)

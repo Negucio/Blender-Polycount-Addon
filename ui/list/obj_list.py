@@ -15,7 +15,7 @@ class ListOperator():
     def updata_data_path(self, context):
         ListOperator.data_path_cls = self.data_path
 
-    data_path = StringProperty(name="data_path", default='', update=updata_data_path)
+    data_path: StringProperty(name="data_path", default='', update=updata_data_path)
     data_path_cls = ''
 
     @staticmethod
@@ -166,7 +166,7 @@ class DATA_OT_obj_list_select(ObjSelectionOperator, Operator):
     bl_label = "Select/Deselect Objects"
     bl_description = "Select/Deselect all objects in the list"
 
-    select = BoolProperty(default=True)
+    select: BoolProperty(default=True)
 
     @classmethod
     def poll(cls, context):
@@ -185,7 +185,7 @@ class DATA_OT_obj_list_hide(ObjVisibilityOperator, Operator):
     bl_label = "Show/Hide Objects"
     bl_description = "Show/Hide Objects all object from the list"
 
-    hide = BoolProperty(default=False)
+    hide: BoolProperty(default=False)
 
     @classmethod
     def poll(cls, context):

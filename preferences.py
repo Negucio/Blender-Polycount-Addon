@@ -8,7 +8,7 @@ from bpy.utils import register_class, unregister_class
 class PolycountPreferences(bpy.types.AddonPreferences):
     bl_idname = get_addon_name()
 
-    persistent_settings = PointerProperty(options={'HIDDEN'}, type=DrawPropertyGroup)
+    persistent_settings: PointerProperty(options={'HIDDEN'}, type=DrawPropertyGroup)
 
     def draw(self, context):
         pass

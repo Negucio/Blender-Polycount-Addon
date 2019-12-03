@@ -28,7 +28,7 @@ class DATA_OT_polycount_lists_list_add(Operator):
     bl_label = "New List"
     bl_description = "Add list to the list"
 
-    name = StringProperty(name="name", default='List')
+    name: StringProperty(name="name", default='List')
 
     def resolve_name_collision(self, name, context):
         names_in_list = [l.list_name for l in context.scene.Polycount.MainUI.lists_List]

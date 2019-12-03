@@ -21,11 +21,10 @@ bl_info = {
     "author": "Roberto Noya <negucio@gmail.com>, Oliver Villar <oliver@blendtuts.com>",
     "description": "Display triangle, quad, ngon and face count, in Object and Edit Mode",
     "version": (1, 0, 8),
-    "blender": (2, 7, 9),
+    "blender": (2, 80, 0),
     "location": "View3D > Tools",
     "warning": "",
     "wiki_url": "",
-    "support": "COMMUNITY",
     "category": "3D View"}
 
 from . import icons
@@ -36,7 +35,7 @@ from . import data
 from . import handler
 # Import Panels, Operators and Lists which compose the interface
 from . import ui
-from bpy.utils import unregister_module
+#from bpy.utils import unregister_module
 
 
 def register():
@@ -54,7 +53,7 @@ def unregister():
     ui.unregister()
     icons.unregister()
 
-    unregister_module(__name__)
+    #unregister_module(__name__)
 
 
 if __name__ == "__main__":

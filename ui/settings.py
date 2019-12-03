@@ -42,7 +42,7 @@ class VIEW3D_PT_polycount_settings(Panel):
     """
     bl_label = "Settings"
     bl_space_type = 'VIEW_3D'
-    bl_region_type = 'TOOLS'
+    bl_region_type = 'UI'
     bl_category = "Polycount"
     bl_options = {'DEFAULT_CLOSED'}
 
@@ -53,7 +53,7 @@ class VIEW3D_PT_polycount_settings(Panel):
     def draw(self, context):
         layout = self.layout
         col_display = layout.column(align=True)
-        col_display.label("Data display:")
+        col_display.label(text="Data display:")
         col_display.prop(context.scene.Polycount.Draw, "hor_pos", text="X")
         col_display.prop(context.scene.Polycount.Draw, "vert_pos", text="Y")
         col_display.prop(context.scene.Polycount.Draw, "font_size", text="Font Size")
@@ -73,7 +73,7 @@ class VIEW3D_PT_polycount_settings(Panel):
         col_display.prop(context.scene.Polycount.Draw, "perc_color", text="Perc")
 
         col_large_numbers = layout.column(align=True)
-        col_large_numbers.label("Separate large numbers:")
+        col_large_numbers.label(text="Separate large numbers:")
 
         box = col_large_numbers.box()
         col_color = box.column(align=True)
@@ -93,7 +93,7 @@ class VIEW3D_PT_polycount_settings(Panel):
         row.prop(context.scene.Polycount.Draw, "sep", expand=True)
 
         col_config = layout.column(align=True)
-        col_config.label("Configuration:")
+        col_config.label(text="Configuration:")
         row = col_config.row()
         row.operator("save_prefs_polycount.btn", text="Save current configuration")
         row = col_config.row(align=True)

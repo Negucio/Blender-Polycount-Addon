@@ -2,7 +2,7 @@ import bpy
 from . object import DataPropertyGroup
 from bpy.props import PointerProperty, StringProperty, FloatVectorProperty, BoolProperty,\
     PointerProperty, CollectionProperty, IntProperty, BoolVectorProperty
-from bpy.types import PropertyGroup, Group
+from bpy.types import PropertyGroup#, Group
 
 from .. ui.list import ObjListPropertyGroup
 
@@ -11,32 +11,32 @@ class ItemCollectionPropertyGroup(PropertyGroup):
     Stores the properties of a UIList item
     """
     # Settings
-    list_name = StringProperty(default="")
-    list_visible = BoolProperty(default=True)
-    list_color = FloatVectorProperty(name="title_color", subtype='COLOR',
+    list_name: StringProperty(default="")
+    list_visible: BoolProperty(default=True)
+    list_color: FloatVectorProperty(name="title_color", subtype='COLOR',
                                      default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
-    list_data = PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
+    list_data: PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
     # Collections
-    list = PointerProperty(type=ObjListPropertyGroup)
+    list: PointerProperty(type=ObjListPropertyGroup)
 
 
-class GrpPropertyGroup(PropertyGroup):
-    """
-    Stores the properties of a UIGroup item
-    """
-    def hide_update_func(self, context):
-        for obj in self.group.objects:
-            obj.hide = self.group_hide
-
-    group = PointerProperty(name="object", type=Group)
-    group_visible = BoolProperty(name="visible", default=True)
-    group_hide = BoolProperty(name="select", default=False, update=hide_update_func)
-    group_data = PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
-    group_color = FloatVectorProperty(name="title_color", subtype='COLOR',
-                                     default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
+# class GrpPropertyGroup(PropertyGroup):
+#     """
+#     Stores the properties of a UIGroup item
+#     """
+#     def hide_update_func(self, context):
+#         for obj in self.group.objects:
+#             obj.hide = self.group_hide
+#
+#     group: PointerProperty(name="object", type=Group)
+#     group_visible: BoolProperty(name="visible", default=True)
+#     group_hide: BoolProperty(name="select", default=False, update=hide_update_func)
+#     group_data: PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
+#     group_color: FloatVectorProperty(name="title_color", subtype='COLOR',
+#                                      default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
 
 class WindowDisplayPropertyGroup(bpy.types.PropertyGroup):
-    display = bpy.props.BoolProperty(default=True, description="Display Polycount in this 3DView")
+    display: bpy.props.BoolProperty(default=True, description="Display Polycount in this 3DView")
 
 class MainUIPropertyGroup(PropertyGroup):
     """
@@ -51,23 +51,23 @@ class MainUIPropertyGroup(PropertyGroup):
     def select_update_func(self, context):
         for obj in bpy.data.objects:
             obj.select = False
-        grp = self.grp_list[self.grp_list_index].group
-        for obj in grp.objects:
-            obj.select = True
+        # grp = self.grp_list[self.grp_list_index].group
+        # for obj in grp.objects:
+        #     obj.select = True
 
     # UILists
-    lists_List_Index = IntProperty(name="Index", default=0, min=0)
-    lists_List = CollectionProperty(type=ItemCollectionPropertyGroup)
+    lists_List_Index: IntProperty(name="Index", default=0, min=0)
+    lists_List: CollectionProperty(type=ItemCollectionPropertyGroup)
 
     # Layer operator
-    layer_idx = BoolVectorProperty(size=20, subtype='LAYER', name='', update=layer_update_func)
+    layer_idx: BoolVectorProperty(size=20, subtype='LAYER', name='', update=layer_update_func)
 
-    # UIGroups
-    grp_list = CollectionProperty(type=GrpPropertyGroup)
-    grp_list_index = IntProperty(name="Index", default=0, min=0, update=select_update_func)
+    # # UIGroups
+    # grp_list: CollectionProperty(type=GrpPropertyGroup)
+    # grp_list_index: IntProperty(name="Index", default=0, min=0, update=select_update_func)
 
-    window_display = CollectionProperty(type=WindowDisplayPropertyGroup)
-    window_display_temp = BoolProperty(default=False, description="Display Polycount in this 3DView")
+    window_display: CollectionProperty(type=WindowDisplayPropertyGroup)
+    window_display_temp: BoolProperty(default=False, description="Display Polycount in this 3DView")
 
 
 

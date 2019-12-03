@@ -13,10 +13,10 @@ class ObjectModeUI:
         col.prop(draw_pc, "ObjPolycount", text="Obj Mode Count", icon='OBJECT_DATAMODE')
         if draw_pc.ObjPolycount:
             box = col.box()
-            box.label("Count Display:")
+            box.label(text="Count Display:")
             self.polygon_types(context, box)
             self.modifiers_config(context, box)
-            box.label("Count Mode:")
+            box.label(text="Count Mode:")
             self.polygon_context(context, box)
 
     def polygon_types(self, context, layout):
@@ -86,8 +86,8 @@ class ObjectModeUI:
         col = row.column()
         inner_row = col.row()
         inner_col = inner_row.column(align=True)
-        inner_col.operator("lists_list_add.btn", icon='ZOOMIN', text="")
-        inner_col.operator("lists_list_remove.btn", icon='ZOOMOUT', text="")
+        inner_col.operator("lists_list_add.btn", icon='ZOOM_IN', text="")
+        inner_col.operator("lists_list_remove.btn", icon='ZOOM_OUT', text="")
         inner_row = col.row()
         inner_row.operator("lists_list_to_group.btn", icon='GROUP', text="")
 
@@ -119,7 +119,7 @@ class EditModeUI:
     def draw(self, context, layout):
         col = layout.column(align=True)
         draw_pc = context.scene.Polycount.Draw
-        col.prop(draw_pc, "EditModePolycount", text="Edit Mode Count", icon='EDIT')
+        col.prop(draw_pc, "EditModePolycount", text="Edit Mode Count", icon='EDITMODE_HLT')
 
         if draw_pc.EditModePolycount:
             box = col.box()
