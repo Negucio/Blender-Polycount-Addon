@@ -79,7 +79,7 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
     width: FloatProperty(name="width", default=1.2, min=1, max=1.5)
     height: FloatProperty(name="height", default=1, min=1, max=1.5)
 
-    hor_pos: FloatProperty(name="hor_pos", default=1, max=1, min=0)
+    hor_pos: FloatProperty(name="hor_pos", default=0.50, max=1, min=0)
     vert_pos: FloatProperty(name="vert_pos", default=0, max=1, min=0)
     digit_sep: FloatProperty(name="digit_sep", default=1, max=1.5, min=1)
     title_sep: FloatProperty(name="title_sep", default=0.5, max=1, min=0)

@@ -42,8 +42,8 @@ class Draw:
         :param width: Width of the cell
         """
         if not text.isdigit() or color is None:
-            blf.position(0, position[0], position[1], 0)
-            bgl.glColor3f(*color)
+            blf.position(self.font_id, position[0], position[1], 0)
+            blf.color(self.font_id, color[0], color[1], color[2], 1.0)
             blf.draw(self.font_id, text)
             return
 
@@ -52,10 +52,10 @@ class Draw:
         scn = bpy.context.scene
         self.format_digits_2(text, position, scn, width)
 
-        bgl.glColor3f(*color)
+        blf.color(self.font_id, color[0], color[1], color[2], 1.0)
 
     def draw_char(self, position, char, char_sample_width):
-        blf.position(0, position[0], position[1], 0)
+        blf.position(self.font_id, position[0], position[1], 0)
         text_width, text_height = blf.dimensions(self.font_id, char_sample_width)
         blf.draw(self.font_id, char)
         return position[0] - text_width
@@ -78,22 +78,24 @@ class Draw:
                     pos = self.draw_char((pos, position[1]), ' ' + sep_char, '.')
                 if color:
                     if count == 3:
-                        bgl.glColor3f(*scene.Polycount.Draw.thousands_color)
+                        tc = scene.Polycount.Draw.thousands_color
+                        blf.color(self.font_id, tc[0], tc[1], tc[2], 1.0)
                     elif count == 6:
-                        bgl.glColor3f(*scene.Polycount.Draw.millions_color)
+                        mc = scene.Polycount.Draw.millions_color
+                        blf.color(self.font_id, mc[0], mc[1], mc[2], 1.0)
 
-    def draw_line(self, v1, v2):
-        """
-        Draws a line between the 2D position v1 and the 2D position v2
-        :param v1: First 2D point of the line
-        :param v2: Second 2D point of the line
-        """
-        if v1 and v2:
-            bgl.glBegin(bgl.GL_LINES)
-            bgl.glVertex2f(*v1)
-            bgl.glVertex2f(*v2)
-            bgl.glEnd()
-        return
+    # def draw_line(self, v1, v2):
+    #     """
+    #     Draws a line between the 2D position v1 and the 2D position v2
+    #     :param v1: First 2D point of the line
+    #     :param v2: Second 2D point of the line
+    #     """
+    #     if v1 and v2:
+    #         bgl.glBegin(bgl.GL_LINES)
+    #         bgl.glVertex2f(*v1)
+    #         bgl.glVertex2f(*v2)
+    #         bgl.glEnd()
+    #     return
 
     def draw_table(self, pos, cell_size, content):
         """
@@ -117,7 +119,7 @@ class Draw:
         for key in content:
             content_color = draw_pc.title_color if content[key][1] is None else content[key][1]
             title_color = draw_pc.sep_color if key == 'OBJECT' else content_color
-            bgl.glColor3f(*title_color)
+            blf.color(self.font_id, title_color[0], title_color[1], title_color[2], 1.0)
 
             title = key
             max_chars = int(draw_pc.width * (9 + (5*draw_pc.title_sep)))
@@ -132,17 +134,18 @@ class Draw:
             if len(key) > max_chars:
                 title = key[0:max_chars-2] + "..."
 
-            blf.position(0, init_x, y, 0)
+            blf.position(self.font_id, init_x, y, 0)
             blf.draw(self.font_id, title)
 
             if perc:
                 title_width, title_height = blf.dimensions(self.font_id, title)
-                bgl.glColor3f(*draw_pc.perc_color)
-                blf.position(0, init_x+title_width, y, 0)
+                pc = draw_pc.perc_color
+                blf.color(self.font_id, pc[0], pc[1], pc[2], 1.0)
+                blf.position(self.font_id, init_x+title_width, y, 0)
                 blf.draw(self.font_id, perc)
 
             color = draw_pc.title_color if row == 0 else draw_pc.data_color
-            bgl.glColor3f(*color)
+            blf.color(self.font_id, color[0], color[1], color[2], 1.0)
 
             col = 1
             if draw_pc.triangles:
@@ -183,8 +186,9 @@ class Draw:
         if (draw_pc.triangles or draw_pc.faces) and (draw_pc.pure_tris or draw_pc.quads or draw_pc.ngons):
             cols = 2 if draw_pc.triangles and draw_pc.faces else 1
             sep_x = x + (cell_size[0] * cols) + (draw_pc.font_size * (5 * draw_pc.width))
-            bgl.glColor3f(*draw_pc.sep_color)
-            self.draw_line((sep_x, init_y), (sep_x, y + (cell_size[1] * 2)))
+            sc = draw_pc.sep_color
+            blf.color(self.font_id, sc[0], sc[1], sc[2], 1.0)
+            #self.draw_line((sep_x, init_y), (sep_x, y + (cell_size[1] * 2)))
 
         return x, y
 
@@ -201,15 +205,16 @@ class Draw:
 
         for key in content:
             if key == 'EDIT':
-                bgl.glColor3f(*draw_pc.sep_color)
+                sp = draw_pc.sep_color
+                blf.color(self.font_id, sp[0], sp[1], sp[2], 1.0)
             else:
-                bgl.glColor3f(*draw_pc.title_color)
-            blf.position(0, init_x, y, 0)
+                tc = draw_pc.title_color
+                blf.color(self.font_id, tc[0], tc[1], tc[2], 1.0)
+            blf.position(self.font_id, init_x, y, 0)
             blf.draw(self.font_id, key)
 
             color = draw_pc.title_color if row == 0 else draw_pc.data_color
-
-            bgl.glColor3f(*color)
+            blf.color(self.font_id, color[0], color[1], color[2], 1.0)
 
             col = 1
             if draw_pc.selected_tris:
@@ -299,9 +304,9 @@ class Draw:
 
     def draw_obj_edit_sep_line(self, pos, cell_size, color, cols):
         line_y = pos[1] + cell_size[1]
-        bgl.glColor3f(*color)
+        blf.color(self.font_id, color[0], color[1], color[2], 1.0)
         line_cols = cols - 0.5
-        self.draw_line((pos[0], line_y), (pos[0] + (line_cols * cell_size[0]), line_y))
+        #self.draw_line((pos[0], line_y), (pos[0] + (line_cols * cell_size[0]), line_y))
 
     def manage_windows(self, region, scene):
         if region is None:
