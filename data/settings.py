@@ -20,9 +20,8 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
         'solidify',
         'Selected',
         'Scene',
-        'Layer',
         'List',
-        'Group',
+        'Collection',
         'EditModePolycount',
         'selected_tris',
         'selected_verts',
@@ -64,9 +63,8 @@ class DrawPropertyGroup(bpy.types.PropertyGroup):
     # Which data will be displayed
     Selected: BoolProperty(default=True, description="Selected Object(s) Polycount")
     Scene: BoolProperty(default=True, description="Scene Polycount")
-    Layer: BoolProperty(default=False, description="Layer(s) Polycount")
     List: BoolProperty(default=False, description="List Polycount")
-    Group: BoolProperty(default=False, description="Group Polycount")
+    Collection: BoolProperty(default=False, description="Collection Polycount")
 
     # Edit Mode data
     EditModePolycount: BoolProperty(default=True, description='Edit Mode Polycount')

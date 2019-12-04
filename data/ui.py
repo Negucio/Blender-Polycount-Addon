@@ -60,7 +60,7 @@ class MainUIPropertyGroup(PropertyGroup):
     lists_List: CollectionProperty(type=ItemCollectionPropertyGroup)
 
     # Layer operator
-    layer_idx: BoolVectorProperty(size=20, subtype='LAYER', name='', update=layer_update_func)
+    #layer_idx: BoolVectorProperty(size=20, subtype='LAYER', name='', update=layer_update_func)
 
     # # UIGroups
     # grp_list: CollectionProperty(type=GrpPropertyGroup)

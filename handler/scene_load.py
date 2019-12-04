@@ -23,8 +23,8 @@ def polycount_load_post(param):
     # At loading the .blend file, scene var "selected_verts" should be 0
     scn.Polycount.temp.selected_verts = 0
 
-    scn.Polycount.temp.groups = len(bpy.data.groups)
-    if scn.Polycount.temp.groups > 0: bpy.ops.groups_list_refresh.btn('EXEC_DEFAULT')
+    # scn.Polycount.temp.groups = len(bpy.data.groups)
+    # if scn.Polycount.temp.groups > 0: bpy.ops.groups_list_refresh.btn('EXEC_DEFAULT')
 
     # Assigning the var to itself forces the calling of its update function
     # This activates the Polycount at loading a scene

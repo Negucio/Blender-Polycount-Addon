@@ -53,11 +53,9 @@ class ObjectModeUI:
         row = layout.row()
         row.prop(draw_pc, "Scene", text="Scene", icon='SCENE_DATA')
         row = layout.row()
-        self.layer_config(context, row)
-        row = layout.row()
         self.list_config(context, row)
         row = layout.row()
-        self.groups_config(context, row)
+        self.collections_config(context, row)
 
     def layer_config(self, context, layout):
         col = layout.column(align=True)
@@ -97,20 +95,21 @@ class ObjectModeUI:
             title = ui.lists_List[idx].list_name
             draw_list(context, data_path, layout, title, tuple_buttons=(True, False, True, True))
 
-    def groups_config(self, context, layout):
+    def collections_config(self, context, layout):
         col = layout.column(align=True)
         draw_pc = context.scene.Polycount.Draw
-        col.prop(draw_pc, "Group", text="Group", icon='GROUP')
+        col.prop(draw_pc, "Collection", text="Collection", icon='GROUP')
         ui = context.scene.Polycount.MainUI
-        if draw_pc.Group:
-            box = col.box()
-            row = box.row()
-            row.template_list("DATA_UL_polycount_groups_list", "",
-                              ui, "grp_list",
-                              ui, "grp_list_index",
-                              rows=1, maxrows=5)
-            col = row.column(align=True)
-            col.operator("groups_list_to_list.btn", icon='COLLAPSEMENU', text="")
+        if draw_pc.Collection:
+            col.label(text="Under Construction")
+        #     box = col.box()
+        #     row = box.row()
+        #     row.template_list("DATA_UL_polycount_groups_list", "",
+        #                       ui, "grp_list",
+        #                       ui, "grp_list_index",
+        #                       rows=1, maxrows=5)
+        #     col = row.column(align=True)
+        #     col.operator("groups_list_to_list.btn", icon='COLLAPSEMENU', text="")
 
 class EditModeUI:
     def __init__(self):
