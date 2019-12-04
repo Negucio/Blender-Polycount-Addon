@@ -1,3 +1,4 @@
+import bpy
 from . data import ObjPropertyGroup, ObjListPropertyGroup
 from bpy.utils import register_class, unregister_class
 
@@ -10,6 +11,10 @@ from . obj_list import \
     DATA_OT_obj_list_clear
 
 def register():
+    bpy.types.Object.select = bpy.props.BoolProperty(
+        set=lambda o, val: o.select_set(val),
+        get=lambda o: o.select_get())
+
     register_class(ObjPropertyGroup)
     register_class(ObjListPropertyGroup)
 

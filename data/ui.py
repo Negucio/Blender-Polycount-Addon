@@ -50,7 +50,7 @@ class MainUIPropertyGroup(PropertyGroup):
 
     def select_update_func(self, context):
         for obj in bpy.data.objects:
-            obj.select = False
+            obj.select_set(False)
         # grp = self.grp_list[self.grp_list_index].group
         # for obj in grp.objects:
         #     obj.select = True

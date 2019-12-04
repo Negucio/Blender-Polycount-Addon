@@ -48,7 +48,7 @@ class ObjQuantityOperator(ListOperator):
         prop = self.get_prop(context, self.data_path)
         # Retrieve the ids of all objects in the list
         objs_in_list = [o.object for o in prop.obj_list]
-        for obj in [o for o in context.scene.objects if o.select and o.type == 'MESH']:
+        for obj in [o for o in context.scene.objects if o.select_get() and o.type == 'MESH']:
             # If the object id is already on the list, continue to the next object
             if obj in objs_in_list:
                 continue
@@ -76,7 +76,7 @@ class ObjSelectionOperator(ListOperator):
         for obj in prop.obj_list:
             if not hasattr(obj, "object") or type(obj.object) != bpy.types.Object:
                 continue
-            obj.object.select = select
+            obj.object.select_set(select)
 
 class ObjVisibilityOperator(ListOperator):
     def hide_objs(self, context, hide):
@@ -97,10 +97,11 @@ class DATA_UL_obj_list(UIList):
             layout.alignment = 'EXPAND'
             # The name of the object will be displayed when is added to the list
             row = layout.row()
-            split = row.split(percentage=0.15)
-            split.prop(item.object, "hide", emboss=False, text="")
-            split = split.split(percentage=0.15)
-            icon_select = 'RADIOBUT_ON' if item.object.select else 'RADIOBUT_OFF'
+            split = row.split(factor=0.15)
+            icon_hide = 'RESTRICT_VIEW_ON' if item.object.hide_viewport else 'RESTRICT_VIEW_OFF'
+            split.prop(item.object, "hide_viewport", emboss=False, text="", icon=icon_hide)
+            split = split.split(factor=0.15)
+            icon_select = 'RADIOBUT_ON' if item.object.select_get() else 'RADIOBUT_OFF'
             split.prop(item.object, "select", text="", emboss=False, icon=icon_select)
             split = split.split()
             split.prop(item.object, "name", text="", emboss=False, icon_value=icon)
