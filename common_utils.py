@@ -6,7 +6,7 @@ def get_addon_name():
 
 def get_preferences():
     addon_name = get_addon_name()
-    return bpy.context.user_preferences.addons[addon_name].preferences
+    return bpy.context.preferences.addons[addon_name].preferences
 
 def redraw():
     for area in bpy.context.screen.areas:
