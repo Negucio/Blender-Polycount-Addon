@@ -1,14 +1,14 @@
 import bpy
 from bpy.props import BoolProperty, StringProperty
 from bpy.types import Operator, UIList
-from . utils import get_property, PREFIX
+from . utils import get_property, PREFIX_LOWER, PREFIX_UPPER
 
-class_ids = {'add': PREFIX + "obj_list_add.btn",
-           'remove': PREFIX + "obj_list_remove.btn",
-           'clear': PREFIX + "obj_list_clear.btn",
-           'select': PREFIX + "obj_list_select.btn",
-           'hide': PREFIX + "obj_list_hide.btn",
-           'list': PREFIX + "DATA_UL_obj_list"
+class_ids = {'add': PREFIX_LOWER + "obj_list_add.btn",
+           'remove': PREFIX_LOWER + "obj_list_remove.btn",
+           'clear': PREFIX_LOWER + "obj_list_clear.btn",
+           'select': PREFIX_LOWER + "obj_list_select.btn",
+           'hide': PREFIX_LOWER + "obj_list_hide.btn",
+           'list': PREFIX_UPPER  + "DATA_UL_obj_list"
            }
 
 class ListOperator():

@@ -11,13 +11,13 @@ class DATA_UL_polycount_groups_list(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         layout.alignment = 'EXPAND'
         row = layout.row()
-        split = row.split(percentage=0.15)
+        split = row.split(factor=0.15)
         icon_visible = 'OUTLINER_OB_LAMP' if item.group_visible else 'LAMP'
         split.prop(item, "group_visible", emboss=False, text="", icon=icon_visible)
-        split = split.split(percentage=0.15)
+        split = split.split(factor=0.15)
         icon_select = 'VISIBLE_IPO_OFF' if item.group_hide else 'VISIBLE_IPO_ON'
         split.prop(item, "group_hide", text="", emboss=False, icon=icon_select)
-        split = split.split(percentage=0.65)
+        split = split.split(factor=0.65)
         split.prop(item.group, "name", text="", emboss=False, icon_value=icon)
         split = split.split()
         split.prop(item, "group_color", text="", icon_value=icon)

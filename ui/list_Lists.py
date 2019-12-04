@@ -11,10 +11,10 @@ class DATA_UL_polycount_lists_list(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         layout.alignment = 'EXPAND'
         row = layout.row()
-        split = row.split(percentage=0.2)
-        icon_visible = 'OUTLINER_OB_LAMP' if item.list_visible else 'LAMP'
+        split = row.split(factor=0.2)
+        icon_visible = 'HIDE_ON' if item.list_visible else 'HIDE_OFF'
         split.prop(item, "list_visible", text="", emboss=False, icon=icon_visible)
-        split = split.split(percentage=0.7)
+        split = split.split(factor=0.7)
         split.prop(item, "list_name", text="", emboss=False, icon_value=icon)
         split = split.split()
         split.prop(item, "list_color", text="", icon_value=icon)
