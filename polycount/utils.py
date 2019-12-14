@@ -74,10 +74,7 @@ def get_mirror_axis(obj):
     if mirror is None:
         return ret_val
 
-    if mirror.use_x:
-        ret_val += 1
-    if mirror.use_y:
-        ret_val += 1
-    if mirror.use_z:
-        ret_val += 1
+    for axis in mirror.use_axis:
+        if axis: ret_val += 1
+
     return ret_val
