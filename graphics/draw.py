@@ -1,7 +1,7 @@
 import bpy
 import bgl
 import blf
-import collections
+import collections as python_collections
 from ..common_utils import redraw, get_region
 
 
@@ -281,8 +281,8 @@ class Draw:
                 obj_mode += 1
             if scene.Polycount.Draw.Scene:
                 obj_mode += 1
-            if scene.Polycount.Draw.Layer:
-                obj_mode += 1
+            # if scene.Polycount.Draw.Layer:
+            #     obj_mode += 1
             if scene.Polycount.Draw.List:
                 obj_mode += len([l.list_visible for l in bpy.context.scene.Polycount.MainUI.lists_List])
 
@@ -352,7 +352,6 @@ class Draw:
 
         if not draw_pc.Selected and \
                 not draw_pc.Scene and \
-                not draw_pc.Layer and \
                 (not draw_pc.List or len(bpy.context.scene.Polycount.MainUI.lists_List) == 0):
             return
 
@@ -363,7 +362,7 @@ class Draw:
         # Object/Global mode: This information will be displayed in real-time in Object and Edit Mode.
         if object_mode:
             # Global mode data is stored in an ordered dictionary
-            content_obj_mode = collections.OrderedDict()
+            content_obj_mode = python_collections.OrderedDict()
             # Add the name of each component which will be accounted
             content_obj_mode['OBJECT'] = ('Triangles', 'Quads', 'Ngons', 'Faces', "PureTriangles")
             # Data for each Polycount context (selected objects, scene, layer and list) will be stored in the dictionary
@@ -371,8 +370,8 @@ class Draw:
                 content_obj_mode['Selection'] = (scn.Polycount.ObjectMode.SelectedData, None)
             if draw_pc.Scene:
                 content_obj_mode['Scene'] = (scn.Polycount.ObjectMode.SceneData, None)
-            if draw_pc.Layer:
-                content_obj_mode['Layer'] = (scn.Polycount.ObjectMode.LayerData, None)
+            # if draw_pc.Layer:
+            #     content_obj_mode['Layer'] = (scn.Polycount.ObjectMode.LayerData, None)
             lists = bpy.context.scene.Polycount.MainUI.lists_List
             if draw_pc.List and len(lists) > 0:
                 for l in lists:
@@ -380,12 +379,12 @@ class Draw:
                         continue
                     content_obj_mode["L_" + l.list_name] = (l.list_data, l.list_color)
 
-            # groups = bpy.context.scene.Polycount.MainUI.grp_list
-            # if draw_pc.Group and len(groups) > 0:
-            #     for grp in groups:
-            #         if not grp.group_visible:
-            #             continue
-            #         content_obj_mode["G_" + grp.group.name] = (grp.group_data, grp.group_color)
+            collections = bpy.context.scene.Polycount.MainUI.col_list
+            if draw_pc.Collection and len(collections) > 0:
+                for col in collections:
+                    if not col.collection_visible:
+                        continue
+                    content_obj_mode["C_" + col.collection.name] = (col.collection_data, col.collection_color)
 
             # Data will be displayed as a table
             pos = self.draw_table(pos, cell_ref_size, content_obj_mode)
@@ -402,7 +401,7 @@ class Draw:
                 self.draw_obj_edit_sep_line(pos, cell_ref_size, draw_pc.sep_color, cols)
 
             # Global mode data is stored in an ordered dictionary
-            content_edit_mode = collections.OrderedDict()
+            content_edit_mode = python_collections.OrderedDict()
             # Add the name of each component which will be accounted
             content_edit_mode['EDIT'] = ('Triangles', 'Verts', 'Edges', 'Faces')
             # In Edit mode, Polycount only accounts the selected components

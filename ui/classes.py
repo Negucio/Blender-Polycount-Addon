@@ -57,14 +57,14 @@ class ObjectModeUI:
         row = layout.row()
         self.collections_config(context, row)
 
-    def layer_config(self, context, layout):
-        col = layout.column(align=True)
-        draw_pc = context.scene.Polycount.Draw
-        ui = context.scene.Polycount.MainUI
-        col.prop(draw_pc, "Layer", text="Layer", icon='RENDERLAYERS')  # icon='LAYER_ACTIVE')
-        if draw_pc.Layer:
-            box = col.box()
-            box.prop(ui, 'layer_idx')
+    # def layer_config(self, context, layout):
+    #     col = layout.column(align=True)
+    #     draw_pc = context.scene.Polycount.Draw
+    #     ui = context.scene.Polycount.MainUI
+    #     col.prop(draw_pc, "Layer", text="Layer", icon='RENDERLAYERS')  # icon='LAYER_ACTIVE')
+    #     if draw_pc.Layer:
+    #         box = col.box()
+    #         box.prop(ui, 'layer_idx')
 
     def list_config(self, context, layout):
         col = layout.column(align=True)
@@ -84,10 +84,10 @@ class ObjectModeUI:
         col = row.column()
         inner_row = col.row()
         inner_col = inner_row.column(align=True)
-        inner_col.operator("lists_list_add.btn", icon='ZOOM_IN', text="")
-        inner_col.operator("lists_list_remove.btn", icon='ZOOM_OUT', text="")
+        inner_col.operator("lists_list_add.btn", icon='ADD', text="")
+        inner_col.operator("lists_list_remove.btn", icon='REMOVE', text="")
         inner_row = col.row()
-        inner_row.operator("lists_list_to_group.btn", icon='GROUP', text="")
+        inner_row.operator("lists_list_to_collection.btn", icon='GROUP', text="")
 
         if len(ui.lists_List) > 0:
             idx = ui.lists_List_Index
@@ -101,15 +101,14 @@ class ObjectModeUI:
         col.prop(draw_pc, "Collection", text="Collection", icon='GROUP')
         ui = context.scene.Polycount.MainUI
         if draw_pc.Collection:
-            col.label(text="Under Construction")
-        #     box = col.box()
-        #     row = box.row()
-        #     row.template_list("DATA_UL_polycount_groups_list", "",
-        #                       ui, "grp_list",
-        #                       ui, "grp_list_index",
-        #                       rows=1, maxrows=5)
-        #     col = row.column(align=True)
-        #     col.operator("groups_list_to_list.btn", icon='COLLAPSEMENU', text="")
+            box = col.box()
+            row = box.row()
+            row.template_list("DATA_UL_polycount_collections_list", "",
+                              ui, "col_list",
+                              ui, "col_list_index",
+                              rows=1, maxrows=5)
+            col = row.column(align=True)
+            col.operator("collections_list_to_list.btn", icon='COLLAPSEMENU', text="")
 
 class EditModeUI:
     def __init__(self):

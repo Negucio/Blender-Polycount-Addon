@@ -16,7 +16,6 @@ class ObjectModePropertyGroup(PropertyGroup):
     # The data itself
     SelectedData: PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
     SceneData: PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
-    LayerData: PointerProperty(options={'HIDDEN'}, type=DataPropertyGroup)
 
 
 class EditModePropertyGroup(PropertyGroup):
@@ -35,7 +34,7 @@ class ScnTempPropertyGroup(PropertyGroup):
     """
     selected_verts: IntProperty(default=0)
     mesh_objs: IntProperty(default=0)
-    groups: IntProperty(default=0)
+    collections: IntProperty(default=0)
 
 
 class ScnPolycountPropertyGroup(PropertyGroup):

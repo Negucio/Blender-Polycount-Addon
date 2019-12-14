@@ -132,13 +132,13 @@ class PolycountController:
     def scene_polycount(self):
         self.set_data(bpy.context.scene.objects, bpy.context.scene.Polycount.ObjectMode.SceneData)
 
-    def layer_polycount(self):
-        objs = []
-        for layer in range(len(bpy.context.scene.Polycount.MainUI.layer_idx)):
-            if bpy.context.scene.Polycount.MainUI.layer_idx[layer]:
-                objs += [ob for ob in bpy.context.scene.objects if ob.layers[layer] and ob not in objs]
-
-        self.set_data(objs, bpy.context.scene.Polycount.ObjectMode.LayerData)
+    # def layer_polycount(self):
+    #     objs = []
+    #     for layer in range(len(bpy.context.scene.Polycount.MainUI.layer_idx)):
+    #         if bpy.context.scene.Polycount.MainUI.layer_idx[layer]:
+    #             objs += [ob for ob in bpy.context.scene.objects if ob.layers[layer] and ob not in objs]
+    #
+    #     self.set_data(objs, bpy.context.scene.Polycount.ObjectMode.LayerData)
 
     def list_polycount(self, context):
         if len(context.scene.Polycount.MainUI.lists_List) == 0:
@@ -149,12 +149,12 @@ class PolycountController:
                     o.object.name in context.scene.objects]
             self.set_data(objs, l.list_data)
 
-    def group_polycount(self, context):
-        if len(context.scene.Polycount.MainUI.grp_list) == 0:
+    def collection_polycount(self, context):
+        if len(context.scene.Polycount.MainUI.col_list) == 0:
             return
-        for item in context.scene.Polycount.MainUI.grp_list:
-            objs = [o for o in item.group.objects]
-            self.set_data(objs, item.group_data)
+        for item in context.scene.Polycount.MainUI.col_list:
+            objs = [o for o in item.collection.all_objects]
+            self.set_data(objs, item.collection_data)
 
     def refresh(self, context, force=False):
         # start_time = time.time()
@@ -170,14 +170,14 @@ class PolycountController:
         if force or scene.Polycount.Draw.Scene:
             self.scene_polycount()
 
-        if force or scene.Polycount.Draw.Layer:
-            self.layer_polycount()
+        # if force or scene.Polycount.Draw.Layer:
+        #     self.layer_polycount()
 
         if force or scene.Polycount.Draw.List:
             self.list_polycount(context)
 
-        if force or scene.Polycount.Draw.Group:
-            self.group_polycount(context)
+        if force or scene.Polycount.Draw.Collection:
+            self.collection_polycount(context)
 
         redraw()
         # print("--- %s seconds ---" % (time.time() - start_time))

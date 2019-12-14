@@ -12,7 +12,7 @@ class DATA_UL_polycount_lists_list(UIList):
         layout.alignment = 'EXPAND'
         row = layout.row()
         split = row.split(factor=0.2)
-        icon_visible = 'HIDE_ON' if item.list_visible else 'HIDE_OFF'
+        icon_visible = 'HIDE_OFF' if item.list_visible else 'HIDE_ON'
         split.prop(item, "list_visible", text="", emboss=False, icon=icon_visible)
         split = split.split(factor=0.7)
         split.prop(item, "list_name", text="", emboss=False, icon_value=icon)
@@ -89,10 +89,10 @@ class DATA_OT_polycount_lists_list_remove(Operator):
         return {'FINISHED'}
 
 
-class DATA_OT_polycount_lists_list_to_group(Operator):
-    bl_idname = "lists_list_to_group.btn"
-    bl_label = "Convert list to group"
-    bl_description = "Convert list to group"
+class DATA_OT_polycount_lists_list_to_collection(Operator):
+    bl_idname = "lists_list_to_collection.btn"
+    bl_label = "Convert list to collection"
+    bl_description = "Convert list to collection"
 
     @classmethod
     def poll(cls, context):
@@ -103,9 +103,9 @@ class DATA_OT_polycount_lists_list_to_group(Operator):
         # Index of the selected item in the list
         index = context.scene.Polycount.MainUI.lists_List_Index
         list = context.scene.Polycount.MainUI.lists_List[index]
-        grp = bpy.data.groups.new(list.list_name)
+        col = bpy.data.collection.new(list.list_name)
         for obj in list.list.obj_list:
-            grp.objects.link(obj.object)
+            col.objects.link(obj.object)
 
         redraw()
         return {'FINISHED'}
