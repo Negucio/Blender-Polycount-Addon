@@ -67,9 +67,9 @@ def polycount_depsgraph_update_post(scene):
     if obj is None or not hasattr(obj, 'Polycount') or not hasattr(obj.Polycount, 'Updated'):
         return
 
-    # if scene.Polycount.temp.groups != len(bpy.data.groups):
-    #     bpy.context.scene.Polycount.temp.groups = len(bpy.data.groups)
-    #     bpy.ops.groups_list_refresh.btn('EXEC_DEFAULT')
+    if scene.Polycount.temp.collections != len(bpy.data.collections):
+        bpy.context.scene.Polycount.temp.collections = len(bpy.data.collections)
+        bpy.ops.collections_list_refresh.btn('EXEC_DEFAULT')
 
     depsgraph = bpy.context.evaluated_depsgraph_get()
     for update in depsgraph.updates:
