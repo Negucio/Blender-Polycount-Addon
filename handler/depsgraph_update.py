@@ -71,10 +71,13 @@ def polycount_depsgraph_update_post(scene):
     #     bpy.context.scene.Polycount.temp.groups = len(bpy.data.groups)
     #     bpy.ops.groups_list_refresh.btn('EXEC_DEFAULT')
 
-    obj.Polycount.Updated = False
-    if obj.mode != 'EDIT' and scene.Polycount.temp.selected_verts != 0:
-        # When the active object is not in Edit mode selected_verts should be 0
-        scene.Polycount.temp.selected_verts = 0
+    depsgraph = bpy.context.evaluated_depsgraph_get()
+    for update in depsgraph.updates:
+        if update.id.original == obj and update.is_updated_geometry:
+            obj.Polycount.Updated = False
+            if obj.mode != 'EDIT' and scene.Polycount.temp.selected_verts != 0:
+                # When the active object is not in Edit mode selected_verts should be 0
+                scene.Polycount.temp.selected_verts = 0
 
     # In Edit Mode
     if scene.Polycount.Draw.EditModePolycount:
