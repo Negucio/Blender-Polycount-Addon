@@ -1,8 +1,7 @@
 import bpy
-import bgl
 import blf
 import collections as python_collections
-from ..common_utils import redraw, get_region
+from ..ui.utils import redraw, get_area_id, get_area_display
 
 
 class Draw:
@@ -308,28 +307,24 @@ class Draw:
         line_cols = cols - 0.5
         #self.draw_line((pos[0], line_y), (pos[0] + (line_cols * cell_size[0]), line_y))
 
-    def manage_windows(self, region, scene):
-        if region is None:
+    def manage_windows(self, area, scene):
+        if area is None:
             return
 
-        windows = len(scene.Polycount.MainUI.window_display)
-        if windows > region.id:
-            return
-        count = 0
-        while windows <= region.id + 1 or count > 100:
-            item = scene.Polycount.MainUI.window_display.add()
-            windows = len(scene.Polycount.MainUI.window_display)
-            if count == region.id:
-                item.display = True
-            count = count + 1
+        item = scene.Polycount.MainUI.window_display.add()
+        item.area = area
+        item.display = True
+
 
     def draw_polycount(self, context):
         scn = context.scene
 
-        # region = get_region(context)
-        # self.manage_windows(region, scn)
-        # if not context.scene.Polycount.MainUI.window_display[region.id].display:
-        #     return
+        area = get_area_id(context.area)
+        wd = get_area_display(area)
+        if wd is None:
+            self.manage_windows(area, scn)
+        if wd is None or not wd.display:
+            return
 
         draw_pc = scn.Polycount.Draw
 

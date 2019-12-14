@@ -1,9 +1,7 @@
 import bpy
 from .. graphics.draw import Draw
 from bpy.types import Operator, Panel
-from ..common_utils import redraw, get_region
-from . utils import manage_window_visualization
-
+from . utils import manage_window_visualization, redraw, get_area_id, get_area_display
 
 class VIEW3D_OT_polycount_display(Operator):
     bl_idname = "display_polycount.btn"
@@ -30,9 +28,8 @@ class VIEW3D_OT_polycount_other_windows_display(Operator):
     show: bpy.props.BoolProperty(default=True)
 
     def execute(self, context):
-        #region = get_region(context)
-        #manage_window_visualization(context, region.id, self.show)
-        redraw()
+        area = get_area_id(context.area)
+        manage_window_visualization(context, area, self.show)
         return {'FINISHED'}
 
 class VIEW3D_PT_polycount_main(Panel):
@@ -54,15 +51,17 @@ class VIEW3D_PT_polycount_main(Panel):
     def poll(cls, context):
         return True
 
-    def window_display_button(self, context, layout, region):
-        wd = context.scene.Polycount.MainUI.window_display
-        if len(wd)==0 or not context.scene.Polycount.Display:
+    def window_display_button(self, context, layout, area):
+        wd = get_area_display(area)
+        if len(context.scene.Polycount.MainUI.window_display)==0 or \
+            not context.scene.Polycount.Display or \
+            wd is None:
             col = layout.column(align=True)
             col.enabled=False
             col.prop(context.scene.Polycount.MainUI, "window_display_temp", text="", icon="HIDE_OFF")
         else:
-            icon = "HIDE_ON" if wd[region.id].display else "HIDE_OFF"
-            layout.prop(wd[region.id], "display", text="", icon=icon)
+            icon = "HIDE_OFF" if wd.display else "HIDE_ON"
+            layout.prop(wd, "display", text="", icon=icon)
 
     def other_windows_display_buttons(self, layout):
         box = layout.box()
@@ -74,14 +73,14 @@ class VIEW3D_PT_polycount_main(Panel):
         row.operator("display_other_windows_display.btn", text="Hide").show = False
 
     def draw(self, context):
-        region = get_region(context)
+        area = get_area_id(context.area)
         layout = self.layout
 
         col = layout.column(align=True)
         icon = 'RESTRICT_VIEW_OFF' if context.scene.Polycount.Display else 'RESTRICT_VIEW_ON'
         row = col.row(align=True)
         row.prop(context.scene.Polycount, "Display", text="Polycount", icon=icon)
-        self.window_display_button(context, row, region)
+        self.window_display_button(context, row, area)
 
         row = col.row(align=True)
         row.enabled = context.scene.Polycount.Display

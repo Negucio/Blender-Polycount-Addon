@@ -1,6 +1,6 @@
 import bpy
 from . object import DataPropertyGroup
-from bpy.props import PointerProperty, StringProperty, FloatVectorProperty, BoolProperty,\
+from bpy.props import PointerProperty, StringProperty, FloatVectorProperty, BoolProperty, \
     PointerProperty, CollectionProperty, IntProperty, BoolVectorProperty
 from bpy.types import PropertyGroup, Collection
 
@@ -36,6 +36,7 @@ class CollectionPropertyGroup(PropertyGroup):
                                      default=(1.0, 0.8, 0.1), min=0.0, max=1.0, description="color picker")
 
 class WindowDisplayPropertyGroup(bpy.types.PropertyGroup):
+    area: StringProperty(default='')
     display: bpy.props.BoolProperty(default=True, description="Display Polycount in this 3DView")
 
 class MainUIPropertyGroup(PropertyGroup):
