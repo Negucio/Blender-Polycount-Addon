@@ -61,6 +61,7 @@ def polycount_depsgraph_update_post(scene):
     Called on after updating scene data
     :param scene: At appending this function to the scene_update_post, it receives the scene as a parameter.
     """
+    if not scene.Polycount.Display: return
     check_removed_objs(scene)
 
     obj = bpy.context.active_object
