@@ -2,7 +2,7 @@ import bpy
 import bmesh
 from . utils import get_mirror_axis, calculate_subsurf, has_solidify, get_levels_subsurf
 from .. data.utils import reset_data_property
-from .. common_utils import redraw
+from ..ui.utils import redraw
 
 class PolycountController:
 

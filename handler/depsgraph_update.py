@@ -1,7 +1,7 @@
 import bpy
 import bmesh
 from bpy.app.handlers import persistent
-from .. common_utils import redraw
+from ..ui.utils import redraw
 
 # scene_update_post
 def edit_mode_count(act_obj):

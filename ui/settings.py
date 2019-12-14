@@ -1,7 +1,7 @@
 import bpy
 from .. common_utils import get_preferences
 from bpy.types import Operator, Panel
-from .. common_utils import redraw
+from . utils import redraw
 
 class SettingsConfirmDialogOp(Operator):
     bl_label = "Are you sure?. This action will save global User Settings"

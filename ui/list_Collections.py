@@ -1,7 +1,7 @@
 import bpy
 from bpy.props import StringProperty
 from bpy.types import UIList, Operator
-from .. common_utils import redraw
+from .utils import redraw
 
 
 class DATA_UL_polycount_collections_list(UIList):
